@@ -1,0 +1,6 @@
+# Editor files.
+*.swo
+*.swp
+
+# Haskell build files.
+.stack-work
