@@ -46,6 +46,8 @@ executable sempervivum
                , sempervivum
                , monad-logger
                , text
+               , scotty
+               , transformers
 
 test-suite spec
   default-language: Haskell2010

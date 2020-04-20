@@ -9,10 +9,23 @@
 
 module Main where
 
-import Control.Monad.Logger (runStdoutLoggingT, logInfoN)
+import Control.Monad.Logger (LoggingT, runStdoutLoggingT, logInfoN)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
+import Control.Monad.Trans.Class (lift)
+
+import qualified Data.Text.Lazy as LazyText
+import qualified Web.Scotty.Trans as Scotty
 
 import qualified Database
+import qualified WebInterface
+
+server :: Scotty.ScottyT LazyText.Text (LoggingT IO) ()
+server = do
+  Scotty.get "/" $ do
+    lift $ logInfoN "Serving /"
+    Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
+    let title = "Sempervivum"
+    Scotty.raw $ WebInterface.renderPage title $ WebInterface.testPage
 
 main :: IO ()
 main = do
@@ -27,4 +40,4 @@ main = do
   conn <- Database.connect
   Database.initialize conn
 
-  runStdoutLoggingT $ logInfoN "Hello, World"
+  Scotty.scottyT 8000 runStdoutLoggingT server

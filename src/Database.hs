@@ -20,7 +20,7 @@ connect = Sqlite.open "sempervivum.sqlite3"
 initialize :: Sqlite.Connection -> IO ()
 initialize conn = do
   Sqlite.execute conn
-    "CREATE TABLE plants (       \
-    \  id   INTEGER PRIMARY KEY, \
-    \  name TEXT NOT NULL        \
+    "CREATE TABLE IF NOT EXISTS plants ( \
+    \  id   INTEGER PRIMARY KEY,         \
+    \  name TEXT NOT NULL                \
     \);" ()

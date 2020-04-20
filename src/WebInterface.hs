@@ -9,13 +9,14 @@
 
 module WebInterface
 ( renderPage
+, testPage
 ) where
 
 import Data.Text (Text)
 import Prelude hiding (id, div, head, span)
 import Text.Blaze ((!))
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, body, div, docTypeHtml, head, meta, title, toHtml)
+import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, head, meta, title, toHtml)
 import Text.Blaze.Html5.Attributes (charset, content, id, name)
 
 import qualified Data.ByteString.Lazy as LazyByteString
@@ -33,3 +34,5 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
     div ! id "content" $
       bodyHtml
 
+testPage :: Html
+testPage = h1 "Hello, world"
