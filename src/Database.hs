@@ -11,6 +11,7 @@ module Database
 ( addPlant
 , connect
 , initialize
+, listPlants
 , recordFertilized
 , recordWatered
 ) where
@@ -20,7 +21,7 @@ import Data.Time.Clock (UTCTime)
 
 import qualified Database.SQLite.Simple as Sqlite
 
-import Types (PlantId (..), Species (..))
+import Types (Plant (..), PlantId (..), Species (..))
 
 connect :: IO Sqlite.Connection
 connect = do
@@ -66,3 +67,29 @@ recordWatered = recordEvent "watered"
 
 recordFertilized :: Sqlite.Connection -> PlantId -> UTCTime -> IO ()
 recordFertilized = recordEvent "fertilized"
+
+listPlants :: Sqlite.Connection -> IO [Plant]
+listPlants conn =
+  let
+    decode (pid, species, lastWatered, lastFertilized) =
+      Plant (PlantId pid) (Species species) lastWatered lastFertilized
+  in
+    fmap decode <$> Sqlite.query conn
+      " select                                                                   \
+      \   id,                                                                    \
+      \   species,                                                               \
+      \   (                                                                      \
+      \     select max(time)                                                     \
+      \     from events                                                          \
+      \     where plant_id = id and type = 'watered'                             \
+      \   )                                                                      \
+      \   as last_watered,                                                       \
+      \   (                                                                      \
+      \     select max(time)                                                     \
+      \     from events                                                          \
+      \     where plant_id = id and type = 'fertilized'                          \
+      \   )                                                                      \
+      \   as last_fertilized                                                     \
+      \ from                                                                     \
+      \   plants;                                                                "
+      ()

@@ -10,16 +10,20 @@
 module WebInterface
 ( renderPage
 , testPage
+, renderPlantList
 ) where
 
 import Data.Text (Text)
 import Prelude hiding (id, div, head, span)
-import Text.Blaze ((!))
+import Control.Monad (mapM_)
+import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, head, meta, title, toHtml)
+import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, meta, p, title, toHtml)
 import Text.Blaze.Html5.Attributes (charset, content, id, name)
 
 import qualified Data.ByteString.Lazy as LazyByteString
+
+import Types (Plant (..), PlantId (..), Species (..))
 
 -- Wraps the given body html in html for an actual page, and encodes the
 -- resulting page in utf-8.
@@ -33,6 +37,22 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
   body $
     div ! id "content" $
       bodyHtml
+
+renderPlant :: Plant -> Html
+renderPlant plant =
+  let
+    (PlantId pid) = plantId plant
+    (Species species) = plantSpecies plant
+  in
+    div ! id ("plant" <> (toValue $ show pid)) $ do
+      h2 $ toHtml species
+      p $ toHtml $ "Last watered: " <> (show $ plantLastWatered plant)
+      p $ toHtml $ "Last fertilized: " <> (show $ plantLastFertilized plant)
+
+renderPlantList :: [Plant] -> Html
+renderPlantList plants = do
+  h1 "Plants"
+  mapM_ renderPlant plants
 
 testPage :: Html
 testPage = h1 "Hello, world"
