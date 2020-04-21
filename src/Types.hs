@@ -12,8 +12,8 @@ module Types
 ) where
 
 import Data.Int (Int64)
-import Data.Time.Clock (UTCTime)
 import Data.Text (Text)
+import Data.Time.Clock (UTCTime)
 
 newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show)
 newtype Species = Species Text deriving (Eq, Ord, Show)

@@ -8,11 +8,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Database
-( connect
+( addPlant
+, connect
 , initialize
+, recordFertilized
+, recordWatered
 ) where
 
+import Data.Text (Text)
+import Data.Time.Clock (UTCTime)
+
 import qualified Database.SQLite.Simple as Sqlite
+
+import Types (PlantId (..), Species (..))
 
 connect :: IO Sqlite.Connection
 connect = do
@@ -41,3 +49,20 @@ initialize conn = do
     \ -- 'last event' query, but frankly, I am never going to water so many    \
     \ -- plants in my lifetime to make the difference noticeable.              "
     ()
+
+addPlant :: Sqlite.Connection -> Species -> IO PlantId
+addPlant conn (Species species) = do
+  Sqlite.execute conn "insert into plants (species) values (?);" [species]
+  PlantId <$> Sqlite.lastInsertRowId conn
+
+recordEvent :: Text -> Sqlite.Connection -> PlantId -> UTCTime -> IO ()
+recordEvent eventType conn (PlantId pid) time =
+  Sqlite.execute conn
+    "insert into events (plant_id, time, type) values (?, ?, ?);"
+    (pid, time, eventType)
+
+recordWatered :: Sqlite.Connection -> PlantId -> UTCTime -> IO ()
+recordWatered = recordEvent "watered"
+
+recordFertilized :: Sqlite.Connection -> PlantId -> UTCTime -> IO ()
+recordFertilized = recordEvent "fertilized"
