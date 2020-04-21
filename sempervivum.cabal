@@ -19,6 +19,7 @@ library
   ghc-options:     -Wall -Werror -Wincomplete-uni-patterns -Wincomplete-record-updates -fno-ignore-asserts
   hs-source-dirs:  src
   exposed-modules: Database
+                 , Types
                  , WebInterface
 
   build-depends: aeson

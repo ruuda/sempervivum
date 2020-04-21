@@ -15,12 +15,29 @@ module Database
 import qualified Database.SQLite.Simple as Sqlite
 
 connect :: IO Sqlite.Connection
-connect = Sqlite.open "sempervivum.sqlite3"
+connect = do
+  conn <- Sqlite.open "sempervivum.sqlite3"
+  Sqlite.execute conn "pragma foreign_keys = on;" ()
+  pure conn
 
 initialize :: Sqlite.Connection -> IO ()
 initialize conn = do
   Sqlite.execute conn
-    "CREATE TABLE IF NOT EXISTS plants ( \
-    \  id   INTEGER PRIMARY KEY,         \
-    \  name TEXT NOT NULL                \
-    \);" ()
+    " create table if not exists plants                                        \
+    \ ( id      integer primary key                                            \
+    \ , species text not null                                                  \
+    \ );                                                                       "
+    ()
+
+  Sqlite.execute conn
+    " create table if not exists events                                        \
+    \ ( id       integer primary key                                           \
+    \ , plant_id integer not null                                              \
+    \ , time     text not null -- Encoded as ISO 8601 in UTC, with Z suffix. \n\
+    \ , type     text not null -- Should be 'watered' or 'fertilized'.       \n\
+    \ , foreign key (plant_id) references plants(id)                           \
+    \ );                                                                       \
+    \ -- We could have an index on (plant_id, type, time) to accellerate the   \
+    \ -- 'last event' query, but frankly, I am never going to water so many    \
+    \ -- plants in my lifetime to make the difference noticeable.              "
+    ()
