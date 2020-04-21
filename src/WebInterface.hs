@@ -18,8 +18,8 @@ import Prelude hiding (id, div, head, span)
 import Control.Monad (mapM_)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, meta, p, title, toHtml)
-import Text.Blaze.Html5.Attributes (charset, content, id, name)
+import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, link, meta, p, title, toHtml)
+import Text.Blaze.Html5.Attributes (charset, content, href, id, name, rel)
 
 import qualified Data.ByteString.Lazy as LazyByteString
 
@@ -33,6 +33,8 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
     meta ! charset "utf-8"
     meta ! name "viewport" ! content "width=device-width, initial-scale=1"
     meta ! name "robots" ! content "noindex, nofollow"
+    -- TODO: Embed once I am happy with the stylesheet.
+    link ! rel "stylesheet" ! href "/style.css"
     title $ toHtml pageTitle
   body $
     div ! id "content" $

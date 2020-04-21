@@ -23,6 +23,10 @@ import qualified WebInterface
 
 server :: Sqlite.Connection -> Scotty.ScottyT LazyText.Text (LoggingT IO) ()
 server conn = do
+  Scotty.get "/style.css"  $ do
+    Scotty.setHeader "content-type" "text/css"
+    Scotty.file "app/style.css"
+
   Scotty.get "/" $ do
     lift $ logInfoN "Serving /"
     Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
