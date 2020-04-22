@@ -1,5 +1,17 @@
 [[species]]
-name = "Sempervivum"
-water_days = 14
+name = "Dieffenbachia"
+water_days = 5
 fertilize_days = 30
-description = "Can be in the sun."
+light = "Half-shadow, no direct sunlight"
+
+[[species]]
+name = "Echeveria"
+water_days = 10
+fertilize_days = 365
+light = "Sunny"
+
+[[species]]
+name = "Sempervivum"
+water_days = 10
+fertilize_days = 365
+light = "Sunny"

@@ -25,7 +25,7 @@ data SpeciesInfo = SpeciesInfo
   { speciesName :: Species
   , speciesWaterDays :: Int
   , speciesFertilizeDays :: Int
-  , speciesDescription :: Text
+  , speciesLight :: Text
   } deriving (Eq, Show)
 
 speciesText :: Species -> Text
@@ -36,7 +36,7 @@ speciesInfoCodec = SpeciesInfo
   <$> (Species <$> Toml.text "name" .= speciesText . speciesName)
   <*> Toml.int  "water_days"     .= speciesWaterDays
   <*> Toml.int  "fertilize_days" .= speciesFertilizeDays
-  <*> Toml.text "description"    .= speciesDescription
+  <*> Toml.text "light"          .= speciesLight
 
 speciesListCodec :: TomlCodec [SpeciesInfo]
 speciesListCodec = Toml.list speciesInfoCodec "species" .= id
