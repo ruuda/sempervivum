@@ -14,6 +14,7 @@ module Database
 , listPlants
 , recordFertilized
 , recordWatered
+, upsertSpecies
 ) where
 
 import Data.Text (Text)
@@ -21,6 +22,7 @@ import Data.Time.Clock (UTCTime)
 
 import qualified Database.SQLite.Simple as Sqlite
 
+import Catalog (SpeciesInfo (..), speciesText)
 import Types (Plant (..), PlantId (..), Species (..))
 
 connect :: IO Sqlite.Connection
@@ -51,6 +53,16 @@ initialize conn = do
     \ -- plants in my lifetime to make the difference noticeable.              "
     ()
 
+  Sqlite.execute conn
+    " create table if not exists species                                       \
+    \ ( id             integer primary key                                     \
+    \ , species        text not null unique                                    \
+    \ , water_days     integer not null                                        \
+    \ , fertilize_days integer not null                                        \
+    \ , light          text not null                                           \
+    \ );                                                                       "
+    ()
+
 addPlant :: Sqlite.Connection -> Species -> IO PlantId
 addPlant conn (Species species) = do
   Sqlite.execute conn "insert into plants (species) values (?);" [species]
@@ -67,6 +79,18 @@ recordWatered = recordEvent "watered"
 
 recordFertilized :: Sqlite.Connection -> PlantId -> UTCTime -> IO ()
 recordFertilized = recordEvent "fertilized"
+
+upsertSpecies :: Sqlite.Connection -> SpeciesInfo -> IO ()
+upsertSpecies conn species =
+  Sqlite.execute conn
+    " insert or replace into                                                   \
+    \ species (species, water_days, fertilize_days, light)                     \
+    \ values (?, ?, ?, ?);                                                     "
+    ( speciesText $ speciesName species
+    , speciesWaterDays species
+    , speciesFertilizeDays species
+    , speciesLight species
+    )
 
 listPlants :: Sqlite.Connection -> IO [Plant]
 listPlants conn =

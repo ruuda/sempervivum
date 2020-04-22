@@ -10,6 +10,7 @@
 module Catalog
 ( SpeciesInfo (..)
 , readSpeciesOrExit
+, speciesText
 ) where
 
 import Data.Text (Text)
@@ -28,6 +29,7 @@ data SpeciesInfo = SpeciesInfo
   , speciesLight :: Text
   } deriving (Eq, Show)
 
+-- TODO: These newtype wrappers are more annoying than helpful, remove?
 speciesText :: Species -> Text
 speciesText (Species name) = name
 
