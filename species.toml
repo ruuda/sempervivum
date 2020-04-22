@@ -1,0 +1,5 @@
+[[species]]
+name = "Sempervivum"
+water_days = 14
+fertilize_days = 30
+description = "Can be in the sun."

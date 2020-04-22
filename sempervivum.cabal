@@ -19,6 +19,7 @@ library
   ghc-options:     -Wall -Werror -Wincomplete-uni-patterns -Wincomplete-record-updates -fno-ignore-asserts
   hs-source-dirs:  src
   exposed-modules: Database
+                 , Catalog
                  , Types
                  , WebInterface
 
@@ -35,6 +36,7 @@ library
                , text
                , text-format
                , time
+               , tomland
                , warp
 
 executable sempervivum

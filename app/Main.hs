@@ -18,6 +18,7 @@ import qualified Data.Text.Lazy as LazyText
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Web.Scotty.Trans as Scotty
 
+import qualified Catalog
 import qualified Database
 import qualified WebInterface
 
@@ -48,5 +49,8 @@ main = do
 
   conn <- Database.connect
   Database.initialize conn
+
+  species <- Catalog.readSpeciesOrExit "species.toml"
+  putStrLn $ show species
 
   Scotty.scottyT 8000 runStdoutLoggingT $ server conn
