@@ -19,7 +19,7 @@ import Control.Monad (mapM_)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, link, meta, p, title, toHtml)
-import Text.Blaze.Html5.Attributes (charset, content, href, id, name, rel)
+import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, rel)
 
 import qualified Data.ByteString.Lazy as LazyByteString
 
@@ -49,14 +49,17 @@ renderPlant catalog plant =
     (PlantId pid) = plantId plant
     (Species species) = plantSpecies plant
   in
-    div ! id ("plant" <> (toValue $ show pid)) $ do
-      h2 $ toHtml species
-      p $ toHtml $ "Last watered: " <> (show $ plantLastWatered plant)
-      p $ toHtml $ "Last fertilized: " <> (show $ plantLastFertilized plant)
-      case Catalog.lookup plant catalog of
-        Nothing -> pure ()
-        Just info ->
-          p $ toHtml $ "Water every " <> (show $ Catalog.speciesWaterDays info) <> " days"
+    div
+      ! id ("plant" <> (toValue $ show pid))
+      ! class_ "plant"
+      $ do
+        h2 $ toHtml species
+        p $ toHtml $ "Last watered: " <> (show $ plantLastWatered plant)
+        p $ toHtml $ "Last fertilized: " <> (show $ plantLastFertilized plant)
+        case Catalog.lookup plant catalog of
+          Nothing -> pure ()
+          Just info ->
+            p $ toHtml $ "Water every " <> (show $ Catalog.speciesWaterDays info) <> " days"
 
 renderPlantList :: Catalog -> [Plant] -> Html
 renderPlantList catalog plants = do

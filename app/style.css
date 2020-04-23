@@ -12,13 +12,16 @@
   padding: 0;
 }
 
-body {
+html {
   font-family: 'IBM Plex Sans';
   font-size: 18px;
-  max-width: 18em;
+  padding: 1em;
+}
+
+body {
+  max-width: 22em;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 2em;
 }
 
 h1, h2 {
@@ -27,6 +30,11 @@ h1, h2 {
 }
 
 h2 {
-  margin-top: 2rem;
   font-size: 1.5em;
+}
+
+.plant {
+  background-color: lightgreen;
+  padding: 1em;
+  margin-top: 1em;
 }
