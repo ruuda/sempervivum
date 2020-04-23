@@ -18,12 +18,17 @@ import qualified Data.Text.Lazy as LazyText
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Web.Scotty.Trans as Scotty
 
+import Catalog (Catalog)
+
 import qualified Catalog
 import qualified Database
 import qualified WebInterface
 
-server :: Sqlite.Connection -> Scotty.ScottyT LazyText.Text (LoggingT IO) ()
-server conn = do
+server
+  :: Catalog
+  -> Sqlite.Connection
+  -> Scotty.ScottyT LazyText.Text (LoggingT IO) ()
+server catalog conn = do
   Scotty.get "/style.css"  $ do
     Scotty.setHeader "content-type" "text/css"
     Scotty.file "app/style.css"
@@ -35,7 +40,7 @@ server conn = do
     plants <- liftIO $ Database.listPlants conn
     Scotty.raw
       $ WebInterface.renderPage title
-      $ WebInterface.renderPlantList plants
+      $ WebInterface.renderPlantList catalog plants
 
 main :: IO ()
 main = do
@@ -52,7 +57,6 @@ main = do
 
   -- Load the species definitions from the toml file, and insert them into the
   -- database. If any species was already present, overwrite it.
-  species <- Catalog.readSpeciesOrExit "species.toml"
-  mapM_ (Database.upsertSpecies conn) species
+  catalog <- Catalog.readSpeciesOrExit "species.toml"
 
-  Scotty.scottyT 8000 runStdoutLoggingT $ server conn
+  Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn

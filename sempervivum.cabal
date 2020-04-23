@@ -29,6 +29,7 @@ library
                , blaze-markup
                , bytestring
                , containers
+               , hashable
                , http-types
                , monad-logger
                , scotty
@@ -37,6 +38,7 @@ library
                , text-format
                , time
                , tomland
+               , unordered-containers
                , warp
 
 executable sempervivum

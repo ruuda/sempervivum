@@ -5,18 +5,21 @@
 -- you may not use this file except in compliance with the License.
 -- A copy of the License has been included in the root of the repository.
 
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Types
 ( PlantId (..)
 , Plant (..)
 , Species (..)
 ) where
 
+import Data.Hashable (Hashable)
 import Data.Int (Int64)
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 
-newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show)
-newtype Species = Species Text deriving (Eq, Ord, Show)
+newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show, Hashable)
+newtype Species = Species Text deriving (Eq, Ord, Show, Hashable)
 
 data Plant = Plant
   { plantId             :: PlantId
