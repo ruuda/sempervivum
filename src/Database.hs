@@ -24,7 +24,9 @@ import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text as Text
 import qualified Database.SQLite.Simple as Sqlite
 
-import Plant (Plant (..), PlantId (..), SpeciesName)
+import Plant (Plant (Plant), PlantId, SpeciesName)
+
+import qualified Plant
 
 connect :: IO Sqlite.Connection
 connect = do
@@ -57,13 +59,13 @@ initialize conn = do
 addPlant :: Sqlite.Connection -> SpeciesName -> IO PlantId
 addPlant conn species = do
   Sqlite.execute conn "insert into plants (species) values (?);" [species]
-  PlantId <$> Sqlite.lastInsertRowId conn
+  Sqlite.lastInsertRowId conn
 
 recordEvent :: Text -> Sqlite.Connection -> PlantId -> UTCTime -> IO ()
-recordEvent eventType conn (PlantId pid) time =
+recordEvent eventType conn plantId time =
   Sqlite.execute conn
     "insert into events (plant_id, time, type) values (?, ?, ?);"
-    (pid, time, eventType)
+    (plantId, time, eventType)
 
 recordWatered :: Sqlite.Connection -> PlantId -> UTCTime -> IO ()
 recordWatered = recordEvent "watered"
@@ -79,28 +81,28 @@ listPlants conn =
     -- up. It is terribly inefficent, but the amount of plants and events that
     -- we are ever going to have is going to be so modest that it is not a
     -- problem at all.
-    addWatered    time plant = plant { plantWatered    = time : plantWatered plant }
-    addFertilized time plant = plant { plantFertilized = time : plantFertilized plant }
+    addWatered    time plant = plant { Plant.watered    = time : Plant.watered plant }
+    addFertilized time plant = plant { Plant.fertilized = time : Plant.fertilized plant }
 
-    insertPlant plants (pid, species) =
+    insertPlant plants (plantId, species) =
       HashMap.insert
-        (PlantId pid)
+        plantId
         (Plant
-          { plantId = PlantId pid
-          , plantSpecies = species
-          , plantWatered = []
-          , plantFertilized = []
+          { Plant.id = plantId
+          , Plant.species = species
+          , Plant.watered = []
+          , Plant.fertilized = []
           }
         )
         plants
 
-    insertEvent plants (pid, time, "watered") =
-      HashMap.adjust (addWatered time) (PlantId pid) plants
+    insertEvent plants (plantId, time, "watered") =
+      HashMap.adjust (addWatered time) plantId plants
 
-    insertEvent plants (pid, time, "fertilized") =
-      HashMap.adjust (addFertilized time) (PlantId pid) plants
+    insertEvent plants (plantId, time, "fertilized") =
+      HashMap.adjust (addFertilized time) plantId plants
 
-    insertEvent _plants (_pid, _time, wrongType) =
+    insertEvent _plants (_plantId, _time, wrongType) =
       error $ Text.unpack $ "Invalid event type: " <> wrongType
 
   in do

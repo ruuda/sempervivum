@@ -8,33 +8,32 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Plant
-( PlantId (..)
-, Plant (..)
+( Plant (..)
+, PlantId
 , SpeciesName
-, plantLastWatered
-, plantLastFertilized
+, lastFertilized
+, lastWatered
 ) where
 
-import Data.Hashable (Hashable)
 import Data.Int (Int64)
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
+import Prelude hiding (id)
 
 import Data.Maybe (listToMaybe)
 
-newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show, Hashable)
-
+type PlantId = Int64
 type SpeciesName = Text
 
 data Plant = Plant
-  { plantId         :: PlantId
-  , plantSpecies    :: SpeciesName
-  , plantWatered    :: [UTCTime] -- Ordered descending, index 0 is latest.
-  , plantFertilized :: [UTCTime] -- Ordered descending, index 0 is latest.
+  { id         :: PlantId
+  , species    :: SpeciesName
+  , watered    :: [UTCTime] -- Ordered descending, index 0 is latest.
+  , fertilized :: [UTCTime] -- Ordered descending, index 0 is latest.
   } deriving (Eq, Ord, Show)
 
-plantLastWatered :: Plant -> Maybe UTCTime
-plantLastWatered = listToMaybe . plantWatered
+lastWatered :: Plant -> Maybe UTCTime
+lastWatered = listToMaybe . watered
 
-plantLastFertilized :: Plant -> Maybe UTCTime
-plantLastFertilized = listToMaybe . plantFertilized
+lastFertilized :: Plant -> Maybe UTCTime
+lastFertilized = listToMaybe . fertilized

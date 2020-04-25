@@ -24,7 +24,9 @@ import qualified Data.Text.IO as TextIO
 import qualified System.Exit as System
 import qualified Toml
 
-import Plant (Plant (..))
+import Plant (Plant)
+
+import qualified Plant
 
 type SpeciesName = Text
 
@@ -61,4 +63,4 @@ readCatalogOrExit fname = do
       System.exitFailure
 
 lookup :: Plant -> Catalog -> Maybe Species
-lookup plant = HashMap.lookup (plantSpecies plant)
+lookup plant = HashMap.lookup $ Plant.species plant
