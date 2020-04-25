@@ -15,13 +15,14 @@ module WebInterface
 
 import Data.Text (Text)
 import Prelude hiding (id, div, head, span)
-import Control.Monad (mapM_)
+import Control.Monad (mapM_, when)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, link, meta, p, title, toHtml)
 import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, rel)
 
 import qualified Data.ByteString.Lazy as LazyByteString
+import qualified Data.Text as Text
 
 import Care (KnownPlant (..))
 import Plant (Plant)
@@ -60,10 +61,15 @@ renderPlant (KnownPlant plant species) =
 renderPlantList :: Catalog -> [Plant] -> Html
 renderPlantList catalog plants =
   let
-    (knowns, _unknowns) = Care.matchPlants catalog plants
+    (knowns, unknowns) = Care.matchPlants catalog plants
   in do
     h1 "Plants"
     mapM_ renderPlant knowns
+    when (not $ null $ unknowns) $
+      p $ toHtml $ "Some plants could not be displayed "
+        <> "because they are missing from the species catalog: "
+        <> Text.intercalate ", " (fmap Plant.species unknowns)
+        <> "."
 
 testPage :: Html
 testPage = h1 "Hello, world"
