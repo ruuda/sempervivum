@@ -85,6 +85,23 @@ fertilize_remark = "Don’t fertilize in winter."
 light = "Sunny, at least five hours of direct sunlight"
 
 [[species]]
+name = "Ctenanthe burle-marxii"
+# Source: https://pistilsnursery.com/products/ctenanthe-burle-marxii-fishbone-prayer-plant
+# Source: https://www.plantsome.nl/products/ctenanthe-burle-marxii
+# Source: https://fair-flora.com/en/our-growers/vde-plant/ctenanthe-burle-marxii/
+water_days_summer = 7
+water_days_winter = 14
+water_remark =
+  """\
+  Keep the soil slightly moist, do not allow the soil to dry out entirely. \
+  Mist periodically.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Needs very little fertilizer."
+light = "From bright to shadow; no direct sunlight"
+
+[[species]]
 name = "Dieffenbachia seguine"
 # Source: https://www.intratuin.nl/dieffenbachia-dieffenbachia-seguine-tropic-snow-d-21-h-85-cm.html
 # Says water once a week, but mine seems to need more, so let's dial it down to
@@ -108,6 +125,22 @@ name = "Hedera Helix"
 water_days = 6 # TODO: Source good value.
 fertilize_days = 14 # TODO: Source good value.
 light = "TODO"
+
+[[species]]
+name = "Phlebodium areum"
+# Source: https://www.123planten.nl/verzorging/tips-phlebodium
+water_days_summer = 3
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil slightly moist at all times. \
+  Prefer to water at the edges of the pot. \
+  Sprinkle regularly.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 90
+fertilize_remark = "Needs very little fertilizer."
+light = "Anything apart from direct sunlight is fine"
 
 [[species]]
 name = "Sansevieria trifasciata"
