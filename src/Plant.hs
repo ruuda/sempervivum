@@ -10,7 +10,7 @@
 module Plant
 ( PlantId (..)
 , Plant (..)
-, Species (..)
+, SpeciesName
 , plantLastWatered
 , plantLastFertilized
 ) where
@@ -23,11 +23,12 @@ import Data.Time.Clock (UTCTime)
 import Data.Maybe (listToMaybe)
 
 newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show, Hashable)
-newtype Species = Species Text deriving (Eq, Ord, Show, Hashable)
+
+type SpeciesName = Text
 
 data Plant = Plant
   { plantId         :: PlantId
-  , plantSpecies    :: Species
+  , plantSpecies    :: SpeciesName
   , plantWatered    :: [UTCTime] -- Ordered descending, index 0 is latest.
   , plantFertilized :: [UTCTime] -- Ordered descending, index 0 is latest.
   } deriving (Eq, Ord, Show)

@@ -24,7 +24,7 @@ import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text as Text
 import qualified Database.SQLite.Simple as Sqlite
 
-import Plant (Plant (..), PlantId (..), Species (..))
+import Plant (Plant (..), PlantId (..), SpeciesName)
 
 connect :: IO Sqlite.Connection
 connect = do
@@ -54,8 +54,8 @@ initialize conn = do
     \ -- plants in my lifetime to make the difference noticeable.              "
     ()
 
-addPlant :: Sqlite.Connection -> Species -> IO PlantId
-addPlant conn (Species species) = do
+addPlant :: Sqlite.Connection -> SpeciesName -> IO PlantId
+addPlant conn species = do
   Sqlite.execute conn "insert into plants (species) values (?);" [species]
   PlantId <$> Sqlite.lastInsertRowId conn
 
@@ -87,7 +87,7 @@ listPlants conn =
         (PlantId pid)
         (Plant
           { plantId = PlantId pid
-          , plantSpecies = Species species
+          , plantSpecies = species
           , plantWatered = []
           , plantFertilized = []
           }

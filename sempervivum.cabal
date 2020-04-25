@@ -19,8 +19,8 @@ library
   ghc-options:     -Wall -Werror -Wincomplete-uni-patterns -Wincomplete-record-updates -fno-ignore-asserts
   hs-source-dirs:  src
   exposed-modules: Database
-                 , Catalog
                  , Plant
+                 , Species
                  , WebInterface
 
   build-depends: aeson

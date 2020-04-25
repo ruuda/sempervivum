@@ -18,10 +18,10 @@ import qualified Data.Text.Lazy as LazyText
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Web.Scotty.Trans as Scotty
 
-import Catalog (Catalog)
+import Species (Catalog)
 
-import qualified Catalog
 import qualified Database
+import qualified Species
 import qualified WebInterface
 
 server
@@ -57,6 +57,6 @@ main = do
 
   -- Load the species definitions from the toml file, and insert them into the
   -- database. If any species was already present, overwrite it.
-  catalog <- Catalog.readSpeciesOrExit "species.toml"
+  catalog <- Species.readCatalogOrExit "species.toml"
 
   Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn
