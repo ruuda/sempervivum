@@ -211,6 +211,28 @@ light = "Sunny"
 # light = "TODO"
 
 [[species]]
+name = "Peperomia rotundifolia"
+# Source: https://www.plantsome.nl/products/peperomia-rotundifolia-xs
+# Source: https://www.intratuin.nl/peperomia-peperomia-rotundifolia-d-12-cm.html
+# Source: https://www.houseplantsexpert.com/trailing-jade.html
+water_days_summer = 7
+water_days_winter = 7
+water_remark =
+  """\
+  Allow the soil to become dry, then water thorougly. \
+  Prefer to water too little over too much.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Fertilize every two weeks in spring with a diluted liquid fertilizer, \
+  once a month in summer, \
+  and don’t fertilize in fall and winter.\
+  """
+light = "Bright, without direct sunlight"
+
+[[species]]
 name = "Phlebodium areum"
 # Source: https://www.123planten.nl/verzorging/tips-phlebodium
 water_days_summer = 3
