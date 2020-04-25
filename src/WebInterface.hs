@@ -23,11 +23,13 @@ import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, re
 
 import qualified Data.ByteString.Lazy as LazyByteString
 
-import Species (Catalog)
+import Care (KnownPlant (..))
 import Plant (Plant)
+import Species (Catalog)
 
-import qualified Species
+import qualified Care
 import qualified Plant
+import qualified Species
 
 -- Wraps the given body html in html for an actual page, and encodes the
 -- resulting page in utf-8.
@@ -44,8 +46,8 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
     div ! id "content" $
       bodyHtml
 
-renderPlant :: Catalog -> Plant -> Html
-renderPlant catalog plant =
+renderPlant :: KnownPlant -> Html
+renderPlant (KnownPlant plant species) =
   div
     ! id ("plant" <> (toValue $ show $ Plant.id plant))
     ! class_ "plant"
@@ -53,15 +55,15 @@ renderPlant catalog plant =
       h2 $ toHtml $ Plant.species plant
       p $ toHtml $ "Last watered: " <> (show $ Plant.lastWatered plant)
       p $ toHtml $ "Last fertilized: " <> (show $ Plant.lastFertilized plant)
-      case Species.lookup plant catalog of
-        Nothing -> pure ()
-        Just species ->
-          p $ toHtml $ "Water every " <> (show $ Species.waterDays species) <> " days"
+      p $ toHtml $ "Water every " <> (show $ Species.waterDays species) <> " days"
 
 renderPlantList :: Catalog -> [Plant] -> Html
-renderPlantList catalog plants = do
-  h1 "Plants"
-  mapM_ (renderPlant catalog) plants
+renderPlantList catalog plants =
+  let
+    (knowns, _unknowns) = Care.matchPlants catalog plants
+  in do
+    h1 "Plants"
+    mapM_ renderPlant knowns
 
 testPage :: Html
 testPage = h1 "Hello, world"
