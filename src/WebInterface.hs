@@ -64,7 +64,11 @@ renderPlantList catalog plants =
     (knowns, unknowns) = Care.matchPlants catalog plants
   in do
     h1 "Plants"
-    mapM_ renderPlant knowns
+
+    case knowns of
+      [] -> p "You don’t have any plants yet."
+      _  -> mapM_ renderPlant knowns
+
     when (not $ null $ unknowns) $
       p $ toHtml $ "Some plants could not be displayed "
         <> "because they are missing from the species catalog: "
