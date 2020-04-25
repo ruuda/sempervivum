@@ -1,4 +1,12 @@
 [[species]]
+name = "Chlorophytum comosum"
+water_days = 6 # TODO: Source good value.
+fertilize_days = 14 # TODO: Source good value.
+# Source: https://www.rhs.org.uk/Plants/67933/i-Chlorophytum-comosum-i-Vittatum-(v)/Details
+light = "Partial shade"
+remarks = "When the leaves turn pale, the plant needs water."
+
+[[species]]
 name = "Dieffenbachia seguine"
 # Source: https://www.intratuin.nl/dieffenbachia-dieffenbachia-seguine-tropic-snow-d-21-h-85-cm.html
 # Says water once a week, but mine seems to need more, so let's dial it down to
@@ -16,6 +24,12 @@ name = "Echeveria"
 water_days = 10
 fertilize_days = 365
 light = "Sunny"
+
+[[species]]
+name = "Hedera Helix"
+water_days = 6 # TODO: Source good value.
+fertilize_days = 14 # TODO: Source good value.
+light = "TODO"
 
 [[species]]
 name = "Sansevieria trifasciata"
