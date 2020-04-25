@@ -1,9 +1,9 @@
 [[species]]
+name = "Areca flavescens"
 # Actual name is "Dypsis lutescens" according to Wikipedia, but it is called
 # "Areca" everywhere, with nicknames "golden cane palm" and "butterfly palm".
 # Source: https://www.123planten.nl/verzorging/tips-areca
 # Source: https://www.groenrijk.nl/tuintips/111/areca-palm-verzorging
-name = "Areca flavescens"
 aliases = ["Golden cane palm", "Butterfly palm"]
 water_days_summer = 3
 water_days_winter = 7
@@ -23,8 +23,8 @@ light = "Bright, no direct sunlight"
 [[species]]
 name = "Aglaonema Silver Bay"
 # Source https://www.123planten.nl/aglaonema-silver-bay-agsba24070.html
-water_days_summer = 4
-water_days_winter = 10
+water_days_summer = 5
+water_days_winter = 9
 water_remark =
   """\
   Keep the soil slightly moist. \
@@ -44,12 +44,45 @@ fertilize_remark =
 light = "Bright, but at most three hours of direct sunlight"
 
 [[species]]
+name = "Calathea orbifolia"
+# Source: https://www.123planten.nl/verzorging/tips-calathea
+water_days_summer = 3
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil moist, water when it starts to dry. \
+  Hanging and curling leaves are a sign of too little water. \
+  Watering a little often, is better than a lot infrequently. \
+  Sprinkling is beneficial, especially in winter if the air is dry. \
+  The edges of the leaves turn brown when sprinkling too little.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Don’t fertilize in winter."
+light = "Shadow or half-shadow, no direct sunlight"
+
+[[species]]
 name = "Chlorophytum comosum"
 water_days = 6 # TODO: Source good value.
 fertilize_days = 14 # TODO: Source good value.
 # Source: https://www.rhs.org.uk/Plants/67933/i-Chlorophytum-comosum-i-Vittatum-(v)/Details
 light = "Partial shade"
 remarks = "When the leaves turn pale, the plant needs water."
+
+[[species]]
+name = "Coffea arabica"
+# Source: https://www.123planten.nl/verzorging/tips-coffea-arabica.
+water_days_summer = 5
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil slightly to moderately moist. \
+  Sprinkle regularly to keep humidity high and the leaves clean.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Don’t fertilize in winter."
+light = "Sunny, at least five hours of direct sunlight"
 
 [[species]]
 name = "Dieffenbachia seguine"
