@@ -59,15 +59,24 @@ water_remark =
 fertilize_days_summer = 14
 fertilize_days_winter = 180
 fertilize_remark = "Don’t fertilize in winter."
-light = "Shadow or half-shadow, no direct sunlight"
+light = "Shade or partial shade, no direct sunlight"
 
 [[species]]
 name = "Chlorophytum comosum"
-water_days = 6 # TODO: Source good value.
-fertilize_days = 14 # TODO: Source good value.
 # Source: https://www.rhs.org.uk/Plants/67933/i-Chlorophytum-comosum-i-Vittatum-(v)/Details
-light = "Partial shade"
-remarks = "When the leaves turn pale, the plant needs water."
+# https://www.plantsome.nl/products/graslelie-chlorophytum
+water_days_summer = 4
+water_days_winter = 4
+water_remark =
+  """\
+  Keep the soil slightly moist. \
+  When the leaves turn pale, the plant needs water. \
+  Mist weekly.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Needs fertilizer during the summer months."
+light = "Bright to partial shade, no direct sunlight"
 
 [[species]]
 name = "Coffea arabica"
@@ -99,32 +108,59 @@ water_remark =
 fertilize_days_summer = 14
 fertilize_days_winter = 180
 fertilize_remark = "Needs very little fertilizer."
-light = "From bright to shadow; no direct sunlight"
+light = "From bright to shade; no direct sunlight"
 
 [[species]]
 name = "Dieffenbachia seguine"
 # Source: https://www.intratuin.nl/dieffenbachia-dieffenbachia-seguine-tropic-snow-d-21-h-85-cm.html
-# Says water once a week, but mine seems to need more, so let's dial it down to
-# every 5 days. All sources say it needs lots of water and moist soil. Wikipedia
-# says water "about twice a week". It also says both "moderately moist" and
-# "moderately dry" two sentences apart, so not sure how trustworthy the data is.
-water_days = 5
+# Source: https://plantingman.com/dumb-cane-dieffenbachia-summer-style-indoor-house-plants/
 # Source: https://www.rhs.org.uk/Plants/96172/i-Dieffenbachia-i-Camille-(v)/Details
-# Says "monthly".
-fertilize_days = 30
-light = "Half-shadow, no direct sunlight"
+water_days_summer = 4
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil evenly moist, but not soggy. \
+  It is okay for the top soil to become a bit dry between each watering. \
+  Water less often in winter. \
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 60
+fertilize_remark =
+  """\
+  Fertilize every two weeks in summer, every month in spring and fall. \
+  Don’t fertilize in winter.\
+  """
+light = "Bright to partial shade, no direct sunlight (sunlight burns the leaves)"
 
 [[species]]
 name = "Echeveria"
-water_days = 10
-fertilize_days = 365
+# Source: https://www.intratuin.nl/echeveria-echeveria-pilosa-d-14-h-27-cm.html
+# Source: https://www.succulentsandsunshine.com/types-of-succulents/echeveria-violet-queen/
+# Source: https://www.drought-smart-plants.com/how-to-grow-echeveria.html
+water_days_summer = 12
+water_days_winter = 14
+water_remark =
+  """\
+  Soak the soil, then let it dry out completely. \
+  Avoid letting water sit on the leaves for too long \
+  to prevent rot and fungus. \
+  Rainwater works well because it is low on minerals. \
+  The plant stores water in its leaves, so it needs very little water.\
+  """
+fertilize_days_summer = 60
+fertilize_days_winter = 90
+fertilize_remark =
+  """\
+  Rarely needs fertilizer. \
+  Add a little bit of diluted liquid fertilizer if the plant appears pale.\
+  """
 light = "Sunny"
 
-[[species]]
-name = "Hedera Helix"
-water_days = 6 # TODO: Source good value.
-fertilize_days = 14 # TODO: Source good value.
-light = "TODO"
+# [[species]]
+# name = "Hedera Helix"
+# water_days = 6 # TODO: Source good value.
+# fertilize_days = 14 # TODO: Source good value.
+# light = "TODO"
 
 [[species]]
 name = "Phlebodium areum"
@@ -143,20 +179,31 @@ fertilize_remark = "Needs very little fertilizer."
 light = "Anything apart from direct sunlight is fine"
 
 [[species]]
-name = "Sansevieria trifasciata"
-# Source: https://www.houseofplants.co.uk/plants/sansevieria-trifasciata-laurentii_mother-in-laws-tongue_87403.html
-# Source: https://www.houseplantsexpert.com/mother-in-laws-tongue.html
-# During the winter only once a month, according to second source. First source
-# says only "when soil is dry".
-water_days = 14
-# The first source says once every two months in spring-summer. The second
-# source says once every month spring-fall. Take the middle ground.
-fertilize_days = 45
-light = "Indifferent, from full sun to shade"
-remarks = "Don't water too much, ensure the soil is dry before watering. Water even less in winter."
+name = "Pilea peperomioides"
+# Source: https://www.plantsome.nl/products/pannenkoekenplant-pilea-peperomioides-l
+# Source: https://www.ourhouseplants.com/plants/pilea-peperomioides
+water_days_summer = 7
+water_days_winter = 7
+water_remark =
+  """\
+  Water thoroughly and then let the soil dry out. \
+  Needs less water in winter. \
+  Mist regularly.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize once a month in the growing season."
+light = "Bright, can tolerate a little bit of direct sunlight"
 
-[[species]]
-name = "Sempervivum"
-water_days = 10
-fertilize_days = 365
-light = "Sunny"
+# [[species]]
+# name = "Sansevieria trifasciata"
+# # Source: https://www.houseofplants.co.uk/plants/sansevieria-trifasciata-laurentii_mother-in-laws-tongue_87403.html
+# # Source: https://www.houseplantsexpert.com/mother-in-laws-tongue.html
+# # During the winter only once a month, according to second source. First source
+# # says only "when soil is dry".
+# water_days = 14
+# # The first source says once every two months in spring-summer. The second
+# # source says once every month spring-fall. Take the middle ground.
+# fertilize_days = 45
+# light = "Indifferent, from full sun to shade"
+# remarks = "Don't water too much, ensure the soil is dry before watering. Water even less in winter."
