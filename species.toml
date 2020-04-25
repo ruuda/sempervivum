@@ -68,6 +68,30 @@ fertilize_remark = "Don’t fertilize in winter."
 light = "Bright, no direct sunlight"
 
 [[species]]
+name = "Cactus"
+# Source: https://www.plantsome.nl/products/cactus-euphorbia-80cm?
+# Source: https://www.123planten.nl/verzorging/tips-cactus
+# Cactus is a member of the cactaceae family, not a species.
+# The iconic cactus is actually an Euphorbia, not a cactus.
+# But they need so little care that the details don't really matter.
+aliases = ["Euphorbia"]
+water_days_summer = 30
+water_days_winter = 35
+water_remark =
+  """\
+  Barely needs any water at all. \
+  Prefer watering a lot once in a while, over watering a little frequently.\
+  """
+fertilize_days_summer = 120
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Requires very little fertilizer because it grows slowly. \
+  Don’t fertilize in winter.\
+  """
+light = "Sunny"
+
+[[species]]
 name = "Calathea orbifolia"
 # Source: https://www.123planten.nl/verzorging/tips-calathea
 water_days_summer = 3
