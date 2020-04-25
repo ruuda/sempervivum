@@ -56,7 +56,7 @@ renderPlant (KnownPlant plant species) =
       h2 $ toHtml $ Plant.species plant
       p $ toHtml $ "Last watered: " <> (show $ Plant.lastWatered plant)
       p $ toHtml $ "Last fertilized: " <> (show $ Plant.lastFertilized plant)
-      p $ toHtml $ "Water every " <> (show $ Species.waterDays species) <> " days"
+      p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
 
 renderPlantList :: Catalog -> [Plant] -> Html
 renderPlantList catalog plants =

@@ -27,20 +27,28 @@ import qualified Toml
 type SpeciesName = Text
 
 data Species = Species
-  { name          :: SpeciesName
-  , waterDays     :: Int
-  , fertilizeDays :: Int
-  , light         :: Text
+  { name                :: SpeciesName
+  , waterDaysSummer     :: Int
+  , waterDaysWinter     :: Int
+  , waterRemark         :: Text
+  , fertilizeDaysSummer :: Int
+  , fertilizeDaysWinter :: Int
+  , fertilizeRemark     :: Text
+  , light               :: Text
   } deriving (Eq, Show)
 
 type Catalog = HashMap SpeciesName Species
 
 speciesCodec :: TomlCodec Species
 speciesCodec = Species
-  <$> Toml.text "name"           .= name
-  <*> Toml.int  "water_days"     .= waterDays
-  <*> Toml.int  "fertilize_days" .= fertilizeDays
-  <*> Toml.text "light"          .= light
+  <$> Toml.text "name"                  .= name
+  <*> Toml.int  "water_days_summer"     .= waterDaysSummer
+  <*> Toml.int  "water_days_winter"     .= waterDaysWinter
+  <*> Toml.text "water_remark"          .= waterRemark
+  <*> Toml.int  "fertilize_days_summer" .= fertilizeDaysSummer
+  <*> Toml.int  "fertilize_days_winter" .= fertilizeDaysWinter
+  <*> Toml.text "fertilize_remark"      .= fertilizeRemark
+  <*> Toml.text "light"                 .= light
 
 catalogCodec :: TomlCodec [Species]
 catalogCodec = Toml.list speciesCodec "species" .= id
