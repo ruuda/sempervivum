@@ -4,3 +4,6 @@
 
 # Haskell build files.
 .stack-work
+
+# Default database.
+sempervivum.sqlite3
