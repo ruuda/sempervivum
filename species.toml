@@ -11,7 +11,7 @@ water_remark =
   """\
   Keep the soil moist, also in winter. \
   Watering a little often, is better than a lot infrequently. \
-  Sprinkle often, daily during winter if the air is dry.\
+  Mist often, daily during winter if the air is dry.\
   """
 # Once source says add fertilizer in summer every time you water, the other
 # source says add fertilizer every 14 days. I'll go with the lazy option.
@@ -31,7 +31,7 @@ water_remark =
   In winter, it is okay if the soil dries out in between watering. \
   The plant is not demanding, \
   prefer to water too little over too much. \
-  Sprinkling is not necessary but can be beneficial.\
+  Misting is not necessary but can be beneficial.\
   """
 fertilize_days_summer = 30
 fertilize_days_winter = 30
@@ -53,8 +53,8 @@ water_remark =
   Keep the soil moist, water when it starts to dry. \
   Hanging and curling leaves are a sign of too little water. \
   Watering a little often, is better than a lot infrequently. \
-  Sprinkling is beneficial, especially in winter if the air is dry. \
-  The edges of the leaves turn brown when sprinkling too little.\
+  Misting is beneficial, especially in winter if the air is dry. \
+  The edges of the leaves turn brown when misting too little.\
   """
 fertilize_days_summer = 14
 fertilize_days_winter = 180
@@ -77,7 +77,7 @@ water_days_winter = 7
 water_remark =
   """\
   Keep the soil slightly to moderately moist. \
-  Sprinkle regularly to keep humidity high and the leaves clean.\
+  Misting regularly to keep humidity high and the leaves clean.\
   """
 fertilize_days_summer = 14
 fertilize_days_winter = 180
@@ -135,7 +135,7 @@ water_remark =
   """\
   Keep the soil slightly moist at all times. \
   Prefer to water at the edges of the pot. \
-  Sprinkle regularly.\
+  Mist regularly.\
   """
 fertilize_days_summer = 30
 fertilize_days_winter = 90
