@@ -24,9 +24,10 @@ import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, re
 import qualified Data.ByteString.Lazy as LazyByteString
 
 import Catalog (Catalog)
-import Types (Plant (..), PlantId (..), Species (..))
+import Plant (Plant, PlantId (..), Species (..))
 
 import qualified Catalog
+import qualified Plant
 
 -- Wraps the given body html in html for an actual page, and encodes the
 -- resulting page in utf-8.
@@ -46,16 +47,16 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
 renderPlant :: Catalog -> Plant -> Html
 renderPlant catalog plant =
   let
-    (PlantId pid) = plantId plant
-    (Species species) = plantSpecies plant
+    (PlantId pid) = Plant.plantId plant
+    (Species species) = Plant.plantSpecies plant
   in
     div
       ! id ("plant" <> (toValue $ show pid))
       ! class_ "plant"
       $ do
         h2 $ toHtml species
-        p $ toHtml $ "Last watered: " <> (show $ plantLastWatered plant)
-        p $ toHtml $ "Last fertilized: " <> (show $ plantLastFertilized plant)
+        p $ toHtml $ "Last watered: " <> (show $ Plant.plantLastWatered plant)
+        p $ toHtml $ "Last fertilized: " <> (show $ Plant.plantLastFertilized plant)
         case Catalog.lookup plant catalog of
           Nothing -> pure ()
           Just info ->

@@ -7,10 +7,12 @@
 
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module Types
+module Plant
 ( PlantId (..)
 , Plant (..)
 , Species (..)
+, plantLastWatered
+, plantLastFertilized
 ) where
 
 import Data.Hashable (Hashable)
@@ -18,12 +20,20 @@ import Data.Int (Int64)
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 
+import Data.Maybe (listToMaybe)
+
 newtype PlantId = PlantId Int64 deriving (Eq, Ord, Show, Hashable)
 newtype Species = Species Text deriving (Eq, Ord, Show, Hashable)
 
 data Plant = Plant
-  { plantId             :: PlantId
-  , plantSpecies        :: Species
-  , plantLastWatered    :: Maybe UTCTime
-  , plantLastFertilized :: Maybe UTCTime
+  { plantId         :: PlantId
+  , plantSpecies    :: Species
+  , plantWatered    :: [UTCTime] -- Ordered descending, index 0 is latest.
+  , plantFertilized :: [UTCTime] -- Ordered descending, index 0 is latest.
   } deriving (Eq, Ord, Show)
+
+plantLastWatered :: Plant -> Maybe UTCTime
+plantLastWatered = listToMaybe . plantWatered
+
+plantLastFertilized :: Plant -> Maybe UTCTime
+plantLastFertilized = listToMaybe . plantFertilized

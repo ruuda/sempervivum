@@ -20,7 +20,7 @@ library
   hs-source-dirs:  src
   exposed-modules: Database
                  , Catalog
-                 , Types
+                 , Plant
                  , WebInterface
 
   build-depends: aeson

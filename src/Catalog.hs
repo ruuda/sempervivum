@@ -25,7 +25,7 @@ import qualified Data.Text.IO as TextIO
 import qualified System.Exit as System
 import qualified Toml
 
-import Types (Plant (..), Species (..))
+import Plant (Plant (..), Species (..))
 
 data SpeciesInfo = SpeciesInfo
   { speciesName :: Species

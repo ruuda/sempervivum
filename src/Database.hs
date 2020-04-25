@@ -16,12 +16,15 @@ module Database
 , recordWatered
 ) where
 
+import Data.Foldable (foldl')
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
 
+import qualified Data.HashMap.Strict as HashMap
+import qualified Data.Text as Text
 import qualified Database.SQLite.Simple as Sqlite
 
-import Types (Plant (..), PlantId (..), Species (..))
+import Plant (Plant (..), PlantId (..), Species (..))
 
 connect :: IO Sqlite.Connection
 connect = do
@@ -71,25 +74,39 @@ recordFertilized = recordEvent "fertilized"
 listPlants :: Sqlite.Connection -> IO [Plant]
 listPlants conn =
   let
-    decode (pid, species, lastWatered, lastFertilized) =
-      Plant (PlantId pid) (Species species) lastWatered lastFertilized
-  in
-    fmap decode <$> Sqlite.query conn
-      " select                                                                 \
-      \   id,                                                                  \
-      \   species,                                                             \
-      \   (                                                                    \
-      \     select max(time)                                                   \
-      \     from events                                                        \
-      \     where plant_id = plants.id and type = 'watered'                    \
-      \   )                                                                    \
-      \   as last_watered,                                                     \
-      \   (                                                                    \
-      \     select max(time)                                                   \
-      \     from events                                                        \
-      \     where plant_id = plants.id and type = 'fertilized'                 \
-      \   )                                                                    \
-      \   as last_fertilized                                                   \
-      \ from                                                                   \
-      \   plants;                                                              "
-      ()
+    -- This loads the entire database into memory, and assocates all events with
+    -- the correct plant, in such a way that plants without events still show
+    -- up. It is terribly inefficent, but the amount of plants and events that
+    -- we are ever going to have is going to be so modest that it is not a
+    -- problem at all.
+    addWatered    time plant = plant { plantWatered    = time : plantWatered plant }
+    addFertilized time plant = plant { plantFertilized = time : plantFertilized plant }
+
+    insertPlant plants (pid, species) =
+      HashMap.insert
+        (PlantId pid)
+        (Plant
+          { plantId = PlantId pid
+          , plantSpecies = Species species
+          , plantWatered = []
+          , plantFertilized = []
+          }
+        )
+        plants
+
+    insertEvent plants (pid, time, "watered") =
+      HashMap.adjust (addWatered time) (PlantId pid) plants
+
+    insertEvent plants (pid, time, "fertilized") =
+      HashMap.adjust (addFertilized time) (PlantId pid) plants
+
+    insertEvent _plants (_pid, _time, wrongType) =
+      error $ Text.unpack $ "Invalid event type: " <> wrongType
+
+  in do
+   -- This is not in a transaction, but that is fine because the database is
+   -- append-only.
+   plantRows <- Sqlite.query conn "select id, species from plants" ()
+   eventRows <- Sqlite.query conn "select plant_id, time, type from events order by time asc" ()
+   let plants = foldl' insertPlant HashMap.empty plantRows
+   pure $ fmap snd $ HashMap.toList $ foldl' insertEvent plants eventRows
