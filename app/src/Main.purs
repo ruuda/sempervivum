@@ -15,8 +15,20 @@ import Prelude
 
 import Dom as Dom
 import Html as Html
+import Plant as Plant
+import Species as Species
+import Time as Time
+import Util as Util
 
 main :: Effect Unit
 main = launchAff_ $ do
   Console.log "Hello from Purescript."
   liftEffect $ Html.withElement Dom.body $ Html.h2 $ Html.text "Hello"
+  now <- liftEffect $ Time.getCurrentInstant
+  let t1 = Time.fromGregorianUtc 2020 4 26 12 0 0
+  let t2 = Time.fromGregorianUtc 2020 4 27 12 0 0
+  Console.log $ show $ t1 > now
+  Console.log $ show $ t1 < now
+  Console.log $ show $ t2 < now
+  theId <- liftEffect $ Util.getUniqueId
+  Console.log theId
