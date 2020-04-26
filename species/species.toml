@@ -134,7 +134,7 @@ water_days_winter = 7
 water_remark =
   """\
   Keep the soil slightly to moderately moist. \
-  Misting regularly to keep humidity high and the leaves clean.\
+  Mist regularly to keep humidity high and the leaves clean.\
   """
 fertilize_days_summer = 14
 fertilize_days_winter = 180
