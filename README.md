@@ -1,7 +1,5 @@
 # Sempervivum
 
-**Vaporware warning: this app does not actually exist yet.**
-
 Sempervivum is a plant watering tracker. It reminds you when to water your
 plants based on a per-plant schedule.
 
