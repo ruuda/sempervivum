@@ -18,7 +18,12 @@ plants based on a per-plant schedule.
 
 ## License
 
-Sempervivum is licensed under the [Apache 2.0][apache2] license. Please do not
-open an issue if you disagree with the choice of license.
+ * Sempervivum is free software licensed under the [Apache 2.0][apache2] license.
+   Please do not open an issue if you disagree with the choice of license.
+ * Sempervivum includes a plant care dataset in the `species` directory. To the
+   extent possible under law, the Sempervivum contributors have associated
+   [CC0][cc0] with this dataset and waived all copyright and related or
+   neighboring rights to this work.
 
 [apache2]:    https://www.apache.org/licenses/LICENSE-2.0
+[cc0]:        https://creativecommons.org/publicdomain/zero/1.0/

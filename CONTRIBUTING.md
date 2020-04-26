@@ -6,7 +6,11 @@ welcome. For pull requests, please consider:
  * Write [a proper commit message][proper-commit] and keep the history clean.
  * Avoid unrelated formatting changes, they make it harder to identify
    functional changes in the diff.
- * You agree to license your contribution under the Apache 2.0 license.
+ * For code contributions, you agree to license your contribution under the
+   Apache 2.0 license.
+ * For contributions to the species dataset, you agree to associate CC0 with
+   your contribution and waive all copyright and related or neighboring rights
+   to your contribution.
 
 # Code of conduct
 
