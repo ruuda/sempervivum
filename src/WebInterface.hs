@@ -27,6 +27,7 @@ import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, re
 import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.Text as Text
 import qualified Data.Time.Calendar as Calendar
+import qualified Data.Time.Clock as Clock
 import qualified Data.Time.LocalTime as Clock
 
 import Care (KnownPlant (..))
@@ -111,7 +112,12 @@ renderPlantList :: Catalog -> ZonedTime -> [Plant] -> Html
 renderPlantList catalog now plants =
   let
     (knowns, unknowns) = Care.matchPlants catalog plants
-    plantsOrd = sortOn (Care.nextWater $ Clock.zonedTimeToUTC now) knowns
+    nowUtc         = Clock.zonedTimeToUTC now
+    -- Ignore events in the past 8 hours for ordering purposes, to keep the
+    -- plant order stable after ticking off a task. NominalDiffTime converts
+    -- to and from integers as seconds.
+    discardAfter = Clock.addUTCTime (fromInteger $ -3600 * 8) nowUtc
+    plantsOrd = sortOn (Care.nextWater nowUtc . Care.discardEventsAfter discardAfter) knowns
   in do
     h1 "Plants"
 
