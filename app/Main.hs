@@ -53,13 +53,13 @@ server catalog conn = do
     plantId <- Scotty.param "id"
     now <- liftIO $ Clock.getCurrentTime
     liftIO $ Database.recordWatered conn plantId now
-    Scotty.redirect "/plants"
+    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
 
   Scotty.post "/plants/:id/fertilized" $ do
     plantId <- Scotty.param "id"
     now <- liftIO $ Clock.getCurrentTime
     liftIO $ Database.recordFertilized conn plantId now
-    Scotty.redirect "/plants"
+    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
 
 main :: IO ()
 main = do
