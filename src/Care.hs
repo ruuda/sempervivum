@@ -10,6 +10,8 @@ module Care
 , discardEventsAfter
 , matchPlants
 , nextWater
+, wateredRecently
+, fertilizedRecently
 ) where
 
 import Data.Time.Clock (NominalDiffTime, UTCTime, addUTCTime)
@@ -48,8 +50,11 @@ discardEventsAfter discardAfter (KnownPlant plant species) =
   in
     KnownPlant plant' species
 
+hours :: Int -> NominalDiffTime
+hours n = fromIntegral (3600 * n) -- NominalDiffTime converts as seconds.
+
 days :: Int -> NominalDiffTime
-days n = fromIntegral (3600 * 24 * n) -- NominalDiffTime converts as seconds.
+days n = hours $ n * 24
 
 -- When should we next water the plant?
 nextWater :: UTCTime -> KnownPlant -> UTCTime
@@ -57,3 +62,17 @@ nextWater now (KnownPlant plant species) =
   case Plant.lastWatered plant of
     Nothing -> now
     Just t  -> addUTCTime (days $ Species.waterDaysSummer species) t
+
+-- Was the plant watered in the past 8 hours?
+wateredRecently :: UTCTime -> Plant -> Bool
+wateredRecently now plant =
+  case Plant.lastWatered plant of
+    Nothing -> False
+    Just t  -> t > addUTCTime (hours (-8)) now
+
+-- Was the plant fertilized in the past 8 hours?
+fertilizedRecently :: UTCTime -> Plant -> Bool
+fertilizedRecently now plant =
+  case Plant.lastFertilized plant of
+    Nothing -> False
+    Just t  -> t > addUTCTime (hours (-8)) now

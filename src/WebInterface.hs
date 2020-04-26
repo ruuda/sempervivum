@@ -21,8 +21,8 @@ import Data.Time.LocalTime (ZonedTime)
 import Prelude hiding (id, div, head, span)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, link, meta, p, title, toHtml)
-import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, rel)
+import Text.Blaze.Html5 (Html, body, button, div, docTypeHtml, form, h1, h2, head, link, meta, p, title, toHtml)
+import Text.Blaze.Html5.Attributes (charset, class_, content, disabled, formaction, href, id, method, name, rel)
 
 import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.Text as Text
@@ -73,7 +73,8 @@ renderPlant :: ZonedTime -> KnownPlant -> Html
 renderPlant now knownPlant =
   let
     KnownPlant plant species = knownPlant
-    waterAt = Care.nextWater (Clock.zonedTimeToUTC now) knownPlant
+    nowUtc  = Clock.zonedTimeToUTC now
+    waterAt = Care.nextWater nowUtc knownPlant
     waterNextRelDay = now `localDaysUntil` waterAt
     waterNextText = case waterNextRelDay of
       -1        -> "Needs water since yesterday"
@@ -95,9 +96,10 @@ renderPlant now knownPlant =
         0         -> "Fertilized today"
         n | n < 0 -> "Fertilized " <> (show (-n)) <> "days ago"
         _         -> "Fertilized some time in the future"
+    plantId = toValue $ show $ Plant.id plant
   in
     div
-      ! id ("plant" <> (toValue $ show $ Plant.id plant))
+      ! id ("plant" <> plantId)
       ! class_ "plant"
       $ do
         h2 $ toHtml $ Plant.species plant
@@ -107,6 +109,17 @@ renderPlant now knownPlant =
         p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
         p $ toHtml $ Species.waterRemark species
         p $ toHtml $ Species.fertilizeRemark species
+        form ! method "POST" $ do
+          button
+            ! formaction ("/plants/" <> plantId <> "/watered")
+            ! class_ "do-water"
+            ! (if Care.wateredRecently nowUtc plant then disabled "" else mempty)
+            $ "Watered"
+          button
+            ! formaction ("/plants/" <> plantId <> "/fertilized")
+            ! class_ "do-fertilize"
+            ! (if Care.fertilizedRecently nowUtc plant then disabled "" else mempty)
+            $ "Fertilized"
 
 renderPlantList :: Catalog -> ZonedTime -> [Plant] -> Html
 renderPlantList catalog now plants =
