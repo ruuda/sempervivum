@@ -1,0 +1,16 @@
+{
+  "name": "sempervivum",
+  "set": "psc-0.13.5",
+  "source": "https://github.com/purescript/package-sets.git",
+  "depends": [
+    "affjax",
+    "argonaut",
+    "argonaut-codecs",
+    "console",
+    "foldable-traversable",
+    "integers",
+    "prelude",
+    "strings",
+    "transformers"
+  ]
+}

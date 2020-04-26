@@ -7,3 +7,7 @@
 
 # Default database.
 sempervivum.sqlite3
+
+# Purescript build files.
+app/output
+app/.psc-package

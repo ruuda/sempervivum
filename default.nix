@@ -7,5 +7,7 @@ in
       pkgs.glibcLocales # Needed for the locale-archive, to avoid LC_* errors.
       pkgs.gmp          # Required by the Haskell runtime.
       pkgs.stack        # Provides the Haskell toolchain.
+      pkgs.purescript   # Provides the Purescript compiler.
+      pkgs.psc-package  # Provides the Purescript package manager.
     ];
   }

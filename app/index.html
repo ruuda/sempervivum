@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sempervivum</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <p id="loader">Loading app …</p>
+  </body>
+  <script type="text/javascript" src="app.js" async></script>
+  <script type="text/javascript">
+    window.onload = function() {
+      let loader = document.getElementById('loader');
+       document.body.removeChild(loader);
+       PS.Main.main();
+    };
+  </script>
+</html>

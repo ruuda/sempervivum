@@ -38,6 +38,14 @@ server catalog conn = do
   Scotty.get "/" $ do
     Scotty.redirect "/plants"
 
+  Scotty.get "/app"  $ do
+    Scotty.setHeader "content-type" "text/html; charset=utf-8"
+    Scotty.file "app/index.html"
+
+  Scotty.get "/app.js"  $ do
+    Scotty.setHeader "content-type" "text/javascript"
+    Scotty.file "app/output/app.js"
+
   Scotty.get "/plants" $ do
     lift $ logInfoN "Serving /"
     Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
