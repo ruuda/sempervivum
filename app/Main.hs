@@ -15,6 +15,7 @@ import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Class (lift)
 
 import qualified Data.Text.Lazy as LazyText
+import qualified Data.Time.Clock as Clock
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Web.Scotty.Trans as Scotty
 
@@ -38,9 +39,11 @@ server catalog conn = do
     Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
     let title = "Sempervivum"
     plants <- liftIO $ Database.listPlants conn
+    -- TODO: Allow overriding with query param.
+    now <- liftIO $ Clock.getCurrentTime
     Scotty.raw
       $ WebInterface.renderPage title
-      $ WebInterface.renderPlantList catalog plants
+      $ WebInterface.renderPlantList catalog now plants
 
 main :: IO ()
 main = do

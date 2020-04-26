@@ -13,9 +13,11 @@ module WebInterface
 , renderPlantList
 ) where
 
-import Data.Text (Text)
-import Prelude hiding (id, div, head, span)
 import Control.Monad (mapM_, when)
+import Data.List (sortOn)
+import Data.Text (Text)
+import Data.Time.Clock (UTCTime)
+import Prelude hiding (id, div, head, span)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Text.Blaze.Html5 (Html, body, div, docTypeHtml, h1, h2, head, link, meta, p, title, toHtml)
@@ -47,29 +49,34 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
     div ! id "content" $
       bodyHtml
 
-renderPlant :: KnownPlant -> Html
-renderPlant (KnownPlant plant species) =
-  div
-    ! id ("plant" <> (toValue $ show $ Plant.id plant))
-    ! class_ "plant"
-    $ do
-      h2 $ toHtml $ Plant.species plant
-      p $ toHtml $ "Last watered: " <> (show $ Plant.lastWatered plant)
-      p $ toHtml $ "Last fertilized: " <> (show $ Plant.lastFertilized plant)
-      p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
-      p $ toHtml $ Species.waterRemark species
-      p $ toHtml $ Species.fertilizeRemark species
+renderPlant :: UTCTime -> KnownPlant -> Html
+renderPlant now knownPlant =
+  let
+    KnownPlant plant species = knownPlant
+  in
+    div
+      ! id ("plant" <> (toValue $ show $ Plant.id plant))
+      ! class_ "plant"
+      $ do
+        h2 $ toHtml $ Plant.species plant
+        p $ toHtml $ "Last watered: " <> (show $ Plant.lastWatered plant)
+        p $ toHtml $ "Needs water: " <> (show $ Care.nextWater now knownPlant)
+        p $ toHtml $ "Last fertilized: " <> (show $ Plant.lastFertilized plant)
+        p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
+        p $ toHtml $ Species.waterRemark species
+        p $ toHtml $ Species.fertilizeRemark species
 
-renderPlantList :: Catalog -> [Plant] -> Html
-renderPlantList catalog plants =
+renderPlantList :: Catalog -> UTCTime -> [Plant] -> Html
+renderPlantList catalog now plants =
   let
     (knowns, unknowns) = Care.matchPlants catalog plants
+    plantsOrd = sortOn (Care.nextWater now) knowns
   in do
     h1 "Plants"
 
     case knowns of
       [] -> p "You don’t have any plants yet."
-      _  -> mapM_ renderPlant knowns
+      _  -> mapM_ (renderPlant now) plantsOrd
 
     when (not $ null $ unknowns) $
       p $ toHtml $ "Some plants could not be displayed "

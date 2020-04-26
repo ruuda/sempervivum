@@ -54,6 +54,7 @@ executable sempervivum
                , sempervivum
                , sqlite-simple
                , text
+               , time
                , transformers
 
 test-suite spec
