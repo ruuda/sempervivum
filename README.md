@@ -3,6 +3,14 @@
 Sempervivum is a plant watering tracker. It reminds you when to water your
 plants based on a per-plant schedule.
 
+## Building
+
+Sempervivum is written in Haskell and builds with [Stack][stack]. You can set up
+a local development environment with all dependencies with [Nix][nix].
+
+    nix run --command stack build
+    nix run --command stack exec sempervivum
+
 ## Future work
 
  * **v1**: A server-side rendered app backed by a server side database.
@@ -25,5 +33,7 @@ plants based on a per-plant schedule.
    [CC0][cc0] with this dataset and waived all copyright and related or
    neighboring rights to this work.
 
+[stack]:      https://docs.haskellstack.org/en/stable/README/
+[nix]:        https://nixos.org/nix/
 [apache2]:    https://www.apache.org/licenses/LICENSE-2.0
 [cc0]:        https://creativecommons.org/publicdomain/zero/1.0/
