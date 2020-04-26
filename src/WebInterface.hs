@@ -17,6 +17,7 @@ import Control.Monad (mapM_, when)
 import Data.List (sortOn)
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
+import Data.Time.LocalTime (ZonedTime)
 import Prelude hiding (id, div, head, span)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
@@ -25,6 +26,8 @@ import Text.Blaze.Html5.Attributes (charset, class_, content, href, id, name, re
 
 import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.Text as Text
+import qualified Data.Time.Calendar as Calendar
+import qualified Data.Time.LocalTime as Clock
 
 import Care (KnownPlant (..))
 import Plant (Plant)
@@ -33,6 +36,22 @@ import Species (Catalog)
 import qualified Care
 import qualified Plant
 import qualified Species
+
+-- Return (t - now) in number of local days. This considers only the local date,
+-- and ignores the time of the day. So if `now` is 5 seconds before midnight in
+-- its local timezone, and `t` is 10 seconds after `now`, then the difference
+-- would be 1 day. If both were a minute earlier, the difference would be 0
+-- days.
+localDaysUntil :: ZonedTime -> UTCTime -> Integer
+localDaysUntil now t =
+  let
+    zonedT   = Clock.utcToZonedTime (Clock.zonedTimeZone now) t
+    localNow = Clock.zonedTimeToLocalTime now
+    localT   = Clock.zonedTimeToLocalTime zonedT
+    dayNow   = Calendar.toModifiedJulianDay $ Clock.localDay localNow
+    dayT     = Calendar.toModifiedJulianDay $ Clock.localDay localT
+  in
+    dayT - dayNow
 
 -- Wraps the given body html in html for an actual page, and encodes the
 -- resulting page in utf-8.
@@ -49,28 +68,43 @@ renderPage pageTitle bodyHtml = renderHtml $ docTypeHtml $ do
     div ! id "content" $
       bodyHtml
 
-renderPlant :: UTCTime -> KnownPlant -> Html
+renderPlant :: ZonedTime -> KnownPlant -> Html
 renderPlant now knownPlant =
   let
     KnownPlant plant species = knownPlant
+    waterAt = Care.nextWater (Clock.zonedTimeToUTC now) knownPlant
+    waterNextRelDay = now `localDaysUntil` waterAt
+    waterNextText = case waterNextRelDay of
+      -1        -> "Needs water since yesterday"
+      0         -> "Needs water today"
+      1         -> "Needs water tomorrow"
+      n | n < 0 -> "In need of water for " <> (show (-n)) <> " days"
+      n         -> "Needs water in " <> (show n) <> " days"
+    waterPrevText = case Plant.lastWatered plant of
+      Nothing -> "Never watered before"
+      Just t -> case now `localDaysUntil` t of
+        -1        -> "Watered yesterday"
+        0         -> "Watered today"
+        n | n < 0 -> "Watered " <> (show (-n)) <> "days ago"
+        _         -> "Watered some time in the future"
   in
     div
       ! id ("plant" <> (toValue $ show $ Plant.id plant))
       ! class_ "plant"
       $ do
         h2 $ toHtml $ Plant.species plant
-        p $ toHtml $ "Last watered: " <> (show $ Plant.lastWatered plant)
-        p $ toHtml $ "Needs water: " <> (show $ Care.nextWater now knownPlant)
+        p $ toHtml $ waterNextText
+        p $ toHtml $ waterPrevText
         p $ toHtml $ "Last fertilized: " <> (show $ Plant.lastFertilized plant)
         p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
         p $ toHtml $ Species.waterRemark species
         p $ toHtml $ Species.fertilizeRemark species
 
-renderPlantList :: Catalog -> UTCTime -> [Plant] -> Html
+renderPlantList :: Catalog -> ZonedTime -> [Plant] -> Html
 renderPlantList catalog now plants =
   let
     (knowns, unknowns) = Care.matchPlants catalog plants
-    plantsOrd = sortOn (Care.nextWater now) knowns
+    plantsOrd = sortOn (Care.nextWater $ Clock.zonedTimeToUTC now) knowns
   in do
     h1 "Plants"
 
