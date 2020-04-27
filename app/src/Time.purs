@@ -29,6 +29,4 @@ instance ordInstant :: Ord Instant where
   compare = runFn5 ordInstantImpl LT EQ GT
 
 fromGregorianUtc :: Int -> Int -> Int -> Int -> Int -> Int -> Instant
-fromGregorianUtc year month day hour minute second =
-  runFn6 fromGregorianUtcImpl year month day hour minute second
-
+fromGregorianUtc = runFn6 fromGregorianUtcImpl
