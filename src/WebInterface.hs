@@ -87,14 +87,14 @@ renderPlant now knownPlant =
       Just t -> case now `localDaysUntil` t of
         -1        -> "Watered yesterday"
         0         -> "Watered today"
-        n | n < 0 -> "Watered " <> (show (-n)) <> "days ago"
+        n | n < 0 -> "Watered " <> (show (-n)) <> " days ago"
         _         -> "Watered some time in the future"
     fertilizePrevText = case Plant.lastFertilized plant of
       Nothing -> "Never fertilized before"
       Just t -> case now `localDaysUntil` t of
         -1        -> "Fertilized yesterday"
         0         -> "Fertilized today"
-        n | n < 0 -> "Fertilized " <> (show (-n)) <> "days ago"
+        n | n < 0 -> "Fertilized " <> (show (-n)) <> " days ago"
         _         -> "Fertilized some time in the future"
     plantId = toValue $ show $ Plant.id plant
   in
