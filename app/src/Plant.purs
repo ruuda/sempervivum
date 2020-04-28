@@ -9,12 +9,25 @@ module Plant
   ( Plant
   ) where
 
+import Prelude
+
+import Data.Argonaut.Decode (decodeJson, getField) as Json
+import Data.Argonaut.Decode.Class (class DecodeJson)
+
 import Time (Instant)
 
-type Plant =
+newtype Plant = Plant
   { id         :: String
   , species    :: String
   , watered    :: Array Instant
   , fertilized :: Array Instant
   }
 
+instance decodeJsonPlant :: DecodeJson Plant where
+  decodeJson json = do
+    obj        <- Json.decodeJson json
+    id         <- Json.getField obj "id"
+    species    <- Json.getField obj "species"
+    watered    <- Json.getField obj "watered"
+    fertilized <- Json.getField obj "fertilized"
+    pure $ Plant { id, species, watered, fertilized }
