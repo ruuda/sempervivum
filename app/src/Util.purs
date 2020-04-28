@@ -6,14 +6,19 @@
 -- A copy of the License has been included in the root of the repository.
 
 module Util
- ( getRandomBytes
+ ( arrayToMap
+ , getRandomBytes
  , getUniqueId
  ) where
 
+import Prelude
+
 import Data.Foldable (intercalate)
 import Data.Int as Int
+import Data.Tuple (Tuple (..))
 import Effect (Effect)
-import Prelude
+import Foreign.Object (Object)
+import Foreign.Object as Object
 
 foreign import getRandomBytes :: Int -> Effect (Array Int)
 
@@ -27,3 +32,5 @@ getUniqueId =
     -- globally unique, only unique per user.
     map (intercalate "" <<< map hex) (getRandomBytes 8)
 
+arrayToMap :: forall a. (a -> String) -> Array a -> Object a
+arrayToMap f = Object.fromFoldable <<< map (\x -> Tuple (f x) x)

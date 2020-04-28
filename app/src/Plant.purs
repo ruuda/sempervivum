@@ -6,7 +6,8 @@
 -- A copy of the License has been included in the root of the repository.
 
 module Plant
-  ( Plant
+  ( Plant (..)
+  , Plants (..)
   , getPlants
   ) where
 
@@ -20,8 +21,10 @@ import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Either (Either (..))
 import Effect.Aff (Aff)
 import Effect.Exception (Error, error)
+import Foreign.Object (Object)
 
 import Time (Instant)
+import Util (arrayToMap)
 
 newtype Plant = Plant
   { id         :: String
@@ -29,6 +32,8 @@ newtype Plant = Plant
   , watered    :: Array Instant
   , fertilized :: Array Instant
   }
+
+newtype Plants = Plants (Object Plant)
 
 instance decodeJsonPlant :: DecodeJson Plant where
   decodeJson json = do
@@ -42,11 +47,11 @@ instance decodeJsonPlant :: DecodeJson Plant where
 fatal :: forall m a. MonadThrow Error m => String -> m a
 fatal = error >>> throwError
 
-getPlants :: Aff (Array Plant)
+getPlants :: Aff Plants
 getPlants = do
   result <- Http.get Http.ResponseFormat.json "/plants.json"
   case result of
     Left err -> fatal $ "Failed to retrieve plants: " <> Http.printError err
     Right response -> case Json.decodeJson response.body of
       Left err -> fatal $ "Failed to parse plants: " <> err
-      Right plants -> pure plants
+      Right plants -> pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants

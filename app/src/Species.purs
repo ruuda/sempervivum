@@ -24,6 +24,8 @@ import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object
 
+import Util (arrayToMap)
+
 newtype Species = Species
   { name                :: String
   , waterDaysSummer     :: Int
@@ -36,13 +38,6 @@ newtype Species = Species
   }
 
 type Catalog = Object Species
-
-arrayToMap :: Array Species -> Catalog
-arrayToMap =
-  let
-    toTuple (Species s) = Tuple s.name (Species s)
-  in
-    Object.fromFoldable <<< map toTuple
 
 instance decodeJsonSpecies :: DecodeJson Species where
   decodeJson json = do
@@ -76,4 +71,4 @@ getCatalog = do
     Left err -> fatal $ "Failed to retrieve species catalog: " <> Http.printError err
     Right response -> case Json.decodeJson response.body of
       Left err -> fatal $ "Failed to parse species catalog: " <> err
-      Right species -> pure $ arrayToMap species
+      Right species -> pure $ arrayToMap (case _ of Species s -> s.name) species
