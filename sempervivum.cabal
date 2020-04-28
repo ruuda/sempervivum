@@ -48,7 +48,8 @@ executable sempervivum
   hs-source-dirs:   app
   ghc-options:      -Wall -Werror -Wincomplete-uni-patterns -Wincomplete-record-updates
 
-  build-depends: base
+  build-depends: aeson
+               , base
                , monad-logger
                , scotty
                , sempervivum

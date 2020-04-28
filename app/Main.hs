@@ -46,6 +46,9 @@ server catalog conn = do
     Scotty.setHeader "content-type" "text/javascript"
     Scotty.file "app/output/app.js"
 
+  Scotty.get "/catalog.json"  $ do
+    Scotty.json catalog
+
   Scotty.get "/plants" $ do
     lift $ logInfoN "Serving /"
     Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
