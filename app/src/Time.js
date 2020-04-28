@@ -20,7 +20,7 @@ exports.getCurrentInstant = function() {
 }
 
 exports.fromIso8601Impl = function(nothing, just, str) {
-  result = Date.parse(str);
+  let result = Date.parse(str);
   return result == undefined ? nothing : just(result);
 }
 

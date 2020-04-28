@@ -50,6 +50,10 @@ server catalog conn = do
   Scotty.get "/species.json"  $ do
     Scotty.json $ HashMap.elems catalog
 
+  Scotty.get "/plants.json"  $ do
+    plants <- liftIO $ Database.listPlants conn
+    Scotty.json plants
+
   Scotty.get "/plants" $ do
     lift $ logInfoN "Serving /"
     Scotty.setHeader "Content-Type" "text/html; charset=utf-8"
