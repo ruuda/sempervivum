@@ -51,6 +51,7 @@ executable sempervivum
   build-depends: aeson
                , base
                , monad-logger
+               , unordered-containers
                , scotty
                , sempervivum
                , sqlite-simple

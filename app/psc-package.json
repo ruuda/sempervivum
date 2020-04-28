@@ -8,6 +8,8 @@
     "argonaut-codecs",
     "console",
     "foldable-traversable",
+    "foreign-object",
+    "globals",
     "integers",
     "prelude",
     "strings",

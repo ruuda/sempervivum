@@ -14,6 +14,7 @@ import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Class (lift)
 
+import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Time.Clock as Clock
 import qualified Data.Time.LocalTime as Clock
@@ -46,8 +47,8 @@ server catalog conn = do
     Scotty.setHeader "content-type" "text/javascript"
     Scotty.file "app/output/app.js"
 
-  Scotty.get "/catalog.json"  $ do
-    Scotty.json catalog
+  Scotty.get "/species.json"  $ do
+    Scotty.json $ HashMap.elems catalog
 
   Scotty.get "/plants" $ do
     lift $ logInfoN "Serving /"

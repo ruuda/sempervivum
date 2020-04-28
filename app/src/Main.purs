@@ -11,6 +11,7 @@ import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
+import Global.Unsafe (unsafeStringify)
 import Prelude
 
 import Dom as Dom
@@ -32,3 +33,5 @@ main = launchAff_ $ do
   Console.log $ show $ t2 < now
   theId <- liftEffect $ Util.getUniqueId
   Console.log theId
+  catalog <- Species.getCatalog
+  Console.log $ unsafeStringify catalog

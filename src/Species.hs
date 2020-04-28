@@ -58,8 +58,7 @@ instance Aeson.ToJSON Species where
   toJSON = error "Use toEncoding instead."
   toEncoding species =
     Aeson.pairs $ mempty
-      -- We omit the name, the catalog encodes to an object, and the species
-      -- names become the keys.
+      <> "name"                  Aeson..= name species
       <> "water_days_summer"     Aeson..= waterDaysSummer species
       <> "water_days_winter"     Aeson..= waterDaysWinter species
       <> "water_remark"          Aeson..= waterRemark species
