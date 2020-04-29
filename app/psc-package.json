@@ -11,6 +11,7 @@
     "foreign-object",
     "globals",
     "integers",
+    "lists",
     "prelude",
     "strings",
     "transformers"

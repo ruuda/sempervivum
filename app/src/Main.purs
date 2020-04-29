@@ -20,6 +20,8 @@ import Plant as Plant
 import Species as Species
 import Time as Time
 import Util as Util
+import Care as Care
+import View as View
 
 main :: Effect Unit
 main = launchAff_ $ do
@@ -40,3 +42,6 @@ main = launchAff_ $ do
 
   plants <- Plant.getPlants
   Console.log $ unsafeStringify plants
+
+  let matched = Care.match catalog plants
+  liftEffect $ Html.withElement Dom.body $ View.renderPlants matched

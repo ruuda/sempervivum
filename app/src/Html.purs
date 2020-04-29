@@ -11,6 +11,7 @@ module Html
   , addClass
   , clear
   , div
+  , h1
   , h2
   , img
   , input
@@ -18,6 +19,7 @@ module Html
   , node
   , onClick
   , onInput
+  , p
   , removeClass
   , setId
   , setTitle
@@ -81,8 +83,14 @@ onInput callback = ReaderT $ \container ->
 div :: forall a. Html a -> Html a
 div children = node "div" children
 
+h1 :: forall a. Html a -> Html a
+h1 children = node "h1" children
+
 h2 :: forall a. Html a -> Html a
 h2 children = node "h2" children
+
+p :: forall a. Html a -> Html a
+p children = node "p" children
 
 span :: forall a. Html a -> Html a
 span children = node "span" children
