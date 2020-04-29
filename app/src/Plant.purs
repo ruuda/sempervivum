@@ -9,6 +9,8 @@ module Plant
   ( Plant (..)
   , Plants (..)
   , getPlants
+  , lastFertilized
+  , lastWatered
   ) where
 
 import Prelude
@@ -18,7 +20,9 @@ import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Array as Array
 import Data.Either (Either (..))
+import Data.Maybe (Maybe)
 import Effect.Aff (Aff)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
@@ -40,8 +44,8 @@ instance decodeJsonPlant :: DecodeJson Plant where
     obj        <- Json.decodeJson json
     id         <- Json.getField obj "id"
     species    <- Json.getField obj "species"
-    watered    <- Json.getField obj "watered"
-    fertilized <- Json.getField obj "fertilized"
+    watered    <- Array.sort <$> Json.getField obj "watered"
+    fertilized <- Array.sort <$> Json.getField obj "fertilized"
     pure $ Plant { id, species, watered, fertilized }
 
 fatal :: forall m a. MonadThrow Error m => String -> m a
@@ -55,3 +59,9 @@ getPlants = do
     Right response -> case Json.decodeJson response.body of
       Left err -> fatal $ "Failed to parse plants: " <> err
       Right plants -> pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants
+
+lastWatered :: Plant -> Maybe Instant
+lastWatered (Plant p) = Array.last p.watered
+
+lastFertilized :: Plant -> Maybe Instant
+lastFertilized (Plant p) = Array.last p.fertilized

@@ -14,23 +14,53 @@ import Prelude
 import Data.Foldable (traverse_)
 import Data.List (List (..))
 import Data.List as List
+import Data.Maybe (Maybe (..))
 
 import Care (MatchedPlants, KnownPlant)
 import Html (Html)
 import Html as Html
 import Plant (Plant (..))
+import Plant as Plant
 import Species (Species (..))
+import Time (Instant)
+import Time as Time
 
-renderPlants :: MatchedPlants -> Html Unit
-renderPlants ps = do
+-- Return (t2 - t1) in number of local days. This considers only the local date,
+-- and ignores the time of the day. So if t1 is 5 seconds before midnight in
+-- its local timezone, and t2 is 10 seconds after t1, then the difference
+-- would be 1 day. If both were a minute earlier, the difference would be 0
+-- days.
+relativeDate :: Instant -> Instant -> Int
+relativeDate t1 t2 = (Time.localJulianDay t2) - (Time.localJulianDay t1)
+
+lastWatered :: Instant -> Plant -> String
+lastWatered now plant = case Plant.lastWatered plant of
+  Nothing -> "Never watered before"
+  Just t -> case relativeDate now t of
+    -1        -> "Watered yesterday"
+    0         -> "Watered today"
+    n | n < 0 -> "Watered " <> show (-n) <> " days ago"
+    _         -> "Watered in the future"
+
+lastFertilized :: Instant -> Plant -> String
+lastFertilized now plant = case Plant.lastFertilized plant of
+  Nothing -> "Never fertilized before"
+  Just t -> case relativeDate now t of
+    -1        -> "Fertilized yesterday"
+    0         -> "Fertilized today"
+    n | n < 0 -> "Fertilized " <> show (-n) <> " days ago"
+    _         -> "Fertilized in the future"
+
+renderPlants :: Instant -> MatchedPlants -> Html Unit
+renderPlants now ps = do
   Html.h1 $ Html.text "Plants"
-  traverse_ renderPlant ps.knowns
+  traverse_ (renderPlant now) ps.knowns
   case ps.unknowns of
     Nil -> pure unit
     xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
 
-renderPlant :: KnownPlant -> Html Unit
-renderPlant knownPlant =
+renderPlant :: Instant -> KnownPlant -> Html Unit
+renderPlant now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
@@ -40,8 +70,8 @@ renderPlant knownPlant =
       Html.addClass "plant"
       Html.h2 $ Html.text plant.species
       Html.p $ Html.text "Needs water at some point."
-      Html.p $ Html.text "Maybe watered previously."
-      Html.p $ Html.text "Maybe fertilized previously."
+      Html.p $ Html.text $ lastWatered now (Plant plant)
+      Html.p $ Html.text $ lastFertilized now (Plant plant)
       Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
       Html.p $ Html.text species.waterRemark
       Html.p $ Html.text species.fertilizeRemark

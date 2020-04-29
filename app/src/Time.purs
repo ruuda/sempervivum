@@ -7,13 +7,13 @@
 
 module Time
   ( Instant
-  , getCurrentInstant
   , fromGregorianUtc
+  , getCurrentInstant
+  , localJulianDay
   ) where
 
 import Data.Argonaut.Core (caseJsonString) as Json
 import Data.Either (Either (..))
-import Data.Argonaut.Decode (decodeJson) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Function.Uncurried (Fn2, Fn3, Fn5, Fn6, runFn2, runFn3, runFn5, runFn6)
 import Data.Maybe (Maybe (..))
@@ -27,6 +27,11 @@ foreign import fromGregorianUtcImpl :: Fn6 Int Int Int Int Int Int Instant
 foreign import fromIso8601Impl :: Fn3 (Maybe Instant) (Instant -> Maybe Instant) String (Maybe Instant)
 foreign import getCurrentInstant :: Effect Instant
 foreign import ordInstantImpl :: Fn5 Ordering Ordering Ordering Instant Instant Ordering
+
+-- Return the date of the given instant in the user's local time zone.
+foreign import localDay   :: Instant -> Int
+foreign import localMonth :: Instant -> Int
+foreign import localYear  :: Instant -> Int
 
 instance eqInstant :: Eq Instant where
   eq = runFn2 eqInstantImpl
@@ -46,3 +51,20 @@ fromGregorianUtc = runFn6 fromGregorianUtcImpl
 
 fromIso8601 :: String -> Maybe Instant
 fromIso8601 = runFn3 fromIso8601Impl Nothing Just
+
+-- Return the Julian day number of the given instant in the user's local time
+-- zone. Algorithm from
+-- https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
+localJulianDay :: Instant -> Int
+localJulianDay t =
+  let
+    y = localYear t
+    m = localMonth t
+    d = localDay t
+  in
+    0
+    + (1461 * (y + 4800 + (m - 14) / 12)) / 4
+    + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12
+    - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4
+    + d
+    - 32075

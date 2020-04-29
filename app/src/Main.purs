@@ -33,4 +33,4 @@ main = launchAff_ $ do
   Console.log $ unsafeStringify plants
 
   let matched = Care.match catalog plants
-  liftEffect $ Html.withElement Dom.body $ View.renderPlants matched
+  liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched
