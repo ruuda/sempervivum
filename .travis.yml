@@ -6,8 +6,9 @@ notifications:
 
 cache:
   directories:
-    - app/.psc-package
+    - $HOME/.stack
     - .stack-work
+    - app/.psc-package
 
 before_cache:
   # The Stack database changes even when no code changes, do not cache it.
