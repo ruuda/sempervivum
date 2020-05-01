@@ -63,18 +63,32 @@ addDays n = addMilliseconds $ n * 24 * 3600 * 1000
 -- Return the Julian day number of the given instant in the user's local time
 -- zone. Algorithm from
 -- https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
-localJulianDay :: Instant -> Int
-localJulianDay t =
+xlocalJulianDay :: Instant -> Int
+xlocalJulianDay t =
   let
     y = localYear t
     m = localMonth t
     d = localDay t
-    -- Alias as a local to get slightly better codegen.
-    div = (/)
   in
     0
-    + (1461 * (y + 4800 + (m - 14) `div` 12)) `div` 4
-    + (367 * (m - 2 - 12 * ((m - 14) `div` 12))) `div` 12
-    - (3 * ((y + 4900 + (m - 14) `div` 12) `div` 100)) `div` 4
+    + (1461 * (y + 4800 + (m - 14) / 12)) / 4
+    + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12
+    - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4
     + d
     - 32075
+
+-- Return the Julian day number of the given instant in the user's local time
+-- zone. Algorithm from
+-- https://stason.org/TULARC/society/calendars/2-15-1-Is-there-a-formula-for-calculating-the-Julian-day-nu.html
+localJulianDay :: Instant -> Int
+localJulianDay t =
+  let
+    year  = localYear t
+    month = localMonth t
+    day   = localDay t
+
+    a = (14 - month) / 12
+    y = year + 4800 - a
+    m = month + 12 * a - 3
+  in
+    day + (153 * m + 2) / 5 + y * 365 + y / 4 - y / 100 + y / 400 - 32045
