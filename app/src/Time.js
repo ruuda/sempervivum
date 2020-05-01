@@ -36,3 +36,7 @@ exports.fromGregorianUtcImpl = function(year, month, day, hour, minute, second) 
 exports.localDay = function(instant) { return instant.getDate(); }
 exports.localMonth = function(instant) { return 1 + instant.getMonth(); }
 exports.localYear = function(instant) { return instant.getFullYear(); }
+
+exports.addMillisecondsImpl = function(msecs, instant) {
+  return new Date(msecs + instant.getTime());
+}

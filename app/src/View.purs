@@ -17,6 +17,7 @@ import Data.List as List
 import Data.Maybe (Maybe (..))
 
 import Care (MatchedPlants, KnownPlant)
+import Care as Care
 import Html (Html)
 import Html as Html
 import Plant (Plant (..))
@@ -51,10 +52,18 @@ lastFertilized now plant = case Plant.lastFertilized plant of
     n | n < 0 -> "Fertilized " <> show (-n) <> " days ago"
     _         -> "Fertilized in the future"
 
+nextWater :: Instant -> KnownPlant -> String
+nextWater now plant = case relativeDate now (Care.nextWater now plant) of
+  -1        -> "Needs water since yesterday"
+  0         -> "Needs water today"
+  1         -> "Needs water tomorrow"
+  n | n < 0 -> "Needs water since " <> show (-n) <> " days"
+  n         -> "Water in " <> show n <> " days"
+
 renderPlants :: Instant -> MatchedPlants -> Html Unit
 renderPlants now ps = do
   Html.h1 $ Html.text "Plants"
-  traverse_ (renderPlant now) ps.knowns
+  traverse_ (renderPlant now) (Care.sortByNextWater now ps.knowns)
   case ps.unknowns of
     Nil -> pure unit
     xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
@@ -69,7 +78,7 @@ renderPlant now knownPlant =
       Html.setId plant.id
       Html.addClass "plant"
       Html.h2 $ Html.text plant.species
-      Html.p $ Html.text "Needs water at some point."
+      Html.p $ Html.text $ nextWater now knownPlant
       Html.p $ Html.text $ lastWatered now (Plant plant)
       Html.p $ Html.text $ lastFertilized now (Plant plant)
       Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."

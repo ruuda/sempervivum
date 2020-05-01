@@ -7,6 +7,7 @@
 
 module Time
   ( Instant
+  , addDays
   , fromGregorianUtc
   , getCurrentInstant
   , localJulianDay
@@ -22,6 +23,7 @@ import Prelude
 
 foreign import data Instant :: Type
 
+foreign import addMillisecondsImpl :: Fn2 Int Instant Instant
 foreign import eqInstantImpl :: Fn2 Instant Instant Boolean
 foreign import fromGregorianUtcImpl :: Fn6 Int Int Int Int Int Int Instant
 foreign import fromIso8601Impl :: Fn3 (Maybe Instant) (Instant -> Maybe Instant) String (Maybe Instant)
@@ -52,6 +54,12 @@ fromGregorianUtc = runFn6 fromGregorianUtcImpl
 fromIso8601 :: String -> Maybe Instant
 fromIso8601 = runFn3 fromIso8601Impl Nothing Just
 
+addMilliseconds :: Int -> Instant -> Instant
+addMilliseconds = runFn2 addMillisecondsImpl
+
+addDays :: Int -> Instant -> Instant
+addDays n = addMilliseconds $ n * 24 * 3600 * 1000
+
 -- Return the Julian day number of the given instant in the user's local time
 -- zone. Algorithm from
 -- https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
@@ -61,10 +69,12 @@ localJulianDay t =
     y = localYear t
     m = localMonth t
     d = localDay t
+    -- Alias as a local to get slightly better codegen.
+    div = (/)
   in
     0
-    + (1461 * (y + 4800 + (m - 14) / 12)) / 4
-    + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12
-    - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4
+    + (1461 * (y + 4800 + (m - 14) `div` 12)) `div` 4
+    + (367 * (m - 2 - 12 * ((m - 14) `div` 12))) `div` 12
+    - (3 * ((y + 4900 + (m - 14) `div` 12) `div` 100)) `div` 4
     + d
     - 32075

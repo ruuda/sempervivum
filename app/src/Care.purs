@@ -9,15 +9,23 @@ module Care
   ( KnownPlant
   , MatchedPlants
   , match
+  , nextWater
+  , sortByNextWater
   ) where
 
+import Prelude
+
+import Data.Array as Array
 import Data.Foldable (foldl)
 import Data.List (List (..), (:))
 import Data.Maybe (Maybe (..))
 import Foreign.Object as Object
 
 import Plant (Plant (..), Plants (..))
-import Species (Catalog, Species)
+import Plant as Plant
+import Species (Catalog, Species (..))
+import Time (Instant)
+import Time as Time
 
 type KnownPlant =
   { plant   :: Plant
@@ -44,3 +52,16 @@ match catalog (Plants plantMap) =
         acc { unknowns = (Plant p) : acc.unknowns }
   in
     foldl prepend { knowns: Nil, unknowns: Nil } plants
+
+
+nextWater :: Instant -> KnownPlant -> Instant
+nextWater now kp =
+  let
+    Species species = kp.species
+  in
+    case Plant.lastWatered kp.plant of
+      Nothing -> now
+      Just t  -> Time.addDays species.waterDaysSummer t
+
+sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
+sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable
