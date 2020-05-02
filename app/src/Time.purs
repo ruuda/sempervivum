@@ -13,17 +13,19 @@ module Time
   , localJulianDay
   ) where
 
+import Prelude
+
 import Data.Argonaut.Core (caseJsonString) as Json
-import Data.Either (Either (..))
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Either (Either (..))
 import Data.Function.Uncurried (Fn2, Fn3, Fn5, Fn6, runFn2, runFn3, runFn5, runFn6)
+import Data.Int as Int
 import Data.Maybe (Maybe (..))
 import Effect (Effect)
-import Prelude
 
 foreign import data Instant :: Type
 
-foreign import addMillisecondsImpl :: Fn2 Int Instant Instant
+foreign import addMillisecondsImpl :: Fn2 Number Instant Instant
 foreign import eqInstantImpl :: Fn2 Instant Instant Boolean
 foreign import fromGregorianUtcImpl :: Fn6 Int Int Int Int Int Int Instant
 foreign import fromIso8601Impl :: Fn3 (Maybe Instant) (Instant -> Maybe Instant) String (Maybe Instant)
@@ -54,11 +56,14 @@ fromGregorianUtc = runFn6 fromGregorianUtcImpl
 fromIso8601 :: String -> Maybe Instant
 fromIso8601 = runFn3 fromIso8601Impl Nothing Just
 
-addMilliseconds :: Int -> Instant -> Instant
+-- Note that the argument is Number, not Int. The range of a signed 32-bit
+-- number of milliseconds is -24.8 to +24.8 days, so an Int is unable to
+-- represent long time spans.
+addMilliseconds :: Number -> Instant -> Instant
 addMilliseconds = runFn2 addMillisecondsImpl
 
 addDays :: Int -> Instant -> Instant
-addDays n = addMilliseconds $ n * 24 * 3600 * 1000
+addDays n = addMilliseconds $ (Int.toNumber n) * 24.0 * 3600.0 * 1000.0
 
 -- Return the Julian day number of the given instant in the user's local time
 -- zone. Algorithm from
