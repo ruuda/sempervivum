@@ -19,11 +19,9 @@ import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Either (Either (..))
-import Data.Tuple (Tuple (..))
 import Effect.Aff (Aff)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
-import Foreign.Object as Object
 
 import Util (arrayToMap)
 
