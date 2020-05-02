@@ -25,7 +25,7 @@ body {
 }
 
 h1, h2 {
-  font-family: 'Literata', 'IBM Plex Serif';
+  font-family: Literata, serif;
   font-weight: 700;
 }
 
@@ -34,7 +34,24 @@ h2 {
 }
 
 .plant {
-  background-color: lightgreen;
+  /*
+  background-color: white;
   padding: 1em;
+  */
+  margin-top: 2em;
+}
+
+button {
+  background-color: white;
+  border: 0.8px dashed black;
+  border-radius: 0.3em;
+  padding: 0.5em;
+  margin-right: 1em;
   margin-top: 1em;
+  font-family: Literata, serif;
+}
+
+button img {
+  margin-right: 0.5em;
+  vertical-align: text-bottom;
 }

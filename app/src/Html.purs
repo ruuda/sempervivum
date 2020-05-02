@@ -9,6 +9,7 @@
 module Html
   ( Html
   , addClass
+  , button
   , clear
   , div
   , h1
@@ -100,6 +101,9 @@ ul children = node "ul" children
 
 li :: forall a. Html a -> Html a
 li children = node "li" children
+
+button :: forall a. Html a -> Html a
+button children = node "button" children
 
 img :: forall a. String -> String -> Html a -> Html a
 img src alt (ReaderT children) = ReaderT $ \container -> do

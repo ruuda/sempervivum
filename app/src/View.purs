@@ -79,8 +79,14 @@ renderPlant now knownPlant =
       Html.addClass "plant"
       Html.h2 $ Html.text plant.species
       Html.p $ Html.text $ nextWater now knownPlant
-      Html.p $ Html.text $ lastWatered now (Plant plant)
-      Html.p $ Html.text $ lastFertilized now (Plant plant)
-      Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
       Html.p $ Html.text species.waterRemark
       Html.p $ Html.text species.fertilizeRemark
+      Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
+      Html.p $ Html.text $ lastWatered now (Plant plant)
+      Html.p $ Html.text $ lastFertilized now (Plant plant)
+      Html.button $ do
+        Html.img "/watered.svg" "watered" (pure unit)
+        Html.text "watered"
+      Html.button $ do
+        Html.img "/fertilized.svg" "watered and fertilized" (pure unit)
+        Html.text "watered + fertilized"

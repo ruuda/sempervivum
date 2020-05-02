@@ -36,6 +36,14 @@ server catalog conn = do
     Scotty.setHeader "content-type" "text/css"
     Scotty.file "app/style.css"
 
+  Scotty.get "/watered.svg"  $ do
+    Scotty.setHeader "content-type" "image/svg+xml"
+    Scotty.file "assets/watered.svg"
+
+  Scotty.get "/fertilized.svg"  $ do
+    Scotty.setHeader "content-type" "image/svg+xml"
+    Scotty.file "assets/fertilized.svg"
+
   Scotty.get "/" $ do
     Scotty.redirect "/plants"
 
