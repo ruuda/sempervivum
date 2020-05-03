@@ -1,11 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,700;0,900;1,300;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;0,900;1,300;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Gentium+Basic:400,400i,700,700i&display=swap');
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,500,500i,600,600i,700,700i&display=swap');
-@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Serif:400,400i,500,500i,600,600i,700,700i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=DM+Sans:400,400i,500,500i,700,700i&display=swap&subset=latin-ext');
 @import url('https://fonts.googleapis.com/css?family=Literata:400,400i,500,500i,600,600i,700,700i&display=swap');
+
+:root {
+  /* Colors: https://coolors.co/84c318-f5fbef-92ad94-748b75-503d42 */
+  --yellow-green: #84c318;
+  --honeydew: #f5fbef;
+  --laurel-green: #92ad94;
+  --xanadu: #748b75;
+  --old-burgrundy: #503d42;
+}
 
 * {
   margin: 0;
@@ -13,32 +17,38 @@
 }
 
 html {
-  font-family: 'IBM Plex Sans';
-  font-size: 18px;
-  padding: 1em;
+  font-family: 'DM Sans';
+  font-size: 16px;
+  line-height: 1.3em;
+  padding: 1.2em;
+  background-color: var(--yellow-green);
+  color: var(--old-burgrundy);
 }
 
 body {
-  max-width: 22em;
+  max-width: 24em;
   margin-left: auto;
   margin-right: auto;
 }
 
-h1, h2 {
-  font-family: Literata, serif;
+h1 {
   font-weight: 700;
+  font-size: 2rem;
+  margin-top: 0.6rem;
 }
 
 h2 {
-  font-size: 1.5em;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .plant {
-  /*
-  background-color: white;
-  padding: 1em;
-  */
-  margin-top: 2em;
+  background-color: var(--honeydew);
+  border-radius: 0.25em;
+  padding: 1.2em;
+  margin-top: 1.2em;
+  box-shadow: 2pt 2pt 10pt rgba(0,0,0,0.04), 0pt 0pt 10pt inset rgba(0,0,0,0.02);
+  border-top: 1px solid white;
 }
 
 button {
@@ -48,7 +58,6 @@ button {
   padding: 0.5em;
   margin-right: 1em;
   margin-top: 1em;
-  font-family: Literata, serif;
 }
 
 button img {

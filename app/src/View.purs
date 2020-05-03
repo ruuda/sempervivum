@@ -63,13 +63,25 @@ nextWater now plant = case relativeDate now (Care.nextWater now plant) of
 renderPlants :: Instant -> MatchedPlants -> Html Unit
 renderPlants now ps = do
   Html.h1 $ Html.text "Plants"
-  traverse_ (renderPlant now) (Care.sortByNextWater now ps.knowns)
+  traverse_ (renderPlantItem now) (Care.sortByNextWater now ps.knowns)
   case ps.unknowns of
     Nil -> pure unit
     xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
 
-renderPlant :: Instant -> KnownPlant -> Html Unit
-renderPlant now knownPlant =
+renderPlantItem :: Instant -> KnownPlant -> Html Unit
+renderPlantItem now knownPlant =
+  let
+    Plant plant = knownPlant.plant
+    Species species = knownPlant.species
+  in
+    Html.div $ do
+      Html.setId plant.id
+      Html.addClass "plant"
+      Html.h2 $ Html.text plant.species
+      Html.p $ Html.text $ nextWater now knownPlant
+
+renderPlantFull :: Instant -> KnownPlant -> Html Unit
+renderPlantFull now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
