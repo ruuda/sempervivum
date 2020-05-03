@@ -9,12 +9,13 @@
 
 module Main where
 
-import Control.Monad.Logger (LoggingT, runStdoutLoggingT, logInfoN)
+import Control.Monad.Logger (LoggingT, runStdoutLoggingT, logDebugN, logInfoN)
 import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Class (lift)
 
 import qualified Data.HashMap.Strict as HashMap
+import qualified Data.Text as Text
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Time.Clock as Clock
 import qualified Data.Time.LocalTime as Clock
@@ -43,6 +44,12 @@ server catalog conn = do
   Scotty.get "/fertilized.svg"  $ do
     Scotty.setHeader "content-type" "image/svg+xml"
     Scotty.file "assets/fertilized.svg"
+
+  Scotty.get (Scotty.regex "^/(.*)\\.webp$")  $ do
+    fname <- Scotty.param "1"
+    Scotty.setHeader "content-type" "image/webp"
+    lift $ logDebugN $ "Serving image " <> (Text.pack fname)
+    Scotty.file $ "photos/" <> fname <> ".webp"
 
   Scotty.get "/" $ do
     Scotty.redirect "/plants"

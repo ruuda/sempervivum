@@ -3,12 +3,19 @@
 @import url('https://fonts.googleapis.com/css?family=Literata:400,400i,500,500i,600,600i,700,700i&display=swap');
 
 :root {
-  /* Colors: https://coolors.co/84c318-f5fbef-92ad94-748b75-503d42 */
+  /* Colors: */
+  /* https://coolors.co/84c318-f5fbef-92ad94-748b75-503d42 */
+  /* https://coolors.co/503d42-84c318-c9e3ac-f5fbef-eaefbd */
   --yellow-green: #84c318;
   --honeydew: #f5fbef;
   --laurel-green: #92ad94;
   --xanadu: #748b75;
   --old-burgrundy: #503d42;
+  --tea-green: #c9e3ac;
+  --pale-spring-bud: #eaefbd;
+
+  --light-bg: #fafbf9;
+  --light-bg: #f7f8f6;
 }
 
 * {
@@ -20,13 +27,13 @@ html {
   font-family: 'DM Sans';
   font-size: 16px;
   line-height: 1.3em;
-  padding: 1.2em;
-  background-color: var(--yellow-green);
+  padding: 2em;
+  background-color: var(--light-bg);
   color: var(--old-burgrundy);
 }
 
 body {
-  max-width: 24em;
+  max-width: 26em;
   margin-left: auto;
   margin-right: auto;
 }
@@ -34,7 +41,8 @@ body {
 h1 {
   font-weight: 700;
   font-size: 2rem;
-  margin-top: 0.6rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
 }
 
 h2 {
@@ -43,12 +51,18 @@ h2 {
 }
 
 .plant {
-  background-color: var(--honeydew);
+  background-color: white;
   border-radius: 0.25em;
   padding: 1.2em;
-  margin-top: 1.2em;
-  box-shadow: 2pt 2pt 10pt rgba(0,0,0,0.04), 0pt 0pt 10pt inset rgba(0,0,0,0.02);
+  margin-top: 1em;
+  /* box-shadow: 2pt 2pt 10pt rgba(0,0,0,0.02), 0pt 0pt 10pt inset rgba(0,0,0,0.01); */
   border-top: 1px solid white;
+}
+
+.plant img {
+  width: 2em;
+  float: left;
+  margin-right: 1em;
 }
 
 button {

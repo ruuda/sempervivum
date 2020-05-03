@@ -15,6 +15,8 @@ import Data.Foldable (traverse_)
 import Data.List (List (..))
 import Data.List as List
 import Data.Maybe (Maybe (..))
+import Data.String.Common as String
+import Data.String.Pattern (Pattern (..), Replacement (..))
 
 import Care (MatchedPlants, KnownPlant)
 import Care as Care
@@ -60,6 +62,16 @@ nextWater now plant = case relativeDate now (Care.nextWater now plant) of
   n | n < 0 -> "Needs water since " <> show (-n) <> " days"
   n         -> "Water in " <> show n <> " days"
 
+speciesImageUrl :: Species -> String
+speciesImageUrl (Species species) =
+  let
+    slug
+      = String.replaceAll (Pattern " ") (Replacement "_")
+      $ String.toLower
+      $ species.name
+  in
+    "/" <> slug <> ".webp"
+
 renderPlants :: Instant -> MatchedPlants -> Html Unit
 renderPlants now ps = do
   Html.h1 $ Html.text "Plants"
@@ -77,6 +89,7 @@ renderPlantItem now knownPlant =
     Html.div $ do
       Html.setId plant.id
       Html.addClass "plant"
+      Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)
       Html.h2 $ Html.text plant.species
       Html.p $ Html.text $ nextWater now knownPlant
 

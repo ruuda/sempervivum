@@ -9,5 +9,8 @@ in
       pkgs.stack        # Provides the Haskell toolchain.
       pkgs.purescript   # Provides the Purescript compiler.
       pkgs.psc-package  # Provides the Purescript package manager.
+
+      # For compressing plant photos as WebP.
+      pkgs.libwebp
     ];
   }
