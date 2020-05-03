@@ -54,15 +54,18 @@ h2 {
   background-color: white;
   border-radius: 0.25em;
   padding: 1.2em;
+  padding-left: 0.8em;
   margin-top: 1em;
   /* box-shadow: 2pt 2pt 10pt rgba(0,0,0,0.02), 0pt 0pt 10pt inset rgba(0,0,0,0.01); */
   border-top: 1px solid white;
 }
 
 .plant img {
-  width: 2em;
+  width: 2.6em;
+  height: 2.6em;
   float: left;
-  margin-right: 1em;
+  margin-right: 0.8em;
+  object-fit: contain;
 }
 
 button {

@@ -50,6 +50,7 @@ executable sempervivum
 
   build-depends: aeson
                , base
+               , directory
                , monad-logger
                , unordered-containers
                , scotty

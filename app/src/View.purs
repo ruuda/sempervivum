@@ -67,6 +67,7 @@ speciesImageUrl (Species species) =
   let
     slug
       = String.replaceAll (Pattern " ") (Replacement "_")
+      $ String.replaceAll (Pattern "-") (Replacement "_")
       $ String.toLower
       $ species.name
   in

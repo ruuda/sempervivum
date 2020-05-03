@@ -20,6 +20,7 @@ import qualified Data.Text.Lazy as LazyText
 import qualified Data.Time.Clock as Clock
 import qualified Data.Time.LocalTime as Clock
 import qualified Database.SQLite.Simple as Sqlite
+import qualified System.Directory as Directory
 import qualified Web.Scotty.Trans as Scotty
 
 import Species (Catalog)
@@ -46,10 +47,18 @@ server catalog conn = do
     Scotty.file "assets/fertilized.svg"
 
   Scotty.get (Scotty.regex "^/(.*)\\.webp$")  $ do
-    fname <- Scotty.param "1"
-    Scotty.setHeader "content-type" "image/webp"
-    lift $ logDebugN $ "Serving image " <> (Text.pack fname)
-    Scotty.file $ "photos/" <> fname <> ".webp"
+    slug <- Scotty.param "1"
+    lift $ logDebugN $ "Serving image " <> (Text.pack slug)
+    let photoFname = "photos/" <> slug <> ".webp"
+    hasPhoto <- liftIO $ Directory.doesFileExist photoFname
+    case hasPhoto of
+      True -> do
+        Scotty.setHeader "content-type" "image/webp"
+        Scotty.file photoFname
+      False -> do
+        -- Fall back to a generic icon if we don't have a photo.
+        Scotty.setHeader "content-type" "image/svg+xml"
+        Scotty.file "assets/plant.svg"
 
   Scotty.get "/" $ do
     Scotty.redirect "/plants"
