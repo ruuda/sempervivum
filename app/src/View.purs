@@ -7,6 +7,7 @@
 
 module View
   ( renderPlants
+  , renderPlantFull
   ) where
 
 import Prelude
@@ -104,7 +105,7 @@ renderPlantFull now knownPlant =
     Html.div $ do
       Html.setId plant.id
       Html.addClass "plant"
-      Html.h2 $ Html.text plant.species
+      Html.h1 $ Html.text plant.species
       Html.p $ Html.text $ nextWater now knownPlant
       Html.p $ Html.text species.waterRemark
       Html.p $ Html.text species.fertilizeRemark

@@ -61,8 +61,12 @@ runPlantDetail id = do
         Nothing ->
           liftEffect $ Html.withElement Dom.body $ Html.p $ Html.text "Unknown species."
 
-        Just (Species species) -> do
-          liftEffect $ Html.withElement Dom.body $ Html.p $ Html.text plant.species
+        Just (Species species) ->
+          let
+            knownPlant = { plant: Plant plant, species: Species species }
+          in
+            liftEffect $ Html.withElement Dom.body $
+              View.renderPlantFull now knownPlant
 
 
 runNotFound :: Aff Unit
