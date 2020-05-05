@@ -86,8 +86,9 @@ renderPlantItem now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
+    href = "/app/plant/" <> plant.id
   in
-    Html.div $ do
+    Html.a href $ do
       Html.setId plant.id
       Html.addClass "plant"
       Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)

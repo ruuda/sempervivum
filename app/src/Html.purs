@@ -8,6 +8,7 @@
 
 module Html
   ( Html
+  , a
   , addClass
   , button
   , clear
@@ -104,6 +105,14 @@ li children = node "li" children
 
 button :: forall a. Html a -> Html a
 button children = node "button" children
+
+a :: forall a. String -> Html a -> Html a
+a href (ReaderT children) = ReaderT $ \container -> do
+  self <- Dom.createElement "a"
+  Dom.setAttribute "href" href self
+  result <- children self
+  Dom.appendChild self container
+  pure result
 
 img :: forall a. String -> String -> Html a -> Html a
 img src alt (ReaderT children) = ReaderT $ \container -> do

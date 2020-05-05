@@ -38,6 +38,12 @@ body {
   margin-right: auto;
 }
 
+a {
+  display: block;
+  text-decoration: inherit;
+  color: inherit;
+}
+
 h1 {
   font-weight: 700;
   font-size: 2rem;
@@ -56,8 +62,12 @@ h2 {
   padding: 1.2em;
   padding-left: 0.8em;
   margin-top: 1em;
-  /* box-shadow: 2pt 2pt 10pt rgba(0,0,0,0.02), 0pt 0pt 10pt inset rgba(0,0,0,0.01); */
-  border-top: 1px solid white;
+  cursor: pointer;
+  transition: transform 0.06s ease-out;
+}
+
+.plant:active {
+  transform: scale(0.98);
 }
 
 .plant img {
