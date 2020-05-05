@@ -63,9 +63,10 @@ h2 {
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.06s ease-out;
+  z-index: 1;
 }
 
-a.plant:active {
+.plant:active {
   transform: scale(0.98);
 }
 
@@ -80,6 +81,35 @@ a.plant:active {
 
 p.multi {
   margin-bottom: 1em;
+}
+
+.plant-details {
+  display: none;
+  background-color: white;
+  border-radius: 0 0 0.25em 0.25em;
+  padding: 1.2em;
+  margin-top: 1.5pt;
+  transform: translate(0, -5em);
+  opacity: 0;
+  transition:
+    transform 0.07s ease-out,
+    opacity 0.05s ease-in;
+}
+
+.expanded .plant {
+  border-radius: 0.25em 0.25em 0 0;
+}
+
+/* Expanding is split into two classes, .expanded and .unveiled, to work around
+ * the transition not taking effect if display changes from none to block. */
+
+.expanded .plant-details {
+  display: block;
+}
+
+.unveiled .plant-details {
+  transform: translate(0, 0);
+  opacity: 1;
 }
 
 button {

@@ -12,12 +12,16 @@ module View
 
 import Prelude
 
+import Control.Monad.Reader.Class (ask)
 import Data.Foldable (traverse_)
 import Data.List (List (..))
 import Data.List as List
 import Data.Maybe (Maybe (..))
 import Data.String.Common as String
 import Data.String.Pattern (Pattern (..), Replacement (..))
+import Data.Time.Duration (Milliseconds (..))
+import Effect.Aff as Aff
+import Effect.Class (liftEffect)
 
 import Care (MatchedPlants, KnownPlant)
 import Care as Care
@@ -87,14 +91,39 @@ renderPlantItem now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
-    href = "/app/plant/" <> plant.id
+    _href = "/app/plant/" <> plant.id
   in
-    Html.a href $ do
-      Html.setId plant.id
-      Html.addClass "plant"
-      Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)
-      Html.h2 $ Html.text plant.species
-      Html.p $ Html.text $ nextWater now knownPlant
+    Html.div $ do
+      outer <- ask
+
+      Html.div $ do
+        Html.setId plant.id
+        Html.addClass "plant"
+        Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)
+        Html.h2 $ Html.text plant.species
+        Html.p $ Html.text $ nextWater now knownPlant
+        Html.onClick $ Aff.launchAff_ $ do
+          -- We need to add these classes with a delay in between; when they get
+          -- added simultaneously, the css transition does not take effect.
+          liftEffect $ Html.withElement outer $ Html.addClass "expanded"
+          Aff.delay (Milliseconds 1.0)
+          liftEffect $ Html.withElement outer $ Html.addClass "unveiled"
+
+      Html.div $ do
+        Html.addClass "plant-details"
+        Html.p $ do
+          Html.addClass "multi"
+          Html.text species.waterRemark
+        Html.p $ do
+          Html.addClass "multi"
+          Html.text species.fertilizeRemark
+        Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
+        Html.p $ Html.text $ lastWatered now (Plant plant)
+        Html.p $ Html.text $ lastFertilized now (Plant plant)
+        Html.button $ do
+          Html.text "watered"
+        Html.button $ do
+          Html.text "watered + fertilized"
 
 renderPlantFull :: Instant -> KnownPlant -> Html Unit
 renderPlantFull now knownPlant =
