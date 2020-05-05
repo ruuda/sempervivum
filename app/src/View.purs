@@ -95,6 +95,7 @@ renderPlantItem now knownPlant =
   in
     Html.div $ do
       outer <- ask
+      Html.addClass "plant-item"
 
       Html.div $ do
         Html.setId plant.id
