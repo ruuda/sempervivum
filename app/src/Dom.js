@@ -55,6 +55,10 @@ exports.assumeElementById = function(id) {
 
 exports.body = document.body;
 
+exports.getLocationPathName = function() {
+  return window.location.pathname;
+}
+
 exports.getValue = function(element) {
   return function() {
     return element.value;
