@@ -21,8 +21,8 @@ import Data.Time.LocalTime (ZonedTime)
 import Prelude hiding (id, div, head, span)
 import Text.Blaze ((!), toValue)
 import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, body, button, div, docTypeHtml, form, h1, h2, head, link, meta, p, title, toHtml)
-import Text.Blaze.Html5.Attributes (charset, class_, content, disabled, formaction, href, id, method, name, rel)
+import Text.Blaze.Html5 (Html, body, button, div, docTypeHtml, form, h1, h2, head, img, link, meta, p, title, toHtml)
+import Text.Blaze.Html5.Attributes (charset, class_, content, disabled, formaction, href, id, method, name, rel, src)
 
 import qualified Data.ByteString.Lazy as LazyByteString
 import qualified Data.Text as Text
@@ -32,7 +32,7 @@ import qualified Data.Time.LocalTime as Clock
 
 import Care (KnownPlant (..))
 import Plant (Plant)
-import Species (Catalog)
+import Species (Species, Catalog)
 
 import qualified Care
 import qualified Plant
@@ -53,6 +53,17 @@ localDaysUntil now t =
     dayT     = Calendar.toModifiedJulianDay $ Clock.localDay localT
   in
     dayT - dayNow
+
+speciesImageUrl :: Species -> Text
+speciesImageUrl species =
+  let
+    slug
+      = Text.replace " " "_"
+      $ Text.replace "-" "_"
+      $ Text.toLower
+      $ Species.name species
+  in
+    "/" <> slug <> ".webp"
 
 -- Wraps the given body html in html for an actual page, and encodes the
 -- resulting page in utf-8.
@@ -102,13 +113,14 @@ renderPlant now knownPlant =
       ! id ("plant" <> plantId)
       ! class_ "plant"
       $ do
+        img ! src (toValue $ speciesImageUrl species)
         h2 $ toHtml $ Plant.species plant
-        p $ toHtml $ waterNextText
+        p ! class_ "multi" $ toHtml $ waterNextText
+        p ! class_ "multi" $ toHtml $ Species.waterRemark species
+        p ! class_ "multi" $ toHtml $ Species.fertilizeRemark species
+        p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
         p $ toHtml $ waterPrevText
         p $ toHtml $ fertilizePrevText
-        p $ toHtml $ "Water every " <> (show $ Species.waterDaysSummer species) <> " days"
-        p $ toHtml $ Species.waterRemark species
-        p $ toHtml $ Species.fertilizeRemark species
         form ! method "POST" $ do
           button
             ! formaction ("/plants/" <> plantId <> "/watered")

@@ -106,9 +106,15 @@ renderPlantFull now knownPlant =
       Html.setId plant.id
       Html.addClass "plant"
       Html.h1 $ Html.text plant.species
-      Html.p $ Html.text $ nextWater now knownPlant
-      Html.p $ Html.text species.waterRemark
-      Html.p $ Html.text species.fertilizeRemark
+      Html.p $ do
+        Html.addClass "multi"
+        Html.text $ nextWater now knownPlant
+      Html.p $ do
+        Html.addClass "multi"
+        Html.text species.waterRemark
+      Html.p $ do
+        Html.addClass "multi"
+        Html.text species.fertilizeRemark
       Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
       Html.p $ Html.text $ lastWatered now (Plant plant)
       Html.p $ Html.text $ lastFertilized now (Plant plant)

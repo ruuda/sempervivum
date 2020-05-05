@@ -26,7 +26,7 @@
 html {
   font-family: 'DM Sans';
   font-size: 16px;
-  line-height: 1.3em;
+  line-height: 1.4em;
   padding: 2em;
   background-color: var(--light-bg);
   color: var(--old-burgrundy);
@@ -60,13 +60,12 @@ h2 {
   background-color: white;
   border-radius: 0.25em;
   padding: 1.2em;
-  padding-left: 0.8em;
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.06s ease-out;
 }
 
-.plant:active {
+a.plant:active {
   transform: scale(0.98);
 }
 
@@ -74,8 +73,13 @@ h2 {
   width: 2.6em;
   height: 2.6em;
   float: left;
+  margin-left: -0.4em;
   margin-right: 0.8em;
   object-fit: contain;
+}
+
+p.multi {
+  margin-bottom: 1em;
 }
 
 button {
