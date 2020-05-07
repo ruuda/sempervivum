@@ -46,21 +46,21 @@ relativeDate t1 t2 = (Time.localJulianDay t2) - (Time.localJulianDay t1)
 
 lastWatered :: Instant -> Plant -> String
 lastWatered now plant = case Plant.lastWatered plant of
-  Nothing -> "Never watered before"
+  Nothing -> "not yet"
   Just t -> case relativeDate now t of
-    -1        -> "Watered yesterday"
-    0         -> "Watered today"
-    n | n < 0 -> "Watered " <> show (-n) <> " days ago"
-    _         -> "Watered in the future"
+    -1        -> "yesterday"
+    0         -> "today"
+    n | n < 0 -> show (-n) <> " days ago"
+    _         -> "in the future"
 
 lastFertilized :: Instant -> Plant -> String
 lastFertilized now plant = case Plant.lastFertilized plant of
-  Nothing -> "Never fertilized before"
+  Nothing -> "not yet"
   Just t -> case relativeDate now t of
-    -1        -> "Fertilized yesterday"
-    0         -> "Fertilized today"
-    n | n < 0 -> "Fertilized " <> show (-n) <> " days ago"
-    _         -> "Fertilized in the future"
+    -1        -> "yesterday"
+    0         -> "today"
+    n | n < 0 -> show (-n) <> " days ago"
+    _         -> "in the future"
 
 nextWater :: Instant -> KnownPlant -> String
 nextWater now plant = case relativeDate now (Care.nextWater now plant) of
@@ -88,6 +88,11 @@ renderPlants now ps = do
   case ps.unknowns of
     Nil -> pure unit
     xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
+
+renderSpanP :: String -> String -> Html Unit
+renderSpanP label value = Html.p $ do
+  Html.span $ Html.text label
+  Html.text value
 
 renderPlantItem :: Instant -> KnownPlant -> Html Unit
 renderPlantItem now knownPlant =
@@ -139,9 +144,14 @@ renderPlantItem now knownPlant =
         Html.p $ do
           Html.addClass "multi"
           Html.text species.fertilizeRemark
-        Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
-        Html.p $ Html.text $ lastWatered now (Plant plant)
-        Html.p $ Html.text $ lastFertilized now (Plant plant)
+        renderSpanP "water" $
+          " every " <> (show species.waterDaysSummer) <> " days"
+        renderSpanP "fertilize" $
+          " every " <> (show species.fertilizeDaysSummer) <> " days"
+        renderSpanP "watered" $
+          " " <> (lastWatered now $ Plant plant)
+        renderSpanP "fertilized" $
+          " " <> (lastFertilized now $ Plant plant)
         Html.button $ do
           Html.text "watered"
         Html.button $ do

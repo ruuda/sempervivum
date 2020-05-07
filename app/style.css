@@ -86,6 +86,12 @@ h2 {
   object-fit: contain;
 }
 
+.plant-details span {
+  font-weight: 700;
+  display: inline-block;
+  width: 5em;
+}
+
 p.multi {
   margin-bottom: 1em;
 }
