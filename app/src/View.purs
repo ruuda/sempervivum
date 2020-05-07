@@ -20,6 +20,7 @@ import Data.Maybe (Maybe (..))
 import Data.String.Common as String
 import Data.String.Pattern (Pattern (..), Replacement (..))
 import Data.Time.Duration (Milliseconds (..))
+import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
 
@@ -32,6 +33,8 @@ import Plant as Plant
 import Species (Species (..))
 import Time (Instant)
 import Time as Time
+import Var (Var)
+import Var as Var
 
 -- Return (t2 - t1) in number of local days. This considers only the local date,
 -- and ignores the time of the day. So if t1 is 5 seconds before midnight in
@@ -94,8 +97,25 @@ renderPlantItem now knownPlant =
     _href = "/app/plant/" <> plant.id
   in
     Html.div $ do
-      outer <- ask
       Html.addClass "plant-item"
+
+      outer    <- ask
+      expanded <- liftEffect $ Var.create false
+
+      let
+        expand :: Aff Unit
+        expand = do
+          -- We need to add these classes with a delay in between; when they get
+          -- added simultaneously, the css transition does not take effect.
+          liftEffect $ Html.withElement outer $ Html.addClass "expanded"
+          Aff.delay (Milliseconds 1.0)
+          liftEffect $ Html.withElement outer $ Html.addClass "unveiled"
+
+        collapse :: Aff Unit
+        collapse = do
+          liftEffect $ Html.withElement outer $ Html.removeClass "unveiled"
+          Aff.delay (Milliseconds 60.0)
+          liftEffect $ Html.withElement outer $ Html.removeClass "expanded"
 
       Html.div $ do
         Html.setId plant.id
@@ -103,12 +123,13 @@ renderPlantItem now knownPlant =
         Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)
         Html.h2 $ Html.text plant.species
         Html.p $ Html.text $ nextWater now knownPlant
-        Html.onClick $ Aff.launchAff_ $ do
-          -- We need to add these classes with a delay in between; when they get
-          -- added simultaneously, the css transition does not take effect.
-          liftEffect $ Html.withElement outer $ Html.addClass "expanded"
-          Aff.delay (Milliseconds 1.0)
-          liftEffect $ Html.withElement outer $ Html.addClass "unveiled"
+        Html.onClick $ Var.get expanded >>= case _ of
+          true -> do
+            Var.set expanded false
+            Aff.launchAff_ collapse
+          false -> do
+            Var.set expanded true
+            Aff.launchAff_ expand
 
       Html.div $ do
         Html.addClass "plant-details"
