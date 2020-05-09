@@ -11,7 +11,7 @@ module View
 
 import Prelude
 
-import Control.Monad.Reader.Class (ask)
+import Control.Monad.Reader.Class (ask, local)
 import Data.Foldable (traverse_)
 import Data.List (List (..))
 import Data.List as List
@@ -158,7 +158,7 @@ renderPlantItem now knownPlant =
         Html.addClass "plant-details"
         renderDetails now knownPlant
 
-      liftEffect $ installClickHandlers knownPlant
+      installClickHandlers knownPlant
         { statusLine
         , infoBlock: detailElements.infoBlock
         , buttonWatered: detailElements.buttonWatered
@@ -210,7 +210,7 @@ renderInfoBlock now knownPlant =
     renderSpanP "fertilized" $
       " " <> (lastFertilized now $ Plant plant)
 
-installClickHandlers :: KnownPlant -> PlantElements -> Effect Unit
+installClickHandlers :: KnownPlant -> PlantElements -> Html Unit
 installClickHandlers knownPlant elements =
   let
     handleClick :: (Instant -> Plant -> Aff Plant) -> Effect Unit
@@ -224,5 +224,5 @@ installClickHandlers knownPlant elements =
     watered = handleClick Plant.postWatered
     wateredFertilized = handleClick Plant.postWateredFertilized
   in do
-    Html.withElement elements.buttonWatered $ Html.onClick watered
-    Html.withElement elements.buttonWateredFertilized $ Html.onClick wateredFertilized
+    local (const elements.buttonWatered) $ Html.onClick watered
+    local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
