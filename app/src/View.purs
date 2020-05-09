@@ -19,12 +19,14 @@ import Data.Maybe (Maybe (..))
 import Data.String.Common as String
 import Data.String.Pattern (Pattern (..), Replacement (..))
 import Data.Time.Duration (Milliseconds (..))
+import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
 
 import Care (MatchedPlants, KnownPlant)
 import Care as Care
+import Dom (Element)
 import Html (Html)
 import Html as Html
 import Plant (Plant (..))
@@ -92,6 +94,19 @@ renderSpanP label value = Html.p $ do
   Html.span $ Html.text label
   Html.text value
 
+type PlantDetailElements =
+  { infoBlock :: Element
+  , buttonWatered :: Element
+  , buttonWateredFertilized :: Element
+  }
+
+type PlantElements =
+  { statusLine :: Element
+  , infoBlock :: Element
+  , buttonWatered :: Element
+  , buttonWateredFertilized :: Element
+  }
+
 renderPlantItem :: Instant -> KnownPlant -> Html Unit
 renderPlantItem now knownPlant =
   let
@@ -117,15 +132,18 @@ renderPlantItem now knownPlant =
         collapse :: Aff Unit
         collapse = do
           liftEffect $ Html.withElement outer $ Html.removeClass "unveiled"
+          -- This timing is coordinated with the css transition.
           Aff.delay (Milliseconds 60.0)
           liftEffect $ Html.withElement outer $ Html.removeClass "expanded"
 
-      Html.div $ do
+      statusLine <- Html.div $ do
         Html.setId plant.id
         Html.addClass "plant"
         Html.img (speciesImageUrl knownPlant.species) species.name (pure unit)
         Html.h2 $ Html.text plant.species
-        Html.p $ Html.text $ nextWater now knownPlant
+        statusLine <- Html.p $ do
+          Html.text $ nextWater now knownPlant
+          ask
         Html.onClick $ Var.get expanded >>= case _ of
           true -> do
             Var.set expanded false
@@ -134,25 +152,77 @@ renderPlantItem now knownPlant =
             Var.set expanded true
             Aff.launchAff_ expand
 
-      Html.div $ do
+        pure statusLine
+
+      detailElements <- Html.div $ do
         Html.addClass "plant-details"
-        Html.p $ do
-          Html.addClass "multi"
-          Html.text species.waterRemark
-        Html.p $ do
-          Html.addClass "multi"
-          Html.text species.fertilizeRemark
-        renderSpanP "water" $
-          " every " <> (show species.waterDaysSummer) <> " days"
-        renderSpanP "fertilize" $
-          " every " <> (show species.fertilizeDaysSummer) <> " days"
-        renderSpanP "watered" $
-          " " <> (lastWatered now $ Plant plant)
-        renderSpanP "fertilized" $
-          " " <> (lastFertilized now $ Plant plant)
-        Html.button $ do
-          Html.text "watered"
-          Html.onClick $ Aff.launchAff_ $ Plant.postWatered (Plant plant)
-        Html.button $ do
-          Html.text "watered + fertilized"
-          Html.onClick $ Aff.launchAff_ $ Plant.postWateredFertilized (Plant plant)
+        renderDetails now knownPlant
+
+      liftEffect $ installClickHandlers knownPlant
+        { statusLine
+        , infoBlock: detailElements.infoBlock
+        , buttonWatered: detailElements.buttonWatered
+        , buttonWateredFertilized: detailElements.buttonWateredFertilized
+        }
+
+      pure unit
+
+renderDetails :: Instant -> KnownPlant -> Html PlantDetailElements
+renderDetails now knownPlant =
+  let
+    Plant plant = knownPlant.plant
+    Species species = knownPlant.species
+  in do
+    Html.p $ do
+      Html.addClass "multi"
+      Html.text species.waterRemark
+    Html.p $ do
+      Html.addClass "multi"
+      Html.text species.fertilizeRemark
+
+    renderSpanP "water" $
+      " every " <> (show species.waterDaysSummer) <> " days"
+    renderSpanP "fertilize" $
+      " every " <> (show species.fertilizeDaysSummer) <> " days"
+
+    infoBlock <- Html.div $ do
+      renderInfoBlock now knownPlant
+      ask
+
+    buttonWatered <- Html.button $ do
+      Html.text "watered"
+      ask
+
+    buttonWateredFertilized <- Html.button $ do
+      Html.text "watered + fertilized"
+      ask
+
+    pure { infoBlock, buttonWatered, buttonWateredFertilized }
+
+renderInfoBlock :: Instant -> KnownPlant -> Html Unit
+renderInfoBlock now knownPlant =
+  let
+    Plant plant = knownPlant.plant
+    Species species = knownPlant.species
+  in do
+    renderSpanP "watered" $
+      " " <> (lastWatered now $ Plant plant)
+    renderSpanP "fertilized" $
+      " " <> (lastFertilized now $ Plant plant)
+
+installClickHandlers :: KnownPlant -> PlantElements -> Effect Unit
+installClickHandlers knownPlant elements =
+  let
+    handleClick :: (Instant -> Plant -> Aff Plant) -> Effect Unit
+    handleClick f = Aff.launchAff_ $ do
+      now <- liftEffect Time.getCurrentInstant
+      newPlant <- f now knownPlant.plant
+      liftEffect $ Html.withElement elements.infoBlock $ do
+        Html.clear
+        renderInfoBlock now $ knownPlant { plant = newPlant }
+
+    watered = handleClick Plant.postWatered
+    wateredFertilized = handleClick Plant.postWateredFertilized
+  in do
+    Html.withElement elements.buttonWatered $ Html.onClick watered
+    Html.withElement elements.buttonWateredFertilized $ Html.onClick wateredFertilized

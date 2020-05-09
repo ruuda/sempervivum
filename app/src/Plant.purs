@@ -70,22 +70,37 @@ lastWatered (Plant p) = Array.last p.watered
 lastFertilized :: Plant -> Maybe Instant
 lastFertilized (Plant p) = Array.last p.fertilized
 
-postWatered :: Plant -> Aff Unit
-postWatered (Plant p) =
+recordWatered :: Instant -> Plant -> Plant
+recordWatered at (Plant p) =
+  Plant $ p { watered = Array.sort $ Array.snoc p.watered at }
+
+recordFertilized :: Instant -> Plant -> Plant
+recordFertilized at (Plant p) =
+  Plant $ p { fertilized = Array.sort $ Array.snoc p.fertilized at }
+
+postWatered :: Instant -> Plant -> Aff Plant
+postWatered now (Plant p) =
   let
     url = "/plants/" <> p.id <> "/watered"
   in do
     result <- Http.post Http.ResponseFormat.ignore url Nothing
     case result of
       Left err -> fatal $ "Failed to post watered: " <> Http.printError err
-      Right _  -> liftEffect $ Console.log "Watered posted"
+      Right _  -> do
+        liftEffect $ Console.log "Watered posted"
+        pure $ recordWatered now (Plant p)
 
-postWateredFertilized :: Plant -> Aff Unit
-postWateredFertilized (Plant p) =
+postWateredFertilized :: Instant -> Plant -> Aff Plant
+postWateredFertilized now (Plant p) =
   let
     url = "/plants/" <> p.id <> "/watered-fertilized"
   in do
     result <- Http.post Http.ResponseFormat.ignore url Nothing
     case result of
       Left err -> fatal $ "Failed to post watered-fertilized: " <> Http.printError err
-      Right _  -> liftEffect $ Console.log "Watered-fertilized posted"
+      Right _  -> do
+        liftEffect $ Console.log "Watered-fertilized posted"
+        pure
+          $ recordFertilized now
+          $ recordWatered now
+          $ Plant p
