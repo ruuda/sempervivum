@@ -101,6 +101,13 @@ server catalog conn = do
     liftIO $ Database.recordFertilized conn plantId now
     Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
 
+  Scotty.post "/plants/:id/watered-fertilized" $ do
+    plantId <- Scotty.param "id"
+    now <- liftIO $ Clock.getCurrentTime
+    liftIO $ Database.recordWatered conn plantId now
+    liftIO $ Database.recordFertilized conn plantId now
+    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
+
 main :: IO ()
 main = do
   -- When the runtime detects that stdout is not connected to a console, it

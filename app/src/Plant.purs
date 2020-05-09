@@ -11,6 +11,8 @@ module Plant
   , getPlants
   , lastFertilized
   , lastWatered
+  , postWatered
+  , postWateredFertilized
   ) where
 
 import Prelude
@@ -22,8 +24,10 @@ import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Array as Array
 import Data.Either (Either (..))
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe (..))
 import Effect.Aff (Aff)
+import Effect.Class (liftEffect)
+import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 
@@ -65,3 +69,23 @@ lastWatered (Plant p) = Array.last p.watered
 
 lastFertilized :: Plant -> Maybe Instant
 lastFertilized (Plant p) = Array.last p.fertilized
+
+postWatered :: Plant -> Aff Unit
+postWatered (Plant p) =
+  let
+    url = "/plants/" <> p.id <> "/watered"
+  in do
+    result <- Http.post Http.ResponseFormat.ignore url Nothing
+    case result of
+      Left err -> fatal $ "Failed to post watered: " <> Http.printError err
+      Right _  -> liftEffect $ Console.log "Watered posted"
+
+postWateredFertilized :: Plant -> Aff Unit
+postWateredFertilized (Plant p) =
+  let
+    url = "/plants/" <> p.id <> "/watered-fertilized"
+  in do
+    result <- Http.post Http.ResponseFormat.ignore url Nothing
+    case result of
+      Left err -> fatal $ "Failed to post watered-fertilized: " <> Http.printError err
+      Right _  -> liftEffect $ Console.log "Watered-fertilized posted"

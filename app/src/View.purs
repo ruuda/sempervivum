@@ -154,8 +154,10 @@ renderPlantItem now knownPlant =
           " " <> (lastFertilized now $ Plant plant)
         Html.button $ do
           Html.text "watered"
+          Html.onClick $ Aff.launchAff_ $ Plant.postWatered (Plant plant)
         Html.button $ do
           Html.text "watered + fertilized"
+          Html.onClick $ Aff.launchAff_ $ Plant.postWateredFertilized (Plant plant)
 
 renderPlantFull :: Instant -> KnownPlant -> Html Unit
 renderPlantFull now knownPlant =
