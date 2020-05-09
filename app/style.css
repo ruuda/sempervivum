@@ -21,6 +21,11 @@
 * {
   margin: 0;
   padding: 0;
+
+  /* Chrome on mobile shows a blue highlight on tap. It makes sense to give some
+   * feedback, but we already have a manual style for this, so disable the
+   * highlight that does not fit the theme. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -62,14 +67,10 @@ h2 {
   padding: 1.2em;
   margin-top: 1em;
   cursor: pointer;
-  transition: transform 0.04s ease-out;
-  /* Chrome on mobile shows a blue highlight on tap. It makes sense to give some
-   * feedback, but we already have a manual style for this, so disable the
-   * highlight that does not fit the theme. */
-  -webkit-tap-highlight-color: transparent;
 
   position: relative;
   z-index: 1;
+  transition: transform 0.04s ease-out;
 }
 
 .plant:active {
@@ -129,14 +130,30 @@ p.multi {
 }
 
 button {
-  font-family: inherit;
   background-color: var(--yellow-green);
+  border-radius: 0.4em;
+  border: 2pt solid white;
   color: white;
-  border: none;
-  border-radius: 0.3em;
-  padding: 0.5em;
+  font-family: inherit;
   margin-right: 1em;
   margin-top: 1em;
+  margin-left: -1pt;
+  margin-bottom: -1pt;
+  outline: none;
+  padding: 0.5em;
+  transition:
+    border 0.1s ease-out,
+    box-shadow 0.1s ease-out,
+    background-color 0.07s ease-out;
+}
+
+button:active {
+  box-shadow: 0 0 1em inset rgba(0, 0, 0, 0.05);
+  background-color: #659513;
+}
+
+button:focus {
+  border: 2pt solid var(--tea-green);
 }
 
 button img {
