@@ -221,6 +221,10 @@ installClickHandlers knownPlant elements =
         Html.clear
         renderInfoBlock now $ knownPlant { plant = newPlant }
 
+      liftEffect $ Html.withElement elements.statusLine $ do
+        Html.clear
+        Html.text "Watered today"
+
     watered = handleClick Plant.postWatered
     wateredFertilized = handleClick Plant.postWateredFertilized
   in do
