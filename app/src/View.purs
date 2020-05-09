@@ -7,7 +7,6 @@
 
 module View
   ( renderPlants
-  , renderPlantFull
   ) where
 
 import Prelude
@@ -33,7 +32,6 @@ import Plant as Plant
 import Species (Species (..))
 import Time (Instant)
 import Time as Time
-import Var (Var)
 import Var as Var
 
 -- Return (t2 - t1) in number of local days. This considers only the local date,
@@ -158,32 +156,3 @@ renderPlantItem now knownPlant =
         Html.button $ do
           Html.text "watered + fertilized"
           Html.onClick $ Aff.launchAff_ $ Plant.postWateredFertilized (Plant plant)
-
-renderPlantFull :: Instant -> KnownPlant -> Html Unit
-renderPlantFull now knownPlant =
-  let
-    Plant plant = knownPlant.plant
-    Species species = knownPlant.species
-  in
-    Html.div $ do
-      Html.setId plant.id
-      Html.addClass "plant"
-      Html.h1 $ Html.text plant.species
-      Html.p $ do
-        Html.addClass "multi"
-        Html.text $ nextWater now knownPlant
-      Html.p $ do
-        Html.addClass "multi"
-        Html.text species.waterRemark
-      Html.p $ do
-        Html.addClass "multi"
-        Html.text species.fertilizeRemark
-      Html.p $ Html.text $ "Needs water every " <> (show species.waterDaysSummer) <> " days."
-      Html.p $ Html.text $ lastWatered now (Plant plant)
-      Html.p $ Html.text $ lastFertilized now (Plant plant)
-      Html.button $ do
-        Html.img "/watered.svg" "watered" (pure unit)
-        Html.text "watered"
-      Html.button $ do
-        Html.img "/fertilized.svg" "watered and fertilized" (pure unit)
-        Html.text "watered + fertilized"
