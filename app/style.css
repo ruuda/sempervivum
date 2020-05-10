@@ -171,11 +171,11 @@ button img {
 }
 
 .status {
-  transition: opacity 0.13s ease-in-out;
+  transition: opacity 0.17s ease-in-out;
 }
 
 .status img {
-  transition: transform 0.13s ease-in-out;
+  transition: transform 0.17s ease-in-out;
 }
 
 /* Used to fade the status line in and out when we change it after watering. */

@@ -129,6 +129,7 @@ renderPlantItem now knownPlant =
       let
         expand :: Aff Unit
         expand = do
+          liftEffect $ Var.set expanded true
           -- We need to add these classes with a delay in between; when they get
           -- added simultaneously, the css transition does not take effect.
           liftEffect $ Html.withElement outer $ Html.addClass "expanded"
@@ -137,6 +138,7 @@ renderPlantItem now knownPlant =
 
         collapse :: Aff Unit
         collapse = do
+          liftEffect $ Var.set expanded false
           liftEffect $ Html.withElement outer $ Html.removeClass "unveiled"
           -- This timing is coordinated with the css transition.
           Aff.delay (Milliseconds 60.0)
@@ -156,12 +158,8 @@ renderPlantItem now knownPlant =
           Html.text $ nextWater now knownPlant
           ask
         Html.onClick $ Var.get expanded >>= case _ of
-          true -> do
-            Var.set expanded false
-            Aff.launchAff_ collapse
-          false -> do
-            Var.set expanded true
-            Aff.launchAff_ expand
+          true  -> Aff.launchAff_ collapse
+          false -> Aff.launchAff_ expand
 
         pure statusLine
 
@@ -169,7 +167,7 @@ renderPlantItem now knownPlant =
         Html.addClass "plant-details"
         renderDetails now knownPlant
 
-      installClickHandlers knownPlant
+      installClickHandlers knownPlant collapse
         { statusLine
         , infoBlock: detailElements.infoBlock
         , buttonWatered: detailElements.buttonWatered
@@ -221,34 +219,47 @@ renderInfoBlock now knownPlant =
     renderSpanP "fertilized" $
       " " <> (lastFertilized now $ Plant plant)
 
-installClickHandlers :: KnownPlant -> PlantElements -> Html Unit
-installClickHandlers knownPlant elements =
+installClickHandlers :: KnownPlant -> Aff Unit -> PlantElements -> Html Unit
+installClickHandlers knownPlant collapse elements =
   let
     handleClick :: (Instant -> Plant -> Aff Plant) -> Effect Unit
     handleClick f = Aff.launchAff_ $ do
       now <- liftEffect Time.getCurrentInstant
       newPlant <- f now knownPlant.plant
-      liftEffect $ Html.withElement elements.infoBlock $ do
-        Html.clear
-        renderInfoBlock now $ knownPlant { plant = newPlant }
+
+      -- In parallel with swapping the status line, collapse the plant item again.
+      -- We add some delay to to make the timing align nicer, so you still see
+      -- a bit of the button depress, and the status animation starts first.
+      -- Finally, swap out the info block after collapsing, so the pop in
+      -- content is not visible.
+      collapsing <- Aff.forkAff $ do
+        Aff.delay (Milliseconds 66.0)
+        collapse
+        liftEffect $ Html.withElement elements.infoBlock $ do
+          Html.clear
+          renderInfoBlock now $ knownPlant { plant = newPlant }
 
       -- We first add a class to start the transition that fades out the current
       -- status line, then wait for that to finish playing. Then we swap in
       -- the new content, and remove the class again, to trigger the reverse
-      -- animation. We need to wait a bit before removing the class, otherwise
-      -- the new nested content (the check image) does not pick up the style
-      -- from the faded class. I've determined empirically that we need to wait
-      -- more than 2ms, but 15ms is sufficient.
-      liftEffect $ Html.withElement elements.statusLine $ do
-        Html.addClass "faded"
-      Aff.delay (Milliseconds 130.0)
+      -- animation.
+      liftEffect $ Html.withElement elements.statusLine $ Html.addClass "faded"
+
+      -- Delay tuned to the css transition duration.
+      Aff.delay (Milliseconds 170.0)
       liftEffect $ Html.withElement elements.statusLine $ do
         Html.clear
         Html.img "/check.svg" "check" $ Html.addClass "droplet"
         Html.text "Watered today"
+
+      -- We need to wait a bit before removing the class, otherwise the new
+      -- nested content (the check image) does not pick up the style from the
+      -- faded class. I've determined empirically that we need to wait more
+      -- than 2ms, but 15ms is sufficient.
       Aff.delay (Milliseconds 15.0)
-      liftEffect $ Html.withElement elements.statusLine $
-        Html.removeClass "faded"
+      liftEffect $ Html.withElement elements.statusLine $ Html.removeClass "faded"
+
+      Aff.joinFiber collapsing
 
     watered = handleClick Plant.postWatered
     wateredFertilized = handleClick Plant.postWateredFertilized
