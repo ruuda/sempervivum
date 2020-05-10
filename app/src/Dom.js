@@ -89,6 +89,12 @@ exports.setIdImpl = function(id, element) {
   }
 }
 
+exports.setOpacityImpl = function(opacity, element) {
+  return function() {
+    element.style.opacity = opacity;
+  }
+}
+
 exports.addEventListenerImpl = function(eventName, callback, element) {
   return function() {
     element.addEventListener(eventName, function(evt) {

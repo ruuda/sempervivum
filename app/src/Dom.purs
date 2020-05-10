@@ -22,6 +22,7 @@ module Dom
   , removeClass
   , setAttribute
   , setId
+  , setOpacity
   ) where
 
 import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3)
@@ -46,6 +47,7 @@ foreign import getElementByIdImpl :: Fn3 String (Element -> Maybe Element) (Mayb
 foreign import removeClassImpl :: Fn2 String Element (Effect Unit)
 foreign import setAttributeImpl :: Fn3 String String Element (Effect Unit)
 foreign import setIdImpl :: Fn2 String Element (Effect Unit)
+foreign import setOpacityImpl :: Fn2 Number Element (Effect Unit)
 
 appendChild :: Element -> Element -> Effect Unit
 appendChild child container = runFn2 appendChildImpl child container
@@ -67,6 +69,9 @@ setId id element = runFn2 setIdImpl id element
 
 setAttribute :: String -> String -> Element -> Effect Unit
 setAttribute attribute value element = runFn3 setAttributeImpl attribute value element
+
+setOpacity :: Number -> Element -> Effect Unit
+setOpacity opacity element = runFn2 setOpacityImpl opacity element
 
 addEventListener :: String -> Effect Unit -> Element -> Effect Unit
 addEventListener eventName callback element = runFn3 addEventListenerImpl eventName callback element

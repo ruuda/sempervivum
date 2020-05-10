@@ -24,6 +24,7 @@ module Html
   , p
   , removeClass
   , setId
+  , setOpacity
   , setTitle
   , span
   , text
@@ -59,6 +60,9 @@ text value = ReaderT $ \container -> Dom.appendText value container
 
 setId :: String -> Html Unit
 setId id = ReaderT $ \container -> Dom.setId id container
+
+setOpacity :: Number -> Html Unit
+setOpacity opacity = ReaderT $ \container -> Dom.setOpacity opacity container
 
 setTitle :: String -> Html Unit
 setTitle title = ReaderT $ \self -> Dom.setAttribute "title" title self

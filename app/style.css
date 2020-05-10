@@ -78,13 +78,19 @@ h2 {
   box-shadow: 0 0 1em inset rgba(0, 0, 0, 0.02);
 }
 
-.plant img {
+.plant img.plant-icon {
   width: 2.6em;
   height: 2.6em;
   float: left;
   margin-left: -0.4em;
   margin-right: 0.8em;
   object-fit: contain;
+}
+
+img.droplet {
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-right: 0.3rem;
 }
 
 .plant-details span {
