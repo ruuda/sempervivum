@@ -141,6 +141,7 @@ button {
   border: 2pt solid white;
   color: white;
   font-family: inherit;
+  font-size: inherit;
   margin-right: 1em;
   margin-top: 1em;
   margin-left: -1pt;
