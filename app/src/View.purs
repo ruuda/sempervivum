@@ -150,6 +150,7 @@ renderPlantItem now knownPlant =
           Html.addClass "plant-icon"
         Html.h2 $ Html.text plant.species
         statusLine <- Html.p $ do
+          Html.addClass "status"
           Html.img "/droplet.svg" "droplet" $ do
             Html.addClass "droplet"
             Html.setOpacity $ dropletOpacity now knownPlant
@@ -232,10 +233,23 @@ installClickHandlers knownPlant elements =
         Html.clear
         renderInfoBlock now $ knownPlant { plant = newPlant }
 
+      -- We first add a class to start the transition that fades out the current
+      -- status line, then wait for that to finish playing. Then we swap in
+      -- the new content, and remove the class again, to trigger the reverse
+      -- animation. We need to wait a bit before removing the class, otherwise
+      -- the new nested content (the check image) does not pick up the style
+      -- from the faded class. I've determined empirically that we need to wait
+      -- more than 2ms, but 15ms is sufficient.
+      liftEffect $ Html.withElement elements.statusLine $ do
+        Html.addClass "faded"
+      Aff.delay (Milliseconds 130.0)
       liftEffect $ Html.withElement elements.statusLine $ do
         Html.clear
         Html.img "/check.svg" "check" $ Html.addClass "droplet"
         Html.text "Watered today"
+      Aff.delay (Milliseconds 15.0)
+      liftEffect $ Html.withElement elements.statusLine $
+        Html.removeClass "faded"
 
     watered = handleClick Plant.postWatered
     wateredFertilized = handleClick Plant.postWateredFertilized

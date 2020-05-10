@@ -146,7 +146,9 @@ button {
   margin-left: -1pt;
   margin-bottom: -1pt;
   outline: none;
-  padding: 0.5em;
+  padding: 0.8em;
+  padding-left: 1em;
+  padding-right: 1em;
   transition:
     border 0.1s ease-out,
     box-shadow 0.1s ease-out,
@@ -165,4 +167,21 @@ button:focus {
 button img {
   margin-right: 0.5em;
   vertical-align: text-bottom;
+}
+
+.status {
+  transition: opacity 0.13s ease-in-out;
+}
+
+.status img {
+  transition: transform 0.13s ease-in-out;
+}
+
+/* Used to fade the status line in and out when we change it after watering. */
+.faded {
+  opacity: 0;
+}
+
+.faded img {
+  transform: scale(0, 0);
 }
