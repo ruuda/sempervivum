@@ -150,7 +150,7 @@ renderPlantItem now knownPlant =
           Html.addClass "plant-icon"
         Html.h2 $ Html.text plant.species
         statusLine <- Html.p $ do
-          Html.img "/droplet.svg" "(droplet)" $ do
+          Html.img "/droplet.svg" "droplet" $ do
             Html.addClass "droplet"
             Html.setOpacity $ dropletOpacity now knownPlant
           Html.text $ nextWater now knownPlant
@@ -234,6 +234,7 @@ installClickHandlers knownPlant elements =
 
       liftEffect $ Html.withElement elements.statusLine $ do
         Html.clear
+        Html.img "/check.svg" "check" $ Html.addClass "droplet"
         Html.text "Watered today"
 
     watered = handleClick Plant.postWatered
