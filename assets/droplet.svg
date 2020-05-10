@@ -7,37 +7,37 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="droplet.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   width="16.0px"
-   height="16.0px"
-   viewBox="0 0 16.0 16.0"
+   id="SVGRoot"
    version="1.1"
-   id="SVGRoot">
+   viewBox="0 0 16.0 16.0"
+   height="16.0px"
+   width="16.0px"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="droplet.svg">
   <defs
      id="defs833" />
   <sodipodi:namedview
-     inkscape:window-maximized="1"
-     inkscape:window-y="0"
-     inkscape:window-x="0"
-     inkscape:window-height="1046"
-     inkscape:window-width="1920"
-     showgrid="true"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="layer1"
-     inkscape:document-units="px"
-     inkscape:cy="8"
-     inkscape:cx="8"
-     inkscape:zoom="54.75"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     borderopacity="1.0"
-     bordercolor="#666666"
+     id="base"
      pagecolor="#ffffff"
-     id="base">
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="54.75"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1046"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
     <inkscape:grid
-       type="xygrid"
-       id="grid1403" />
+       id="grid1403"
+       type="xygrid" />
   </sodipodi:namedview>
   <metadata
      id="metadata836">
@@ -47,18 +47,18 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1"
+     inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     inkscape:label="Layer 1">
+     id="layer1">
     <path
-       sodipodi:nodetypes="ssscs"
+       id="path1415"
+       style="opacity:1;fill:#3b86e1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.8;stroke-linecap:round"
        d="M 15.011416,8.9967384 C 15.022233,12.783818 11.787095,16 8,16 4.2129046,16 0.97776777,12.783818 0.98858447,8.9967384 1,5 4,2 8,0 c 4,2 7,5 7.011416,8.9967384 z"
-       style="opacity:0.5;fill:#0d55c4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.8;stroke-linecap:round"
-       id="path1415" />
+       sodipodi:nodetypes="ssscs" />
   </g>
 </svg>
