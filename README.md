@@ -5,11 +5,19 @@ plants based on a per-plant schedule.
 
 ## Building
 
-Sempervivum is written in Haskell and builds with [Stack][stack]. You can set up
+The server written in Haskell and builds with [Stack][stack]. The client is
+written in PureScript and builds with [psc-package][psc-package]. You can set up
 a local development environment with all dependencies with [Nix][nix].
 
-    nix run --command stack build
-    nix run --command stack exec sempervivum
+    # Enter a shell with development dependencies available.
+    nix run --command $SHELL
+
+    # Build the client-side code.
+    make -C app
+
+    # Build and start the server.
+    stack build
+    stack exec sempervivum
 
 ## Future work
 
@@ -33,7 +41,8 @@ a local development environment with all dependencies with [Nix][nix].
    [CC0][cc0] with this dataset and waived all copyright and related or
    neighboring rights to this work.
 
-[stack]:      https://docs.haskellstack.org/en/stable/README/
-[nix]:        https://nixos.org/nix/
-[apache2]:    https://www.apache.org/licenses/LICENSE-2.0
-[cc0]:        https://creativecommons.org/publicdomain/zero/1.0/
+[stack]:       https://docs.haskellstack.org/en/stable/README/
+[psc-package]: https://github.com/purescript/psc-package
+[nix]:         https://nixos.org/nix/
+[apache2]:     https://www.apache.org/licenses/LICENSE-2.0
+[cc0]:         https://creativecommons.org/publicdomain/zero/1.0/
