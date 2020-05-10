@@ -24,7 +24,6 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
-import Math (sqrt)
 
 import Care (MatchedPlants, KnownPlant)
 import Care as Care
@@ -75,7 +74,7 @@ nextWater now plant = case relativeDate now (Care.nextWater now plant) of
 dropletOpacity :: Instant -> KnownPlant -> Number
 dropletOpacity now plant = case relativeDate now (Care.nextWater now plant) of
   n | n <= 0 -> 1.0
-  n -> 0.2 + 0.8 / (sqrt $ 2.0 + Int.toNumber n)
+  n -> 0.25 + 0.75 / (1.0 + Int.toNumber n)
 
 speciesImageUrl :: Species -> String
 speciesImageUrl (Species species) =
