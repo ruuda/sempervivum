@@ -18,6 +18,7 @@ import Effect.Class (liftEffect)
 import Care as Care
 import Dom as Dom
 import Html as Html
+import Idb as Idb
 import Plant as Plant
 import Species as Species
 import Time as Time
@@ -36,6 +37,7 @@ runPlantList = do
   now      <- liftEffect $ Time.getCurrentInstant
   catalog  <- Species.getCatalog
   plants   <- Plant.getPlants
+  db <- Idb.open
   let matched = Care.match catalog plants
   liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched
 
