@@ -8,7 +8,10 @@
 module Idb
   ( Db
   , open
+  , put
   ) where
+
+import Prelude
 
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
@@ -16,6 +19,10 @@ import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 foreign import data Db :: Type
 
 foreign import openImpl :: EffectFnAff Db
+foreign import putImpl :: Unit -> String -> String -> Db -> EffectFnAff Unit
 
 open :: Aff Db
 open = fromEffectFnAff openImpl
+
+put :: String -> String -> Db -> Aff Unit
+put key value db = fromEffectFnAff $ putImpl unit key value db

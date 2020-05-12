@@ -38,6 +38,7 @@ runPlantList = do
   catalog  <- Species.getCatalog
   plants   <- Plant.getPlants
   db <- Idb.open
+  Idb.put "henk" "steen" db
   let matched = Care.match catalog plants
   liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched
 
