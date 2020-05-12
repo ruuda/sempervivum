@@ -10,6 +10,9 @@ in
       pkgs.purescript   # Provides the Purescript compiler.
       pkgs.psc-package  # Provides the Purescript package manager.
 
+      # For minifying and optimizing the js output of the PureScript compiler.
+      pkgs.closurecompiler
+
       # For compressing plant photos as WebP.
       pkgs.libwebp
     ];
