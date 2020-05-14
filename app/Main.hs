@@ -58,15 +58,12 @@ server catalog conn = do
         Scotty.file "assets/plant.svg"
 
   Scotty.get "/" $ do
-    Scotty.redirect "/plants"
+    Scotty.setHeader "content-type" "text/html; charset=utf-8"
+    Scotty.file "app/index.html"
 
   Scotty.get "/app.js"  $ do
     Scotty.setHeader "content-type" "text/javascript"
     Scotty.file "app/output/app.js"
-
-  Scotty.get (Scotty.regex "^/app") $ do
-    Scotty.setHeader "content-type" "text/html; charset=utf-8"
-    Scotty.file "app/index.html"
 
   Scotty.get "/species.json"  $ do
     Scotty.json $ HashMap.elems catalog

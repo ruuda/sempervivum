@@ -12,7 +12,7 @@ import Prelude
 import Data.String as String
 import Data.String.Pattern (Pattern (..))
 import Effect (Effect)
-import Effect.Aff (Aff, launchAff_)
+import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 
 import Care as Care
@@ -26,14 +26,6 @@ import View as View
 
 main :: Effect Unit
 main = launchAff_ $ do
-  pathName <- liftEffect $ Dom.getLocationPathName
-  let path = String.split (Pattern "/") (String.drop 1 pathName)
-  case path of
-    ["app"]              -> runPlantList
-    _                    -> runNotFound
-
-runPlantList :: Aff Unit
-runPlantList = do
   now      <- liftEffect $ Time.getCurrentInstant
   catalog  <- Species.getCatalog
   plants   <- Plant.getPlants
@@ -41,7 +33,3 @@ runPlantList = do
   Idb.put "henk" "steen" db
   let matched = Care.match catalog plants
   liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched
-
-runNotFound :: Aff Unit
-runNotFound =
-  liftEffect $ Html.withElement Dom.body $ Html.p $ Html.text "Not found"
