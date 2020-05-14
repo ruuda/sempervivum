@@ -24,6 +24,10 @@ exports.fromIso8601Impl = function(nothing, just, str) {
   return result == undefined ? nothing : just(new Date(result));
 }
 
+exports.toIso8601 = function(t) {
+  return t.toISOString();
+}
+
 exports.fromGregorianUtcImpl = function(year, month, day, hour, minute, second) {
   // Beware, js months start counting at 0, but dates start at 1.
   return new Date(Date.UTC(year, month - 1, day, hour, minute, second));

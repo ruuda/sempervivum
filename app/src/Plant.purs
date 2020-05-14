@@ -20,8 +20,12 @@ import Prelude
 import Affjax as Http
 import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
+import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Argonaut.Encode as Json
+import Data.Argonaut.Encode.Class (class EncodeJson)
+import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
 import Data.Either (Either (..))
 import Data.Maybe (Maybe (..))
@@ -30,6 +34,7 @@ import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
+import Foreign.Object as Object
 
 import Time (Instant)
 import Util (arrayToMap)
@@ -51,6 +56,17 @@ instance decodeJsonPlant :: DecodeJson Plant where
     watered    <- Array.sort <$> Json.getField obj "watered"
     fertilized <- Array.sort <$> Json.getField obj "fertilized"
     pure $ Plant { id, species, watered, fertilized }
+
+instance encodeJsonPlant :: EncodeJson Plant where
+  encodeJson (Plant plant) =
+       "id" := plant.id
+    ~> "species" := plant.species
+    ~> "watered" := plant.watered
+    ~> "fertilized" := plant.fertilized
+    ~> jsonEmptyObject
+
+instance encodeJsonPlants :: EncodeJson Plants where
+  encodeJson (Plants obj) = Json.encodeJson (Object.values obj)
 
 fatal :: forall m a. MonadThrow Error m => String -> m a
 fatal = error >>> throwError

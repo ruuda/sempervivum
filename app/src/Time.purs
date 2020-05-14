@@ -15,8 +15,9 @@ module Time
 
 import Prelude
 
-import Data.Argonaut.Core (caseJsonString) as Json
+import Data.Argonaut.Core (caseJsonString, fromString) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Either (Either (..))
 import Data.Function.Uncurried (Fn2, Fn3, Fn5, Fn6, runFn2, runFn3, runFn5, runFn6)
 import Data.Int as Int
@@ -36,6 +37,7 @@ foreign import ordInstantImpl :: Fn5 Ordering Ordering Ordering Instant Instant 
 foreign import localDay   :: Instant -> Int
 foreign import localMonth :: Instant -> Int
 foreign import localYear  :: Instant -> Int
+foreign import toIso8601  :: Instant -> String
 
 instance eqInstant :: Eq Instant where
   eq = runFn2 eqInstantImpl
@@ -49,6 +51,9 @@ instance decodeJsonInstant :: DecodeJson Instant where
     $ fromIso8601 >>> case _ of
         Nothing -> Left "Failed to parse ISO-8601 string."
         Just t  -> Right t
+
+instance encodeJsonInstant :: EncodeJson Instant where
+  encodeJson = Json.fromString <<< toIso8601
 
 fromGregorianUtc :: Int -> Int -> Int -> Int -> Int -> Int -> Instant
 fromGregorianUtc = runFn6 fromGregorianUtcImpl
