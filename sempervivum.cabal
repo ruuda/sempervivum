@@ -22,12 +22,9 @@ library
                  , Database
                  , Plant
                  , Species
-                 , WebInterface
 
   build-depends: aeson
                , base
-               , blaze-html
-               , blaze-markup
                , bytestring
                , containers
                , hashable
