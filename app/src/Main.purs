@@ -9,7 +9,6 @@ module Main where
 
 import Prelude
 
-import Data.Argonaut.Core (stringify) as Json
 import Data.Argonaut.Encode (encodeJson) as Json
 import Effect (Effect)
 import Effect.Aff (launchAff_)
@@ -30,7 +29,7 @@ main = launchAff_ $ do
   catalog  <- Species.getCatalog
   plants   <- Plant.getPlants
   db <- Idb.open
-  Idb.put "henk" "steen" db
-  Idb.put "plants" (Json.stringify $ Json.encodeJson plants) db
+  Idb.putString "henk" "steen" db
+  Idb.putJson "plants" (Json.encodeJson plants) db
   let matched = Care.match catalog plants
   liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched

@@ -8,21 +8,26 @@
 module Idb
   ( Db
   , open
-  , put
+  , putJson
+  , putString
   ) where
 
 import Prelude
 
+import Data.Argonaut.Core (Json)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 
 foreign import data Db :: Type
 
 foreign import openImpl :: EffectFnAff Db
-foreign import putImpl :: Unit -> String -> String -> Db -> EffectFnAff Unit
+foreign import putImpl :: forall a. Unit -> String -> a -> Db -> EffectFnAff Unit
 
 open :: Aff Db
 open = fromEffectFnAff openImpl
 
-put :: String -> String -> Db -> Aff Unit
-put key value db = fromEffectFnAff $ putImpl unit key value db
+putString :: String -> String -> Db -> Aff Unit
+putString key value db = fromEffectFnAff $ putImpl unit key value db
+
+putJson :: String -> Json -> Db -> Aff Unit
+putJson key value db = fromEffectFnAff $ putImpl unit key value db
