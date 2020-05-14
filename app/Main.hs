@@ -36,6 +36,10 @@ server catalog conn = do
     Scotty.setHeader "content-type" "text/css"
     Scotty.file "app/style.css"
 
+  Scotty.get "/manifest.json"  $ do
+    Scotty.setHeader "content-type" "application/manifest+json"
+    Scotty.file "app/manifest.json"
+
   Scotty.get (Scotty.regex "^/(.*)\\.svg$") $ do
     slug <- Scotty.param "1"
     Scotty.setHeader "content-type" "image/svg+xml"
