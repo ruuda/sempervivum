@@ -63,9 +63,10 @@ server catalog conn = do
     Scotty.setHeader "content-type" "text/html; charset=utf-8"
     Scotty.file "app/index.html"
 
-  Scotty.get "/app.js"  $ do
+  Scotty.get (Scotty.regex "^/(.*)\\.js$") $ do
+    slug <- Scotty.param "1"
     Scotty.setHeader "content-type" "text/javascript"
-    Scotty.file "app/output/app.js"
+    Scotty.file $ "app/output/" <> slug <> ".js"
 
   Scotty.get "/species.json"  $ do
     Scotty.json $ HashMap.elems catalog
