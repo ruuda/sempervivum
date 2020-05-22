@@ -7,6 +7,7 @@
 
 module View
   ( renderPlants
+  , renderAddPlant
   ) where
 
 import Prelude
@@ -266,3 +267,8 @@ installClickHandlers knownPlant collapse elements =
   in do
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
+
+renderAddPlant :: Html Unit
+renderAddPlant = do
+  Html.h1 $ Html.text "Add new plants"
+  Html.input "Search for species" $ pure unit

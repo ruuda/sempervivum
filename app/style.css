@@ -33,6 +33,7 @@ html {
   font-size: 16px;
   line-height: 1.4em;
   padding: 2em;
+  padding-top: 0;
   background-color: var(--light-bg);
   color: var(--old-burgrundy);
 }
@@ -52,7 +53,7 @@ a {
 h1 {
   font-weight: 700;
   font-size: 2rem;
-  margin-top: 0.3rem;
+  margin-top: 3rem;
   margin-bottom: 1rem;
 }
 
@@ -185,4 +186,20 @@ button img {
 
 .faded img {
   transform: scale(0, 0);
+}
+
+input {
+  width: 100%;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.3rem;
+  border-radius: 0.4em;
+  border: 2pt solid white;
+  outline: none;
+  transition: border 0.1s ease-out;
+}
+
+input:focus {
+  border: 2pt solid var(--tea-green);
 }

@@ -32,4 +32,6 @@ main = launchAff_ $ do
   Idb.putString "henk" "steen" db
   Idb.putJson "plants" (Json.encodeJson plants) db
   let matched = Care.match catalog plants
-  liftEffect $ Html.withElement Dom.body $ View.renderPlants now matched
+  liftEffect $ Html.withElement Dom.body $ do
+    View.renderPlants now matched
+    View.renderAddPlant
