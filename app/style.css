@@ -198,8 +198,33 @@ input {
   border: 2pt solid white;
   outline: none;
   transition: border 0.1s ease-out;
+  margin-bottom: 0.5em;
 }
 
 input:focus {
   border: 2pt solid var(--tea-green);
+}
+
+ul#search-results {
+  list-style: none;
+}
+
+ul#search-results li {
+  background-color: white;
+  overflow: hidden;
+  margin-top: 1.5pt;
+  padding: 0.2em;
+  border-radius: 0.4em;
+}
+
+ul#search-results span {
+  margin: 0.45em;
+  display: inline-block;
+}
+
+ul#search-results button {
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  margin: 0;
+  float: right;
 }

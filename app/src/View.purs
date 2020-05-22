@@ -33,7 +33,8 @@ import Html (Html)
 import Html as Html
 import Plant (Plant (..))
 import Plant as Plant
-import Species (Species (..))
+import Species (Catalog, Species (..))
+import Species as Species
 import Time (Instant)
 import Time as Time
 import Var as Var
@@ -268,7 +269,15 @@ installClickHandlers knownPlant collapse elements =
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
 
-renderAddPlant :: Html Unit
-renderAddPlant = do
+renderSearchResult :: Species -> Html Unit
+renderSearchResult (Species s) = Html.li $ do
+  Html.span $ Html.text s.name
+  Html.button $ Html.text "add"
+
+renderAddPlant :: Catalog -> Html Unit
+renderAddPlant catalog = do
   Html.h1 $ Html.text "Add new plants"
   Html.input "Search for species" $ pure unit
+  Html.ul $ do
+    Html.setId "search-results"
+    traverse_ renderSearchResult (Species.search "m" catalog)

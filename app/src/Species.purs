@@ -9,6 +9,7 @@ module Species
   ( Catalog
   , Species (..)
   , getCatalog
+  , search
   ) where
 
 import Prelude
@@ -18,10 +19,14 @@ import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Array as Array
 import Data.Either (Either (..))
+import Data.String as String
+import Data.String.Pattern (Pattern (..))
 import Effect.Aff (Aff)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
+import Foreign.Object as Object
 
 import Util (arrayToMap)
 
@@ -71,3 +76,16 @@ getCatalog = do
     Right response -> case Json.decodeJson response.body of
       Left err -> fatal $ "Failed to parse species catalog: " <> err
       Right species -> pure $ arrayToMap (case _ of Species s -> s.name) species
+
+-- Search for a species by name.
+search :: String -> Catalog -> Array Species
+search needle catalog =
+  let
+    -- We search on lowercased species names, so we have a case-insensitive
+    -- search.
+    pattern = Pattern $ String.toLower needle
+    isMatch = String.contains pattern <<< String.toLower
+    matches = Object.values $ Object.filterKeys isMatch catalog
+  in
+    -- Sort matches by the index of the needle, so prefix matches are first.
+    Array.sortWith (case _ of Species s -> String.indexOf pattern $ String.toLower s.name) matches
