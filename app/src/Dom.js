@@ -103,3 +103,9 @@ exports.addEventListenerImpl = function(eventName, callback, element) {
     });
   }
 }
+
+exports.scrollIntoView = function(element) {
+  return function() {
+    return element.scrollIntoView();
+  }
+}

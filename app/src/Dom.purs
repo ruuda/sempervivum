@@ -23,6 +23,7 @@ module Dom
   , setAttribute
   , setId
   , setOpacity
+  , scrollIntoView
   ) where
 
 import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3)
@@ -38,6 +39,7 @@ foreign import clearElement :: Element -> Effect Unit
 foreign import createElement :: String -> Effect Element
 foreign import getLocationPathName :: Effect String
 foreign import getValue :: Element -> Effect String
+foreign import scrollIntoView :: Element -> Effect Unit
 
 foreign import addClassImpl :: Fn2 String Element (Effect Unit)
 foreign import addEventListenerImpl :: Fn3 String (Effect Unit) Element (Effect Unit)

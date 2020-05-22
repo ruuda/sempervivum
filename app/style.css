@@ -51,8 +51,14 @@ a {
 h1 {
   font-weight: 700;
   font-size: 2rem;
-  margin-top: 3rem;
+  /* Split into padding and marging so scroll into view aligns nicely. */
+  padding-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+h1:first-of-type {
+  margin-top: 0;
 }
 
 h2 {
@@ -205,12 +211,14 @@ input:focus {
 
 ul#search-results {
   list-style: none;
+  min-height: 0;
+  transition: min-height 0.2s ease-out;
 }
 
 ul#search-results.active {
   /* When searching, add some space to avoid
    * jumping the page so much when typing. */
-  min-height: 50vh;
+  min-height: 100vh;
 }
 
 ul#search-results li {

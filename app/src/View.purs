@@ -29,6 +29,7 @@ import Effect.Class (liftEffect)
 import Care (MatchedPlants, KnownPlant)
 import Care as Care
 import Dom (Element)
+import Dom as Dom
 import Html (Html)
 import Html as Html
 import Plant (Plant (..))
@@ -276,33 +277,32 @@ renderSearchResult (Species s) = Html.li $ do
 
 renderAddPlant :: Catalog -> Html Unit
 renderAddPlant catalog = do
-  Html.h1 $ Html.text "Add new plants"
-
-  input <- Html.input "Search for species" ask
-  resultUl <- Html.ul $ do
-    Html.setId "search-results"
-    ask
+  header   <- Html.h1 $ Html.text "Add new plants" *> ask
+  input    <- Html.input "Search for species" ask
+  resultUl <- Html.ul $ Html.setId "search-results" *> ask
 
   let
     fillResults :: String -> Effect Unit
-    fillResults needle = Html.withElement resultUl $ do
-      Html.clear
-      case needle of
-        "" -> do
-          Html.removeClass "active"
-        _  -> do
-          Html.addClass "active"
-          case Species.search needle catalog of
-            [] -> do
-              Html.p $ do
-                Html.addClass "multi"
-                Html.text "Nothing found. Try searching by botanical name."
-              Html.p $ do
-                Html.text "If your plant is missing, a pull request to "
-                let srclink = "https://github.com/ruuda/sempervivum/tree/master/species"
-                Html.a srclink $ Html.text "add a new species"
-                Html.text " would be accepted."
+    fillResults needle = do
+      Dom.scrollIntoView header
+      Html.withElement resultUl $ do
+        Html.clear
+        case needle of
+          "" -> do
+            Html.removeClass "active"
+          _  -> do
+            Html.addClass "active"
+            case Species.search needle catalog of
+              [] -> do
+                Html.p $ do
+                  Html.addClass "multi"
+                  Html.text "Nothing found. Try searching by botanical name."
+                Html.p $ do
+                  Html.text "If your plant is missing, a pull request to "
+                  let srclink = "https://github.com/ruuda/sempervivum/tree/master/species"
+                  Html.a srclink $ Html.text "add a new species"
+                  Html.text " would be accepted."
 
-            matches -> traverse_ renderSearchResult matches
+              matches -> traverse_ renderSearchResult matches
 
   local (const input) $ Html.onInput fillResults
