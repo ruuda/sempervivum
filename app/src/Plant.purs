@@ -9,11 +9,12 @@ module Plant
   ( Plant (..)
   , Plants (..)
   , getPlants
+  , hasSpecies
   , lastFertilized
   , lastWatered
+  , newPlant
   , postWatered
   , postWateredFertilized
-  , hasSpecies
   ) where
 
 import Prelude
@@ -31,6 +32,7 @@ import Data.Array as Array
 import Data.Either (Either (..))
 import Data.Foldable (any)
 import Data.Maybe (Maybe (..))
+import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 import Effect.Class.Console as Console
@@ -39,7 +41,7 @@ import Foreign.Object (Object)
 import Foreign.Object as Object
 
 import Time (Instant)
-import Util (arrayToMap)
+import Util (arrayToMap, getUniqueId)
 
 newtype Plant = Plant
   { id         :: String
@@ -81,6 +83,17 @@ getPlants = do
     Right response -> case Json.decodeJson response.body of
       Left err -> fatal $ "Failed to parse plants: " <> err
       Right plants -> pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants
+
+-- Create a plant of the given species, with a new random id.
+newPlant :: String -> Effect Plant
+newPlant speciesName = do
+  id <- getUniqueId
+  pure $ Plant
+    { id: id
+    , species: speciesName
+    , watered: []
+    , fertilized: []
+    }
 
 lastWatered :: Plant -> Maybe Instant
 lastWatered (Plant p) = Array.last p.watered

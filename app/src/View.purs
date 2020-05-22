@@ -118,7 +118,7 @@ type PlantElements =
   , buttonWateredFertilized :: Element
   }
 
-renderPlantItem :: Instant -> KnownPlant -> Html Unit
+renderPlantItem :: Instant -> KnownPlant -> Html Element
 renderPlantItem now knownPlant =
   let
     Plant plant = knownPlant.plant
@@ -179,7 +179,7 @@ renderPlantItem now knownPlant =
         , buttonWateredFertilized: detailElements.buttonWateredFertilized
         }
 
-      pure unit
+      ask
 
 renderDetails :: Instant -> KnownPlant -> Html PlantDetailElements
 renderDetails now knownPlant =
@@ -272,8 +272,8 @@ installClickHandlers knownPlant collapse elements =
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
 
-renderSearchResult :: Plants -> Species -> Html Unit
-renderSearchResult plants (Species s) = Html.li $ do
+renderSearchResult :: Element -> Plants -> Species -> Html Unit
+renderSearchResult plantList plants (Species s) = Html.li $ do
   Html.span $ Html.text s.name
   Html.button $ do
     Html.text "add"
@@ -281,9 +281,17 @@ renderSearchResult plants (Species s) = Html.li $ do
     -- is no good way to tell multiple plants of the same species apart, you
     -- can't give them names or anything.
     Html.setDisabled $ Plant.hasSpecies s.name plants
+    self <- ask
+    Html.onClick $ do
+      -- Manage the state centrally, keep it better in sync.
+      plant <- Plant.newPlant s.name
+      now <- Time.getCurrentInstant
+      item <- Html.withElement plantList $ renderPlantItem now { plant: plant, species: Species s }
+      Html.withElement self $ Html.setDisabled true
+      Dom.scrollIntoView item
 
-renderAddPlant :: Plants -> Catalog -> Html Unit
-renderAddPlant plants catalog = do
+renderAddPlant :: Element -> Plants -> Catalog -> Html Unit
+renderAddPlant plantList plants catalog = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
   input    <- Html.input "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
@@ -310,7 +318,7 @@ renderAddPlant plants catalog = do
                   Html.a srclink $ Html.text "add a new species"
                   Html.text " would be accepted."
 
-              matches -> traverse_ (renderSearchResult plants) matches
+              matches -> traverse_ (renderSearchResult plantList plants) matches
 
   local (const input) $ Html.onInput fillResults
 
@@ -319,5 +327,5 @@ renderApp now catalog plants =
   let
     matched = Care.match catalog plants
   in do
-    _plants <- renderPlants now matched
-    renderAddPlant plants catalog
+    plantList <- renderPlants now matched
+    renderAddPlant plantList plants catalog
