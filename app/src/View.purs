@@ -6,8 +6,7 @@
 -- A copy of the License has been included in the root of the repository.
 
 module View
-  ( renderPlants
-  , renderAddPlant
+  ( renderApp
   ) where
 
 import Prelude
@@ -90,13 +89,16 @@ speciesImageUrl (Species species) =
   in
     "/" <> slug <> ".webp"
 
-renderPlants :: Instant -> MatchedPlants -> Html Unit
+renderPlants :: Instant -> MatchedPlants -> Html Element
 renderPlants now ps = do
   Html.h1 $ Html.text "Plants"
-  traverse_ (renderPlantItem now) (Care.sortByNextWater now ps.knowns)
-  case ps.unknowns of
-    Nil -> pure unit
-    xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
+  Html.div $ do
+    Html.setId "plants"
+    traverse_ (renderPlantItem now) (Care.sortByNextWater now ps.knowns)
+    case ps.unknowns of
+      Nil -> pure unit
+      xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
+    ask
 
 renderSpanP :: String -> String -> Html Unit
 renderSpanP label value = Html.p $ do
@@ -311,3 +313,11 @@ renderAddPlant plants catalog = do
               matches -> traverse_ (renderSearchResult plants) matches
 
   local (const input) $ Html.onInput fillResults
+
+renderApp :: Instant -> Catalog -> Plants -> Html Unit
+renderApp now catalog plants =
+  let
+    matched = Care.match catalog plants
+  in do
+    _plants <- renderPlants now matched
+    renderAddPlant plants catalog

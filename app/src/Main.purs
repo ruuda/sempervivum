@@ -14,7 +14,6 @@ import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 
-import Care as Care
 import Dom as Dom
 import Html as Html
 import Idb as Idb
@@ -31,7 +30,4 @@ main = launchAff_ $ do
   db <- Idb.open
   Idb.putString "henk" "steen" db
   Idb.putJson "plants" (Json.encodeJson plants) db
-  let matched = Care.match catalog plants
-  liftEffect $ Html.withElement Dom.body $ do
-    View.renderPlants now matched
-    View.renderAddPlant plants catalog
+  liftEffect $ Html.withElement Dom.body $ View.renderApp now catalog plants
