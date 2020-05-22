@@ -83,6 +83,12 @@ exports.removeClassImpl = function(className, element) {
   }
 }
 
+exports.setDisabledImpl = function(isDisabled, element) {
+  return function() {
+    element.disabled = isDisabled;
+  }
+}
+
 exports.setIdImpl = function(id, element) {
   return function() {
     element.id = id;

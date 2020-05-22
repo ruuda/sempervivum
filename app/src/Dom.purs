@@ -21,6 +21,7 @@ module Dom
   , getLocationPathName
   , removeClass
   , setAttribute
+  , setDisabled
   , setId
   , setOpacity
   , scrollIntoView
@@ -48,6 +49,7 @@ foreign import appendTextImpl :: Fn2 String Element (Effect Unit)
 foreign import getElementByIdImpl :: Fn3 String (Element -> Maybe Element) (Maybe Element) (Effect (Maybe Element))
 foreign import removeClassImpl :: Fn2 String Element (Effect Unit)
 foreign import setAttributeImpl :: Fn3 String String Element (Effect Unit)
+foreign import setDisabledImpl :: Fn2 Boolean Element (Effect Unit)
 foreign import setIdImpl :: Fn2 String Element (Effect Unit)
 foreign import setOpacityImpl :: Fn2 Number Element (Effect Unit)
 
@@ -71,6 +73,9 @@ setId id element = runFn2 setIdImpl id element
 
 setAttribute :: String -> String -> Element -> Effect Unit
 setAttribute attribute value element = runFn3 setAttributeImpl attribute value element
+
+setDisabled :: Boolean -> Element -> Effect Unit
+setDisabled isDisabled element = runFn2 setDisabledImpl isDisabled element
 
 setOpacity :: Number -> Element -> Effect Unit
 setOpacity opacity element = runFn2 setOpacityImpl opacity element

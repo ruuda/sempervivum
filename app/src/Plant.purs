@@ -13,6 +13,7 @@ module Plant
   , lastWatered
   , postWatered
   , postWateredFertilized
+  , hasSpecies
   ) where
 
 import Prelude
@@ -23,11 +24,12 @@ import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
-import Data.Argonaut.Encode as Json
+import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
 import Data.Either (Either (..))
+import Data.Foldable (any)
 import Data.Maybe (Maybe (..))
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
@@ -120,3 +122,7 @@ postWateredFertilized now (Plant p) =
           $ recordFertilized now
           $ recordWatered now
           $ Plant p
+
+-- Return wether a plant of the given species is part of the collection.
+hasSpecies :: String -> Plants -> Boolean
+hasSpecies speciesName (Plants ps) = any (case _ of Plant p -> p.species == speciesName) ps

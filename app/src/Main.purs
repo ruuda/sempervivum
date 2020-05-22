@@ -34,4 +34,4 @@ main = launchAff_ $ do
   let matched = Care.match catalog plants
   liftEffect $ Html.withElement Dom.body $ do
     View.renderPlants now matched
-    View.renderAddPlant catalog
+    View.renderAddPlant plants catalog

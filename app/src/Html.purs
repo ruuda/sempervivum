@@ -23,6 +23,7 @@ module Html
   , onInput
   , p
   , removeClass
+  , setDisabled
   , setId
   , setOpacity
   , setTitle
@@ -66,6 +67,9 @@ setOpacity opacity = ReaderT $ \container -> Dom.setOpacity opacity container
 
 setTitle :: String -> Html Unit
 setTitle title = ReaderT $ \self -> Dom.setAttribute "title" title self
+
+setDisabled :: Boolean -> Html Unit
+setDisabled isDisabled = ReaderT $ \self -> Dom.setDisabled isDisabled self
 
 addClass :: String -> Html Unit
 addClass className = ReaderT $ \container -> Dom.addClass className container

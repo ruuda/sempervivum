@@ -32,7 +32,7 @@ import Dom (Element)
 import Dom as Dom
 import Html (Html)
 import Html as Html
-import Plant (Plant (..))
+import Plant (Plant (..), Plants)
 import Plant as Plant
 import Species (Catalog, Species (..))
 import Species as Species
@@ -270,13 +270,18 @@ installClickHandlers knownPlant collapse elements =
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
 
-renderSearchResult :: Species -> Html Unit
-renderSearchResult (Species s) = Html.li $ do
+renderSearchResult :: Plants -> Species -> Html Unit
+renderSearchResult plants (Species s) = Html.li $ do
   Html.span $ Html.text s.name
-  Html.button $ Html.text "add"
+  Html.button $ do
+    Html.text "add"
+    -- We allow only one plant instance of each species, because currently there
+    -- is no good way to tell multiple plants of the same species apart, you
+    -- can't give them names or anything.
+    Html.setDisabled $ Plant.hasSpecies s.name plants
 
-renderAddPlant :: Catalog -> Html Unit
-renderAddPlant catalog = do
+renderAddPlant :: Plants -> Catalog -> Html Unit
+renderAddPlant plants catalog = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
   input    <- Html.input "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
@@ -303,6 +308,6 @@ renderAddPlant catalog = do
                   Html.a srclink $ Html.text "add a new species"
                   Html.text " would be accepted."
 
-              matches -> traverse_ renderSearchResult matches
+              matches -> traverse_ (renderSearchResult plants) matches
 
   local (const input) $ Html.onInput fillResults

@@ -241,4 +241,6 @@ ul#search-results button {
   float: right;
 }
 
-ul#search-results
+button:disabled {
+  opacity: 0.3;
+}
