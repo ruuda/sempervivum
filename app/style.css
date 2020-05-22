@@ -45,9 +45,7 @@ body {
 }
 
 a {
-  display: block;
-  text-decoration: inherit;
-  color: inherit;
+  color: var(--yellow-green);
 }
 
 h1 {
@@ -209,6 +207,12 @@ ul#search-results {
   list-style: none;
 }
 
+ul#search-results.active {
+  /* When searching, add some space to avoid
+   * jumping the page so much when typing. */
+  min-height: 50vh;
+}
+
 ul#search-results li {
   background-color: white;
   overflow: hidden;
@@ -228,3 +232,5 @@ ul#search-results button {
   margin: 0;
   float: right;
 }
+
+ul#search-results
