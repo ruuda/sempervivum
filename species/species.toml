@@ -299,7 +299,7 @@ name = "Philodendron scandens"
 # Source: https://www.123planten.nl/verzorging/tips-philodendron
 # Source: https://www.guide-to-houseplants.com/heartleaf-philodendron.html
 # Source: https://www.flowershopnetwork.com/blog/flower-plant-care/plant-care/heartleaf-philodendron-plant-care/
-water_days_summer = 5
+water_days_summer = 4
 water_days_winter = 7
 water_remark =
   """\
