@@ -19,18 +19,22 @@ a local development environment with all dependencies with [Nix][nix].
     stack build
     stack exec sempervivum
 
-## Future work
+## Status and future work
 
- * **v1**: A server-side rendered app backed by a server side database.
- * **v2**: A client-side app backed by local storage, able to generate
+ * **Mostly done**: A server-side rendered app backed by a server side database.
+ * **In progress**: A client-side app backed by local storage, able to generate
    notifications.
- * **v3**: Syncing between multiple devices through a server. Data should be
-   encrypted client-side, and the username must be hashed, so the server cannot
-   identify users. All the server needs is a table of `username_hash: bytes`,
+ * **Future**: Syncing between multiple devices through a server. Data should be
+   encrypted client-side, and the user id should be a client-side chosen uuid,
+   that can be claimed on a first-come-first-serve basis, so the server cannot
+   identify users. All the server needs is a table of `user_id: uuid`,
    `encrypted_data: bytes`, `revision: int`. The data naturally forms a CRDT,
-   which facilitates syncing.
- * **v4**: Decoupling usernames from sync, so you can share one sync accout with
-   everybody in the house or office, and know who watered which plant.
+   which facilitates syncing. The user should keep the user id secret to
+   prevent others from overwriting the encrypted data. Knowledge of the user id
+   authenticates the user.
+ * **Far future**: Add usernames (local to the client data), so you can share
+   one sync account with everybody in the house or office, and know who watered
+   which plant.
 
 ## License
 
