@@ -1,0 +1,15 @@
+name = "Chlorophytum comosum"
+# Source: https://www.rhs.org.uk/Plants/67933/i-Chlorophytum-comosum-i-Vittatum-(v)/Details
+# https://www.plantsome.nl/products/graslelie-chlorophytum
+water_days_summer = 4
+water_days_winter = 4
+water_remark =
+  """\
+  Keep the soil slightly moist. \
+  When the leaves turn pale, the plant needs water. \
+  Mist weekly.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Needs fertilizer during the summer months."
+light = "Bright to partial shade, no direct sunlight"

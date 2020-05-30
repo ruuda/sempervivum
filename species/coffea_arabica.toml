@@ -1,0 +1,13 @@
+name = "Coffea arabica"
+# Source: https://www.123planten.nl/verzorging/tips-coffea-arabica.
+water_days_summer = 5
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil slightly to moderately moist. \
+  Mist regularly to keep humidity high and the leaves clean.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Don’t fertilize in winter."
+light = "Sunny, at least five hours of direct sunlight"

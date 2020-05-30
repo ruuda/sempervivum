@@ -27,6 +27,8 @@ library
                , base
                , bytestring
                , containers
+               , directory
+               , filepath
                , hashable
                , http-types
                , monad-logger

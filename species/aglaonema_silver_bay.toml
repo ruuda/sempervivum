@@ -1,0 +1,21 @@
+name = "Aglaonema Silver Bay"
+# Source https://www.123planten.nl/aglaonema-silver-bay-agsba24070.html
+water_days_summer = 5
+water_days_winter = 9
+water_remark =
+  """\
+  Keep the soil slightly moist. \
+  In winter, it is okay if the soil dries out in between watering. \
+  The plant is not demanding, \
+  prefer to water too little over too much. \
+  Misting is not necessary but can be beneficial.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 30
+fertilize_remark =
+  """\
+  Requires little fertilizer. \
+  Too much fertilizer can turn the soil acid, \
+  which harms the plant.\
+  """
+light = "Bright, but at most three hours of direct sunlight"

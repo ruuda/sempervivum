@@ -1,0 +1,22 @@
+name = "Aloe vera"
+# https://www.123planten.nl/verzorging/tips-aloe-vera
+water_days_summer = 10
+water_days_winter = 20
+water_remark =
+  """\
+  Needs very little water, \
+  just a bit to prevent the roots from drying out. \
+  Can go without water for weeks in fall and winter. \
+  When the tips of the leaves are contracting and turning red, \
+  the plants needs more water. \
+  With too much water, the leaves become soft and turn brown.\
+  """
+fertilize_days_summer = 90
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Requires very little fertilizer. \
+  Fertilizer is most useful in spring. \
+  Use cactus fertilizer, or 1/4 of a normal houseplant fertilizer dose.\
+  """
+light = "From direct sunlight to partial shade"

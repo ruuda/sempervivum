@@ -107,8 +107,7 @@ main = do
   conn <- Database.connect
   Database.initialize conn
 
-  -- Load the species definitions from the toml file, and insert them into the
-  -- database. If any species was already present, overwrite it.
-  catalog <- Species.readCatalogOrExit "species/species.toml"
+  -- Load the species definitions in the toml files in the "species" directory.
+  catalog <- Species.readCatalogOrExit "species"
 
   Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn

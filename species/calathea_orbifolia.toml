@@ -1,0 +1,16 @@
+name = "Calathea orbifolia"
+# Source: https://www.123planten.nl/verzorging/tips-calathea
+water_days_summer = 3
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil moist, water when it starts to dry. \
+  Hanging and curling leaves are a sign of too little water. \
+  Watering a little often, is better than a lot infrequently. \
+  Misting is beneficial, especially in winter if the air is dry. \
+  The edges of the leaves turn brown when misting too little.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Don’t fertilize in winter."
+light = "Shade or partial shade, no direct sunlight"

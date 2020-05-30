@@ -1,0 +1,20 @@
+name = "Tillandsia"
+# Source: https://www.plantsome.nl/products/tillandsia-in-schelp-i
+# https://www.airplantcity.com/pages/air-plant-care
+# One source says "mist every once in a while", the other says 2-3 times a week.
+# I haven’t misted mine for two weeks and it is doing fine, so let's say 14
+# days.
+water_days_summer = 14
+water_days_winter = 14
+water_remark =
+  """\
+  Does not need to be watered, \
+  but mist every once in a while for humidity.\
+  """
+fertilize_days_summer = 365
+fertilize_days_winter = 365
+# One source says it gets everything from the air, the other says there is
+# special fertilizer. But normal liquid fertilizer is not going to work in any
+# case.
+fertilize_remark = "Does not need fertilization."
+light = "Bright, no direct sunlight"

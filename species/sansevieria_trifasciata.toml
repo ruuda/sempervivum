@@ -1,0 +1,23 @@
+name = "Sansevieria trifasciata"
+# Source: https://www.123planten.nl/verzorging/tips-sansevieria
+# Source: https://www.houseofplants.co.uk/plants/sansevieria-trifasciata-laurentii_mother-in-laws-tongue_87403.html
+# Source: https://www.houseplantsexpert.com/mother-in-laws-tongue.html
+water_days_summer = 14
+water_days_winter = 35
+water_remark =
+  """\
+  Needs very little water; don’t water when in doubt. \
+  Let the soil dry out completely before watering again. \
+  In summer, watering once every two weeks is sufficient. \
+  In winter, the plant can easily survive for 6 to 8 weeks without watering. \
+  Misting is unnecessary, but can help to remove dust.\
+  """
+# The first source says once every two months in spring-summer. The second
+# source says once every month spring-fall. Take the middle ground.
+fertilize_days_summer = 45
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Use little fertilizer, about 1/4 of an average liquid fertilizer dose.\
+  """
+light = "Indifferent, from full sun to shade"

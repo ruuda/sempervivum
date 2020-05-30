@@ -1,0 +1,19 @@
+name = "Monstera deliciosa"
+# Not to be confused with Philendron.
+# Source: https://www.rhs.org.uk/Plants/90394/i-Monstera-deliciosa-i-Variegata-(v)/Details
+# Source: https://www.gardenista.com/posts/gardening-101-monstera-deliciosa-tropical-plant-guide/
+# Source: https://greeneryunlimited.co/blogs/plant-care/monstera-deliciosa-care
+# Also the label on the one I bought, which said water once per week and keep in
+# half-shadow.
+water_days_summer = 7
+water_days_winter = 7
+water_remark =
+  """\
+  The plant does not need a lot of water. \
+  Let the top soil dry out before watering again. \
+  Mist once a week.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize monthly when in growth (spring and summer)."
+light = "Partial shade, bright indirect light"

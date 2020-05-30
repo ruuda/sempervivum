@@ -1,0 +1,22 @@
+name = "Rhaphidophora tetrasperma"
+# Source: https://leafyplace.com/rhaphidophora-tetrasperma/
+# Source: https://www.ohiotropics.com/2019/04/11/rhaphidophora-tetrasperma/
+water_days_summer = 5
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil moist, but not soggy. \
+  Soak the soil, then water again when the top 2cm of the soil is dry. \
+  Prefer watering too little over watering too much. \
+  Yellow leaves are a sign of too much water. \
+  Mist every two to three days.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 90
+fertilize_remark = "Only fertilize when the plant is growing."
+light = "Bright indirect light, no direct sunlight"
+light_remark =
+  """\
+  If the leaves of the plant do not split, \
+  the plant needs more light.\
+  """

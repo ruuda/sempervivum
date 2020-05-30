@@ -6,6 +6,7 @@
 -- A copy of the License has been included in the root of the repository.
 
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Species
 ( Catalog
@@ -14,15 +15,20 @@ module Species
 , lookup
 ) where
 
+import Data.Either (partitionEithers)
 import Data.HashMap.Strict (HashMap)
 import Data.Text (Text)
+import Data.List (isSuffixOf)
 import Prelude hiding (lookup)
+import System.FilePath ((</>))
 import Toml (TomlCodec, (.=))
 
 import qualified Data.Aeson as Aeson
 import qualified Data.HashMap.Strict as HashMap
+import qualified Data.Text as Text
 import qualified Data.Text.IO as TextIO
 import qualified System.Exit as System
+import qualified System.Directory as Directory
 import qualified Toml
 
 type SpeciesName = Text
@@ -51,9 +57,6 @@ speciesCodec = Species
   <*> Toml.text "fertilize_remark"      .= fertilizeRemark
   <*> Toml.text "light"                 .= light
 
-catalogCodec :: TomlCodec [Species]
-catalogCodec = Toml.list speciesCodec "species" .= id
-
 instance Aeson.ToJSON Species where
   toJSON = error "Use toEncoding instead."
   toEncoding species =
@@ -70,15 +73,30 @@ instance Aeson.ToJSON Species where
 listToMap :: [Species] -> Catalog
 listToMap = HashMap.fromList . fmap (\species -> (name species, species))
 
+readSingleEntry :: FilePath -> IO (Either Text Species)
+readSingleEntry fname = do
+  tomlText <- TextIO.readFile fname
+  case Toml.decode speciesCodec tomlText of
+    Right species -> pure $ Right species
+    Left msg -> pure $ Left $ mempty
+      <> "Failed to parse " <> (Text.pack fname) <> ":\n"
+      <> Toml.prettyException msg
+
+readCatalog :: FilePath -> IO (Either [Text] Catalog)
+readCatalog dirname = do
+  fnames <- Directory.listDirectory dirname
+  let tomls = fmap (dirname </>) $ filter (".toml" `isSuffixOf`) fnames
+  results <- mapM readSingleEntry tomls
+  case partitionEithers results of
+    ([], entries) -> pure $ Right $ listToMap entries
+    (errors, _entries) -> pure $ Left errors
+
 readCatalogOrExit :: FilePath -> IO Catalog
-readCatalogOrExit fname = do
-  catalog <- TextIO.readFile fname
-  case Toml.decode catalogCodec catalog of
-    Right species -> pure $ listToMap species
-    Left msg -> do
-      putStrLn $ "Failed to parse " <> fname <> ":"
-      TextIO.putStrLn $ Toml.prettyException msg
-      System.exitFailure
+readCatalogOrExit dirname = readCatalog dirname >>= \case
+  Right catalog -> pure catalog
+  Left errors -> do
+    TextIO.putStrLn $ Text.intercalate "\n\n" errors
+    System.exitFailure
 
 lookup :: SpeciesName -> Catalog -> Maybe Species
 lookup = HashMap.lookup

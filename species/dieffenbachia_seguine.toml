@@ -1,0 +1,20 @@
+name = "Dieffenbachia seguine"
+# Source: https://www.intratuin.nl/dieffenbachia-dieffenbachia-seguine-tropic-snow-d-21-h-85-cm.html
+# Source: https://plantingman.com/dumb-cane-dieffenbachia-summer-style-indoor-house-plants/
+# Source: https://www.rhs.org.uk/Plants/96172/i-Dieffenbachia-i-Camille-(v)/Details
+water_days_summer = 4
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil evenly moist, but not soggy. \
+  It is okay for the top soil to become a bit dry between each watering. \
+  Water less often in winter. \
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 60
+fertilize_remark =
+  """\
+  Fertilize every two weeks in summer, every month in spring and fall. \
+  Don’t fertilize in winter.\
+  """
+light = "Bright to partial shade, no direct sunlight (sunlight burns the leaves)"

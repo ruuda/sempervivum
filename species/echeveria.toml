@@ -1,0 +1,22 @@
+name = "Echeveria"
+# Source: https://www.intratuin.nl/echeveria-echeveria-pilosa-d-14-h-27-cm.html
+# Source: https://www.succulentsandsunshine.com/types-of-succulents/echeveria-violet-queen/
+# Source: https://www.drought-smart-plants.com/how-to-grow-echeveria.html
+water_days_summer = 12
+water_days_winter = 14
+water_remark =
+  """\
+  Soak the soil, then let it dry out completely. \
+  Avoid letting water sit on the leaves for too long \
+  to prevent rot and fungus. \
+  Rainwater works well because it is low on minerals. \
+  The plant stores water in its leaves, so it needs very little water.\
+  """
+fertilize_days_summer = 60
+fertilize_days_winter = 90
+fertilize_remark =
+  """\
+  Rarely needs fertilizer. \
+  Add a little bit of diluted liquid fertilizer if the plant appears pale.\
+  """
+light = "Sunny"

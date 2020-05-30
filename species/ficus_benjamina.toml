@@ -1,0 +1,22 @@
+name = "Ficus benjamina"
+# Source: https://www.123planten.nl/verzorging/tips-ficus
+# https://www.ikea.com/gb/en/p/ficus-benjamina-natasja-potted-plant-weeping-fig-56804613/
+water_days_summer = 4
+water_days_winter = 5
+water_remark =
+  """\
+  Keep the soil slightly moist, without soaking the roots. \
+  Watering a little often, is better than a lot infrequently. \
+  Only water when the soil starts to feel dry. \
+  Mist regularly, twice per week in winter if the air is dry.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Yellow leaves can be a sign of too little fertilizer. \
+  Don’t fertilize in fall and winter. \
+  Too much fertilizer can cause the soil to become acid.\
+  """
+# Some sources say no direct sunlight, 123planten says at least 5 hours of
+# direct sunlight.
+light = "At least 5 hours of direct sunlight"

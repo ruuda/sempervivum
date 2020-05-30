@@ -1,0 +1,23 @@
+name = "Philodendron scandens"
+# Source: https://www.123planten.nl/verzorging/tips-philodendron
+# Source: https://www.guide-to-houseplants.com/heartleaf-philodendron.html
+# Source: https://www.flowershopnetwork.com/blog/flower-plant-care/plant-care/heartleaf-philodendron-plant-care/
+water_days_summer = 4
+water_days_winter = 7
+water_remark =
+  """\
+  Keep soil lightly moist, not soggy, in spring through fall. \
+  In winter, allow the top soil to dry out in between waterings. \
+  The plant needs little water, and is sensitive to overwatering. \
+  Yellow or brown leaves indicate too much water. \
+  The plant likes humid air, mist often, at least once a week.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize spring through fall, don’t fertilize in winter."
+light = "Partial shade, avoid direct sunlight"
+light_remark =
+  """\
+  Small leaves, or long spaces between the leaves, \
+  indicate that the plant is not getting enough light.\
+  """

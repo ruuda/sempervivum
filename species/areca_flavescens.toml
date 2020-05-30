@@ -1,0 +1,20 @@
+name = "Areca flavescens"
+# Actual name is "Dypsis lutescens" according to Wikipedia, but it is called
+# "Areca" everywhere, with nicknames "golden cane palm" and "butterfly palm".
+# Source: https://www.123planten.nl/verzorging/tips-areca
+# Source: https://www.groenrijk.nl/tuintips/111/areca-palm-verzorging
+aliases = ["Golden cane palm", "Butterfly palm"]
+water_days_summer = 3
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil moist, also in winter. \
+  Watering a little often, is better than a lot infrequently. \
+  Mist often, daily during winter if the air is dry.\
+  """
+# Once source says add fertilizer in summer every time you water, the other
+# source says add fertilizer every 14 days. I'll go with the lazy option.
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Don’t fertilize in winter."
+light = "Bright, no direct sunlight"

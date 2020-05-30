@@ -1,0 +1,21 @@
+name = "Hedera helix"
+# Source: https://www.123planten.nl/verzorging/tips-hedera
+water_days_summer = 5
+water_days_winter = 5
+water_remark =
+  """\
+  Keep the soil slightly moist at all times. \
+  Watch out for water accumulating in the pot. \
+  The plant losing its leaves, \
+  and leaves with brown or yellow edges or spots, \
+  are signs of too much water. \
+  Misting is not necessary, but beneficial for removing dust and pests.\
+  """
+fertilize_days_summer = 21
+fertilize_days_winter = 30
+fertilize_remark =
+  """\
+  Fertilization is allowed, but not a necessity. \
+  Too much fertilizer can cause the soil to become acid.\
+  """
+light = "Shade or partial shade"

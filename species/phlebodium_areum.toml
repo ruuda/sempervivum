@@ -1,0 +1,14 @@
+name = "Phlebodium areum"
+# Source: https://www.123planten.nl/verzorging/tips-phlebodium
+water_days_summer = 3
+water_days_winter = 6
+water_remark =
+  """\
+  Keep the soil slightly moist at all times. \
+  Prefer to water at the edges of the pot. \
+  Mist regularly.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 90
+fertilize_remark = "Needs very little fertilizer."
+light = "Anything apart from direct sunlight is fine"

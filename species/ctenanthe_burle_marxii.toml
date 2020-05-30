@@ -1,0 +1,15 @@
+name = "Ctenanthe burle-marxii"
+# Source: https://pistilsnursery.com/products/ctenanthe-burle-marxii-fishbone-prayer-plant
+# Source: https://www.plantsome.nl/products/ctenanthe-burle-marxii
+# Source: https://fair-flora.com/en/our-growers/vde-plant/ctenanthe-burle-marxii/
+water_days_summer = 7
+water_days_winter = 14
+water_remark =
+  """\
+  Keep the soil slightly moist, do not allow the soil to dry out entirely. \
+  Mist periodically.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Needs very little fertilizer."
+light = "From bright to shade; no direct sunlight"
