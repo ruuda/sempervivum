@@ -24,6 +24,7 @@ import System.FilePath ((</>))
 import Toml (TomlCodec, (.=))
 
 import qualified Data.Aeson as Aeson
+import qualified Data.Char as Char
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text as Text
 import qualified Data.Text.IO as TextIO
@@ -73,20 +74,37 @@ instance Aeson.ToJSON Species where
 listToMap :: [Species] -> Catalog
 listToMap = HashMap.fromList . fmap (\species -> (name species, species))
 
-readSingleEntry :: FilePath -> IO (Either Text Species)
-readSingleEntry fname = do
-  tomlText <- TextIO.readFile fname
+-- Return the expected file name of a species, without extension.
+slug :: Species -> FilePath
+slug species =
+  let
+    replaceInvalidChars = \case
+      c | Char.isAscii c && Char.isAlpha c -> c
+      _ -> '_'
+  in
+    Text.unpack $ Text.map replaceInvalidChars $ Text.toLower $ name species
+
+readSingleEntry :: FilePath -> FilePath -> IO (Either Text Species)
+readSingleEntry dirname fname = do
+  tomlText <- TextIO.readFile (dirname </> fname)
   case Toml.decode speciesCodec tomlText of
-    Right species -> pure $ Right species
-    Left msg -> pure $ Left $ mempty
-      <> "Failed to parse " <> (Text.pack fname) <> ":\n"
-      <> Toml.prettyException msg
+    Right species ->
+      if (slug species <> ".toml") == fname
+        then pure $ Right species
+        else pure $ Left $ mempty
+          <> "Error in " <> (Text.pack fname) <> ":\n"
+          <> "  File name does not match species '" <> name species <> "'.\n"
+          <> "  Expected file to be named '" <> (Text.pack $ slug species) <> ".toml'."
+    Left msg ->
+      pure $ Left $ mempty
+        <> "Failed to parse " <> (Text.pack fname) <> ":\n"
+        <> "  " <> Toml.prettyException msg
 
 readCatalog :: FilePath -> IO (Either [Text] Catalog)
 readCatalog dirname = do
   fnames <- Directory.listDirectory dirname
-  let tomls = fmap (dirname </>) $ filter (".toml" `isSuffixOf`) fnames
-  results <- mapM readSingleEntry tomls
+  let tomls = filter (".toml" `isSuffixOf`) fnames
+  results <- mapM (readSingleEntry dirname) tomls
   case partitionEithers results of
     ([], entries) -> pure $ Right $ listToMap entries
     (errors, _entries) -> pure $ Left errors
