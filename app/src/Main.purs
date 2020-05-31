@@ -27,7 +27,6 @@ main = launchAff_ $ do
   now      <- liftEffect $ Time.getCurrentInstant
   catalog  <- Species.getCatalog
   plants   <- Plant.getPlants
-  db <- Idb.open
-  Idb.putString "henk" "steen" db
+  db       <- Idb.open
   Idb.putJson "plants" (Json.encodeJson plants) db
   liftEffect $ Html.withElement Dom.body $ View.renderApp now catalog plants
