@@ -6,7 +6,8 @@
 -- A copy of the License has been included in the root of the repository.
 
 module ServiceWorker
-  ( onInstallPromise
+  ( onActivatePromise
+  , onInstallPromise
   ) where
 
 import Prelude
@@ -34,5 +35,17 @@ onInstall = do
     ]
   Console.log "SW: Installation complete"
 
+onActivate :: Aff Unit
+onActivate = do
+  Console.log "SW: Begin activate"
+  -- These is no v0, but if we ever move from v1 to v2, this would be the place
+  -- to clean up the v1 cache.
+  wasDeleted <- Cache.delete "v0"
+  Console.log $ "SW: Deleting v0 cache returned " <> show wasDeleted
+  Console.log "SW: Activation complete"
+
 onInstallPromise :: Effect (Promise Unit)
 onInstallPromise = Promise.fromAff onInstall
+
+onActivatePromise :: Effect (Promise Unit)
+onActivatePromise = Promise.fromAff onActivate

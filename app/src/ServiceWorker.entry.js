@@ -8,3 +8,7 @@
 self.addEventListener('install', function(evt) {
   evt.waitUntil(PS.ServiceWorker.onInstallPromise())
 });
+
+self.addEventListener('activate', function(evt) {
+  evt.waitUntil(PS.ServiceWorker.onActivatePromise())
+});
