@@ -118,8 +118,8 @@ runServer = do
   Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn
 
 -- Export the species catalog as json to stdout.
-exportCatalog :: IO ()
-exportCatalog = do
+exportSpecies :: IO ()
+exportSpecies = do
   -- Load the species definitions in the toml files in the "species" directory.
   catalog <- Species.readCatalogOrExit "species"
   ByteString.putStr $ Aeson.encode $ HashMap.elems catalog
@@ -129,7 +129,7 @@ printUsage = do
   putStrLn "Sempervivum -- A plant watering tracker\n"
   putStrLn "Usage:\n"
   putStrLn "  sempervivum serve             Start the server"
-  putStrLn "  sempervivum export-catalog    Export species json to stdout"
+  putStrLn "  sempervivum export-species    Export species json to stdout"
   System.exitFailure
 
 main :: IO ()
@@ -137,5 +137,5 @@ main = do
   args <- Environment.getArgs
   case args of
     "serve"          : [] -> runServer
-    "export-catalog" : [] -> exportCatalog
+    "export-species" : [] -> exportSpecies
     _                     -> printUsage

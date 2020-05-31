@@ -17,10 +17,11 @@ module Species
 
 import Data.Either (partitionEithers)
 import Data.HashMap.Strict (HashMap)
-import Data.Text (Text)
 import Data.List (isSuffixOf)
+import Data.Text (Text)
 import Prelude hiding (lookup)
 import System.FilePath ((</>))
+import System.IO (stderr)
 import Toml (TomlCodec, (.=))
 
 import qualified Data.Aeson as Aeson
@@ -113,7 +114,8 @@ readCatalogOrExit :: FilePath -> IO Catalog
 readCatalogOrExit dirname = readCatalog dirname >>= \case
   Right catalog -> pure catalog
   Left errors -> do
-    TextIO.putStrLn $ Text.intercalate "\n\n" errors
+    -- Print errors to stderr, so we can still see them when piping stdout elsewhere.
+    TextIO.hPutStrLn stderr $ Text.intercalate "\n\n" errors
     System.exitFailure
 
 lookup :: SpeciesName -> Catalog -> Maybe Species
