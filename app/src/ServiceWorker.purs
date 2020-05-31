@@ -32,7 +32,6 @@ onInstall = do
     [ "/"
     , "/app.js"
     , "/droplet.svg"
-    , "/plants.json" -- TODO: This will go away when storing locally.
     , "/species.json"
     , "/style.css"
     ]
