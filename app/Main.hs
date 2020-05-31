@@ -14,6 +14,8 @@ import System.IO (BufferMode (LineBuffering), hSetBuffering, stderr, stdout)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Trans.Class (lift)
 
+import qualified Data.Aeson as Aeson
+import qualified Data.ByteString.Lazy as ByteString
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as LazyText
@@ -21,6 +23,8 @@ import qualified Data.Time.Clock as Clock
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Network.HTTP.Types.Status as Http
 import qualified System.Directory as Directory
+import qualified System.Environment as Environment
+import qualified System.Exit as System
 import qualified Web.Scotty.Trans as Scotty
 
 import Species (Catalog)
@@ -95,8 +99,8 @@ server catalog conn = do
     liftIO $ Database.recordFertilized conn plantId now
     Scotty.status Http.accepted202
 
-main :: IO ()
-main = do
+runServer :: IO ()
+runServer = do
   -- When the runtime detects that stdout is not connected to a console, it
   -- defaults to block buffering instead of line buffering. When running under
   -- systemd, this prevents log messages (which are written to stdout) from
@@ -112,3 +116,26 @@ main = do
   catalog <- Species.readCatalogOrExit "species"
 
   Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn
+
+-- Export the species catalog as json to stdout.
+exportCatalog :: IO ()
+exportCatalog = do
+  -- Load the species definitions in the toml files in the "species" directory.
+  catalog <- Species.readCatalogOrExit "species"
+  ByteString.putStr $ Aeson.encode $ HashMap.elems catalog
+
+printUsage :: IO ()
+printUsage = do
+  putStrLn "Sempervivum -- A plant watering tracker\n"
+  putStrLn "Usage:\n"
+  putStrLn "  sempervivum serve             Start the server"
+  putStrLn "  sempervivum export-catalog    Export species json to stdout"
+  System.exitFailure
+
+main :: IO ()
+main = do
+  args <- Environment.getArgs
+  case args of
+    "serve"          : [] -> runServer
+    "export-catalog" : [] -> exportCatalog
+    _                     -> printUsage

@@ -17,7 +17,7 @@ a local development environment with all dependencies with [Nix][nix].
 
     # Build and start the server.
     stack build
-    stack exec sempervivum
+    stack exec sempervivum -- serve
 
 ## Status and future work
 

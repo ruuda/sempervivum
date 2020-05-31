@@ -49,6 +49,7 @@ executable sempervivum
 
   build-depends: aeson
                , base
+               , bytestring
                , directory
                , http-types
                , monad-logger
