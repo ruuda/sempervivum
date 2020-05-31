@@ -6,13 +6,19 @@
 -- A copy of the License has been included in the root of the repository.
 
 module ServiceWorker
-  ( onInstall
+  ( onInstallPromise
   ) where
 
 import Prelude
 
+import Control.Promise (Promise)
+import Control.Promise as Promise
 import Effect (Effect)
-import Effect.Console as Console
+import Effect.Aff (Aff)
+import Effect.Class.Console as Console
 
-onInstall :: Effect Unit
+onInstall :: Aff Unit
 onInstall = Console.log "SW: on install"
+
+onInstallPromise :: Effect (Promise Unit)
+onInstallPromise = Promise.fromAff onInstall

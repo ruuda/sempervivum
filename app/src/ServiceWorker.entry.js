@@ -5,4 +5,6 @@
 // you may not use this file except in compliance with the License.
 // A copy of the License has been included in the root of the repository.
 
-self.addEventListener('install', (e) => PS.ServiceWorker.onInstall());
+self.addEventListener('install', function(evt) {
+  evt.waitUntil(PS.ServiceWorker.onInstallPromise())
+});
