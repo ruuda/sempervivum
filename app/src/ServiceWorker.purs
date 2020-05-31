@@ -7,6 +7,7 @@
 
 module ServiceWorker
   ( onActivatePromise
+  , onFetchPromise
   , onInstallPromise
   ) where
 
@@ -19,6 +20,8 @@ import Effect.Aff (Aff)
 import Effect.Class.Console as Console
 
 import Cache as Cache
+import Fetch (Request, Response)
+import Fetch as Fetch
 
 onInstall :: Aff Unit
 onInstall = do
@@ -44,8 +47,18 @@ onActivate = do
   Console.log $ "SW: Deleting v0 cache returned " <> show wasDeleted
   Console.log "SW: Activation complete"
 
+onFetch :: Request -> Aff Response
+onFetch request = do
+  Console.log $ "SW: Begin fetch " <> Fetch.url request
+  response <- Fetch.fetch request
+  Console.log $ "SW: Fetch complete for " <> Fetch.url request
+  pure response
+
 onInstallPromise :: Effect (Promise Unit)
 onInstallPromise = Promise.fromAff onInstall
 
 onActivatePromise :: Effect (Promise Unit)
 onActivatePromise = Promise.fromAff onActivate
+
+onFetchPromise :: Request -> Effect (Promise Response)
+onFetchPromise request = Promise.fromAff $ onFetch request

@@ -12,3 +12,7 @@ self.addEventListener('install', function(evt) {
 self.addEventListener('activate', function(evt) {
   evt.waitUntil(PS.ServiceWorker.onActivatePromise())
 });
+
+self.addEventListener('fetch', function(evt) {
+  evt.respondWith(PS.ServiceWorker.onFetchPromise(evt.request)());
+});
