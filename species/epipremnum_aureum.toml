@@ -1,0 +1,34 @@
+name = "Epipremnum aureum"
+# Mine was labelled 'Epipremnum "Marble Queen"'.
+aliases = ["Marble queen", "Epipremnum aureum"]
+
+# Source: https://www.123planten.nl/verzorging/tips-scindapsus
+# This site puts it in the same category as the Scindapsus, and calls it
+# "Scindapsus Epipremnum" or "Scindapsus aureum". The latter looks like mine.
+
+# Source: https://alovegarden.com/epipremnum-aureum/
+# This site say: “In botanical terms, it is known as Scindapsus aureus among
+# Europeans and Epipremnum pinnatum ‘Aureum’ among North Americans.” However the
+# Wikipedia page on Scindapsus says: “Scindapsus is not easily distinguishable
+# from Epipremnum. The main difference between the two genera is in the number
+# of seeds they produce.”
+#
+# Source: https://www.plantandflowerinfo.com/pothos/pothos_marble_queen.html
+
+water_days_summer = 4
+water_days_winter = 7
+water_remark =
+  """\
+  From spring through summer, water when the top half of the soil has dried out. \
+  In winter, allow the soil to dry out almost entirely before watering again. \
+  Prefer watering too little over watering too much.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Only fertilize when the plant is growing, \
+  not in fall and winter.\
+  """
+light = "Bright indirect light to shade, the plant is not picky"
+light_remark = "The pattern in the leaves disappearing is a sign of too little light."
