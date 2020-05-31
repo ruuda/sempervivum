@@ -24,3 +24,15 @@ exports.addAllImpl = function(cache, urls, unit) {
     return cache.addAll(urls).then(() => unit);
   }
 }
+
+exports.matchImpl = function(cache, request, nothing, just) {
+  return function() {
+    return cache.match(request).then(function(response) {
+      if (response === undefined) {
+        return nothing;
+      } else {
+        return just(response);
+      }
+    });
+  }
+}

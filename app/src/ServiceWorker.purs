@@ -15,6 +15,7 @@ import Prelude
 
 import Control.Promise (Promise)
 import Control.Promise as Promise
+import Data.Maybe (Maybe (Just, Nothing))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class.Console as Console
@@ -31,7 +32,6 @@ onInstall = do
     [ "/"
     , "/app.js"
     , "/droplet.svg"
-    , "/manifest.json"
     , "/plants.json" -- TODO: This will go away when storing locally.
     , "/species.json"
     , "/style.css"
@@ -49,10 +49,13 @@ onActivate = do
 
 onFetch :: Request -> Aff Response
 onFetch request = do
-  Console.log $ "SW: Begin fetch " <> Fetch.url request
-  response <- Fetch.fetch request
-  Console.log $ "SW: Fetch complete for " <> Fetch.url request
-  pure response
+  -- Try to serve from cache first, and if the request is not cached, serve from
+  -- the network.
+  cache <- Cache.open "v1"
+  cachedResponse <- Cache.match cache request
+  case cachedResponse of
+    Nothing -> Fetch.fetch request
+    Just response -> pure response
 
 onInstallPromise :: Effect (Promise Unit)
 onInstallPromise = Promise.fromAff onInstall
