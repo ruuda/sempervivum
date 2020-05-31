@@ -69,7 +69,7 @@ instance Aeson.ToJSON Species where
       <> "fertilize_days_summer" Aeson..= fertilizeDaysSummer species
       <> "fertilize_days_winter" Aeson..= fertilizeDaysWinter species
       <> "fertilize_remark"      Aeson..= fertilizeRemark species
-      <> "light"                 Aeson..= fertilizeRemark species
+      <> "light"                 Aeson..= light species
 
 listToMap :: [Species] -> Catalog
 listToMap = HashMap.fromList . fmap (\species -> (name species, species))
