@@ -17,8 +17,22 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class.Console as Console
 
+import Cache as Cache
+
 onInstall :: Aff Unit
-onInstall = Console.log "SW: on install"
+onInstall = do
+  Console.log "SW: Begin install"
+  cache <- Cache.open "v1"
+  Cache.addAll cache
+    [ "/"
+    , "/app.js"
+    , "/droplet.svg"
+    , "/manifest.json"
+    , "/plants.json" -- TODO: This will go away when storing locally.
+    , "/species.json"
+    , "/style.css"
+    ]
+  Console.log "SW: Installation complete"
 
 onInstallPromise :: Effect (Promise Unit)
 onInstallPromise = Promise.fromAff onInstall
