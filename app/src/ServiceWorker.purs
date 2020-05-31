@@ -27,7 +27,7 @@ import Fetch as Fetch
 onInstall :: Aff Unit
 onInstall = do
   Console.log "SW: Begin install"
-  cache <- Cache.open "v1"
+  cache <- Cache.open "v1.0"
   Cache.addAll cache
     [ "/"
     , "/app.js"
@@ -42,15 +42,15 @@ onActivate = do
   Console.log "SW: Begin activate"
   -- These is no v0, but if we ever move from v1 to v2, this would be the place
   -- to clean up the v1 cache.
-  wasDeleted <- Cache.delete "v0"
-  Console.log $ "SW: Deleting v0 cache returned " <> show wasDeleted
+  wasDeleted <- Cache.delete "v0.0"
+  Console.log $ "SW: Deleting v0.0 cache returned " <> show wasDeleted
   Console.log "SW: Activation complete"
 
 onFetch :: Request -> Aff Response
 onFetch request = do
   -- Try to serve from cache first, and if the request is not cached, serve from
   -- the network.
-  cache <- Cache.open "v1"
+  cache <- Cache.open "v1.0"
   cachedResponse <- Cache.match cache request
   case cachedResponse of
     Nothing -> Fetch.fetch request
