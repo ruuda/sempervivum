@@ -19,6 +19,7 @@ import qualified Data.Text as Text
 import qualified Data.Text.Lazy as LazyText
 import qualified Data.Time.Clock as Clock
 import qualified Database.SQLite.Simple as Sqlite
+import qualified Network.HTTP.Types.Status as Http
 import qualified System.Directory as Directory
 import qualified Web.Scotty.Trans as Scotty
 
@@ -79,20 +80,20 @@ server catalog conn = do
     plantId <- Scotty.param "id"
     now <- liftIO $ Clock.getCurrentTime
     liftIO $ Database.recordWatered conn plantId now
-    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
+    Scotty.status Http.accepted202
 
   Scotty.post "/plants/:id/fertilized" $ do
     plantId <- Scotty.param "id"
     now <- liftIO $ Clock.getCurrentTime
     liftIO $ Database.recordFertilized conn plantId now
-    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
+    Scotty.status Http.accepted202
 
   Scotty.post "/plants/:id/watered-fertilized" $ do
     plantId <- Scotty.param "id"
     now <- liftIO $ Clock.getCurrentTime
     liftIO $ Database.recordWatered conn plantId now
     liftIO $ Database.recordFertilized conn plantId now
-    Scotty.redirect $ "/plants#plant" <> (LazyText.pack $ show plantId)
+    Scotty.status Http.accepted202
 
 main :: IO ()
 main = do

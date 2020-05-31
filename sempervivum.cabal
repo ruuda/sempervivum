@@ -50,14 +50,15 @@ executable sempervivum
   build-depends: aeson
                , base
                , directory
+               , http-types
                , monad-logger
-               , unordered-containers
                , scotty
                , sempervivum
                , sqlite-simple
                , text
                , time
                , transformers
+               , unordered-containers
 
 test-suite spec
   default-language: Haskell2010
