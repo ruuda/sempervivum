@@ -1,0 +1,16 @@
+name = "Ocimum basilicum"
+# Source: https://homeguides.sfgate.com/care-indoor-basil-plant-40195.html
+# Source: https://www.thekitchn.com/everything-you-need-to-know-about-growing-basil-221272
+aliases = ["Basil"]
+water_days_summer = 6
+water_days_winter = 7
+water_remark =
+  """\
+  Water thoroughly, then let the soil almost dry out. \
+  Water again when the soil is dry to the touch.\
+  """
+# The source says "no more than twice a month". I'll make it once a month then.
+fertilize_days_summer = 30
+fertilize_days_winter = 30
+fertilize_remark = "Fertilize no more than twice a month."
+light = "6 to 8 hours of direct sunlight"
