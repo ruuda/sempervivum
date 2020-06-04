@@ -16,3 +16,11 @@ exports.fetchImpl = function(request) {
 exports.url = function(request) {
   return request.url;
 }
+
+exports.method = function(request) {
+  return request.method;
+}
+
+exports.readJsonImpl = function(requestOrResponse) {
+  return requestOrResponse.json();
+}
