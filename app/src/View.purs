@@ -25,17 +25,20 @@ import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
 
+import AppState (AppState)
 import Care (MatchedPlants, KnownPlant)
-import Care as Care
 import Dom (Element)
-import Dom as Dom
 import Html (Html)
-import Html as Html
 import Plant (Plant (..), Plants)
-import Plant as Plant
 import Species (Catalog, Species (..))
-import Species as Species
 import Time (Instant)
+
+import AppState as AppState
+import Care as Care
+import Dom as Dom
+import Html as Html
+import Plant as Plant
+import Species as Species
 import Time as Time
 import Var as Var
 
@@ -89,12 +92,12 @@ speciesImageUrl (Species species) =
   in
     "/" <> slug <> ".webp"
 
-renderPlants :: Instant -> MatchedPlants -> Html Element
-renderPlants now ps = do
+renderPlants :: AppState -> Instant -> MatchedPlants -> Html Element
+renderPlants appState now ps = do
   Html.h1 $ Html.text "Plants"
   Html.div $ do
     Html.setId "plants"
-    traverse_ (renderPlantItem now) (Care.sortByNextWater now ps.knowns)
+    traverse_ (renderPlantItem appState now) (Care.sortByNextWater now ps.knowns)
     case ps.unknowns of
       Nil -> pure unit
       xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
@@ -118,8 +121,8 @@ type PlantElements =
   , buttonWateredFertilized :: Element
   }
 
-renderPlantItem :: Instant -> KnownPlant -> Html Element
-renderPlantItem now knownPlant =
+renderPlantItem :: AppState -> Instant -> KnownPlant -> Html Element
+renderPlantItem appState now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
@@ -172,7 +175,7 @@ renderPlantItem now knownPlant =
         Html.addClass "plant-details"
         renderDetails now knownPlant
 
-      installClickHandlers knownPlant collapse
+      installClickHandlers appState knownPlant collapse
         { statusLine
         , infoBlock: detailElements.infoBlock
         , buttonWatered: detailElements.buttonWatered
@@ -224,12 +227,17 @@ renderInfoBlock now knownPlant =
     renderSpanP "fertilized" $
       " " <> (lastFertilized now $ Plant plant)
 
-installClickHandlers :: KnownPlant -> Aff Unit -> PlantElements -> Html Unit
-installClickHandlers knownPlant collapse elements =
+installClickHandlers
+  :: AppState
+  -> KnownPlant
+  -> Aff Unit
+  -> PlantElements
+  -> Html Unit
+installClickHandlers appState knownPlant collapse elements =
   let
     handleClick :: (Instant -> Plant -> Aff Plant) -> Effect Unit
     handleClick f = Aff.launchAff_ $ do
-      now <- liftEffect Time.getCurrentInstant
+      now <- liftEffect $ Time.getCurrentInstant
       newPlant <- f now knownPlant.plant
 
       -- In parallel with swapping the status line, collapse the plant item again.
@@ -266,14 +274,14 @@ installClickHandlers knownPlant collapse elements =
 
       Aff.joinFiber collapsing
 
-    watered = handleClick Plant.postWatered
-    wateredFertilized = handleClick Plant.postWateredFertilized
+    watered = handleClick $ AppState.postWatered appState
+    wateredFertilized = handleClick $ AppState.postWateredFertilized appState
   in do
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
 
-renderSearchResult :: Element -> Plants -> Species -> Html Unit
-renderSearchResult plantList plants (Species s) = Html.li $ do
+renderSearchResult :: AppState -> Element -> Plants -> Species -> Html Unit
+renderSearchResult appState plantList plants (Species s) = Html.li $ do
   Html.span $ Html.text s.name
   Html.button $ do
     Html.text "add"
@@ -284,14 +292,15 @@ renderSearchResult plantList plants (Species s) = Html.li $ do
     self <- ask
     Html.onClick $ do
       -- Manage the state centrally, keep it better in sync.
+      -- TODO: Also insert into app state.
       plant <- Plant.newPlant s.name
       now <- Time.getCurrentInstant
-      item <- Html.withElement plantList $ renderPlantItem now { plant: plant, species: Species s }
+      item <- Html.withElement plantList $ renderPlantItem appState now { plant: plant, species: Species s }
       Html.withElement self $ Html.setDisabled true
       Dom.scrollIntoView item
 
-renderAddPlant :: Element -> Plants -> Catalog -> Html Unit
-renderAddPlant plantList plants catalog = do
+renderAddPlant :: AppState -> Element -> Plants -> Catalog -> Html Unit
+renderAddPlant appState plantList plants catalog = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
   input    <- Html.input "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
@@ -318,14 +327,14 @@ renderAddPlant plantList plants catalog = do
                   Html.a srclink $ Html.text "add a new species"
                   Html.text " would be accepted."
 
-              matches -> traverse_ (renderSearchResult plantList plants) matches
+              matches -> traverse_ (renderSearchResult appState plantList plants) matches
 
   local (const input) $ Html.onInput fillResults
 
-renderApp :: Instant -> Catalog -> Plants -> Html Unit
-renderApp now catalog plants =
+renderApp :: AppState -> Instant -> Catalog -> Plants -> Html Unit
+renderApp appState now catalog plants =
   let
     matched = Care.match catalog plants
   in do
-    plantList <- renderPlants now matched
-    renderAddPlant plantList plants catalog
+    plantList <- renderPlants appState now matched
+    renderAddPlant appState plantList plants catalog

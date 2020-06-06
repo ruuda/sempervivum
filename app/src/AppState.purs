@@ -6,7 +6,8 @@
 -- A copy of the License has been included in the root of the repository.
 
 module AppState
-  ( open
+  ( AppState
+  , open
   , postWatered
   , postWateredFertilized
   ) where
@@ -21,8 +22,9 @@ import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 import Effect.Exception (Error, error)
 
-import Plant (Plants, Plant)
 import Idb (Db)
+import Plant (Plants, Plant)
+import Time (Instant)
 import Var (Var)
 
 import Idb as Idb
@@ -50,30 +52,35 @@ open = do
 
   pure { db: db, plants: var }
 
--- Modify the plant, replace the plant in the app state, return the new plant.
-modifyPlant :: (Plant -> Aff Plant) -> AppState -> Plant -> Aff Plant
-modifyPlant f appState plant = do
-  newPlant <- f plant
+-- Add (or replace if the plant with that id already exists) a plant to the app
+-- state.
+insertPlant :: AppState -> Plant -> Aff Unit
+insertPlant appState plant = do
   -- Update the deserialized plant list in the mutable volatile app state.
   -- We don't reload the plant list from IndexedDB, so if you open two tabs,
   -- you may lose data. I consider that acceptable, it is easier than
   -- integrating IndexedDB operations deeply with PureScript types.
-  plants   <- liftEffect $ Var.get appState.plants
-  liftEffect $ Var.set appState.plants $ Plant.insertPlant newPlant plants
+  plants <- liftEffect $ Var.get appState.plants
+  liftEffect $ Var.set appState.plants $ Plant.insertPlant plant plants
   -- Also persist the new plant list in IndexedDB.
   Idb.putJson "plants" (Json.encodeJson plants) appState.db
-  pure newPlant
 
--- Record a watered event for the given plant at the current time, then replace
+-- Record a watered event for the given plant at the given time, then replace
 -- the plant in the app state, return the new plant.
-postWatered :: AppState -> Plant -> Aff Plant
-postWatered = modifyPlant $ \plant -> do
-  now <- liftEffect Time.getCurrentInstant
-  pure $ Plant.recordWatered now plant
+postWatered :: AppState -> Instant -> Plant -> Aff Plant
+postWatered appState now plant =
+  let
+    newPlant = Plant.recordWatered now plant
+  in do
+    insertPlant appState newPlant
+    pure newPlant
 
--- Record a watered and fertilized event for the given plant at the current time,
+-- Record a watered and fertilized event for the given plant at the given time,
 -- then replace the plant in the app state, return the new plant.
-postWateredFertilized :: AppState -> Plant -> Aff Plant
-postWateredFertilized = modifyPlant $ \plant -> do
-  now <- liftEffect Time.getCurrentInstant
-  pure $ Plant.recordFertilized now $ Plant.recordWatered now plant
+postWateredFertilized :: AppState -> Instant -> Plant -> Aff Plant
+postWateredFertilized appState now plant =
+  let
+    newPlant = Plant.recordFertilized now $ Plant.recordWatered now $ plant
+  in do
+    insertPlant appState newPlant
+    pure newPlant

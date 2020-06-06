@@ -29,4 +29,4 @@ main = launchAff_ $ do
   plants   <- liftEffect $ Var.get appState.plants
 
   -- Idb.putJson "plants" (Json.encodeJson plants) db
-  liftEffect $ Html.withElement Dom.body $ View.renderApp now catalog plants
+  liftEffect $ Html.withElement Dom.body $ View.renderApp appState now catalog plants

@@ -13,16 +13,12 @@ module Plant
   , lastFertilized
   , lastWatered
   , newPlant
-  , postWatered
-  , postWateredFertilized
   , recordWatered
   , recordFertilized
   ) where
 
 import Prelude
 
-import Affjax as Http
-import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
@@ -31,13 +27,11 @@ import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
-import Data.Either (Either (..))
 import Data.Foldable (any)
-import Data.Maybe (Maybe (..))
+import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
-import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object
@@ -110,33 +104,6 @@ recordFertilized at (Plant p) =
 -- Insert the plant, overwiting it if a plant with that id existed already.
 insertPlant :: Plant -> Plants -> Plants
 insertPlant (Plant p) (Plants ps) = Plants $ Object.insert p.id (Plant p) ps
-
-postWatered :: Instant -> Plant -> Aff Plant
-postWatered now (Plant p) =
-  let
-    url = "/plants/" <> p.id <> "/watered"
-  in do
-    result <- Http.post Http.ResponseFormat.ignore url Nothing
-    case result of
-      Left err -> fatal $ "Failed to post watered: " <> Http.printError err
-      Right _  -> do
-        liftEffect $ Console.log "Watered posted"
-        pure $ recordWatered now (Plant p)
-
-postWateredFertilized :: Instant -> Plant -> Aff Plant
-postWateredFertilized now (Plant p) =
-  let
-    url = "/plants/" <> p.id <> "/watered-fertilized"
-  in do
-    result <- Http.post Http.ResponseFormat.ignore url Nothing
-    case result of
-      Left err -> fatal $ "Failed to post watered-fertilized: " <> Http.printError err
-      Right _  -> do
-        liftEffect $ Console.log "Watered-fertilized posted"
-        pure
-          $ recordFertilized now
-          $ recordWatered now
-          $ Plant p
 
 -- Return wether a plant of the given species is part of the collection.
 hasSpecies :: String -> Plants -> Boolean
