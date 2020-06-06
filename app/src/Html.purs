@@ -13,6 +13,7 @@ module Html
   , button
   , clear
   , div
+  , em
   , h1
   , h2
   , img
@@ -109,6 +110,9 @@ p children = node "p" children
 
 span :: forall a. Html a -> Html a
 span children = node "span" children
+
+em :: forall a. Html a -> Html a
+em children = node "em" children
 
 ul :: forall a. Html a -> Html a
 ul children = node "ul" children

@@ -335,13 +335,28 @@ renderAddPlant appState plantList = do
 renderManage :: AppState -> Html Unit
 renderManage appState = do
   Html.h1 $ Html.text "Manage data"
-  Html.p $ Html.text "Your data is only stored locally on your device."
+  Html.p $ do
+    Html.text "Your data is only stored locally on your device."
+    Html.addClass "multi"
+  Html.p $ do
+    Html.text "Use "
+    Html.em $ Html.text "export"
+    Html.text " to download your data for backup or sharing purposes. Use "
+    Html.em $ Html.text "restore"
+    Html.text " to replace your current data with an earlier export. Use "
+    Html.em $ Html.text "merge"
+    Html.text " to add plants from a different export to your current data. "
+
   Html.button $ do
     Html.text "export"
     Html.onClick $ AppState.downloadAsJson appState
 
   Html.button $ do
-    Html.text "import"
+    Html.text "restore"
+    Html.onClick $ AppState.importJson appState
+
+  Html.button $ do
+    Html.text "merge"
     Html.onClick $ AppState.importJson appState
 
 renderApp :: AppState -> Instant -> Html Unit
