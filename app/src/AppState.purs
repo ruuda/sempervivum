@@ -7,9 +7,10 @@
 
 module AppState
   ( AppState
-  , open
   , getMatchedPlants
   , getPlants
+  , insertPlant
+  , open
   , postWatered
   , postWateredFertilized
   ) where

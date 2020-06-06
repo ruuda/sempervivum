@@ -293,13 +293,12 @@ renderSearchResult appState plantList (Species s) = Html.li $ do
     Html.setDisabled $ Plant.hasSpecies s.name plants
     self <- ask
     Html.onClick $ do
-      -- Manage the state centrally, keep it better in sync.
-      -- TODO: Also insert into app state.
       plant <- Plant.newPlant s.name
       now <- Time.getCurrentInstant
       item <- Html.withElement plantList $ renderPlantItem appState now { plant: plant, species: Species s }
       Html.withElement self $ Html.setDisabled true
       Dom.scrollIntoView item
+      Aff.launchAff_ $ AppState.insertPlant appState plant
 
 renderAddPlant :: AppState -> Element -> Html Unit
 renderAddPlant appState plantList = do
