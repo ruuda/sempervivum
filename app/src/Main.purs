@@ -18,7 +18,6 @@ import Dom as Dom
 import Html as Html
 import Species as Species
 import Time as Time
-import Var as Var
 import View as View
 
 main :: Effect Unit
@@ -26,7 +25,4 @@ main = launchAff_ $ do
   now      <- liftEffect $ Time.getCurrentInstant
   catalog  <- Species.getCatalog
   appState <- AppState.open catalog
-  plants   <- liftEffect $ Var.get appState.plants
-
-  -- Idb.putJson "plants" (Json.encodeJson plants) db
-  liftEffect $ Html.withElement Dom.body $ View.renderApp appState now plants
+  liftEffect $ Html.withElement Dom.body $ View.renderApp appState now

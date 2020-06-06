@@ -26,10 +26,10 @@ import Effect.Aff as Aff
 import Effect.Class (liftEffect)
 
 import AppState (AppState)
-import Care (MatchedPlants, KnownPlant)
+import Care (KnownPlant)
 import Dom (Element)
 import Html (Html)
-import Plant (Plant (..), Plants)
+import Plant (Plant (..))
 import Species (Species (..))
 import Time (Instant)
 
@@ -92,8 +92,9 @@ speciesImageUrl (Species species) =
   in
     "/" <> slug <> ".webp"
 
-renderPlants :: AppState -> Instant -> MatchedPlants -> Html Element
-renderPlants appState now ps = do
+renderPlants :: AppState -> Instant -> Html Element
+renderPlants appState now = do
+  ps <- liftEffect $ AppState.getMatchedPlants appState
   Html.h1 $ Html.text "Plants"
   Html.div $ do
     Html.setId "plants"
@@ -280,14 +281,15 @@ installClickHandlers appState knownPlant collapse elements =
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
 
-renderSearchResult :: AppState -> Element -> Plants -> Species -> Html Unit
-renderSearchResult appState plantList plants (Species s) = Html.li $ do
+renderSearchResult :: AppState -> Element -> Species -> Html Unit
+renderSearchResult appState plantList (Species s) = Html.li $ do
   Html.span $ Html.text s.name
   Html.button $ do
     Html.text "add"
     -- We allow only one plant instance of each species, because currently there
     -- is no good way to tell multiple plants of the same species apart, you
     -- can't give them names or anything.
+    plants <- liftEffect $ AppState.getPlants appState
     Html.setDisabled $ Plant.hasSpecies s.name plants
     self <- ask
     Html.onClick $ do
@@ -299,8 +301,8 @@ renderSearchResult appState plantList plants (Species s) = Html.li $ do
       Html.withElement self $ Html.setDisabled true
       Dom.scrollIntoView item
 
-renderAddPlant :: AppState -> Element -> Plants -> Html Unit
-renderAddPlant appState plantList plants = do
+renderAddPlant :: AppState -> Element -> Html Unit
+renderAddPlant appState plantList = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
   input    <- Html.input "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
@@ -327,14 +329,11 @@ renderAddPlant appState plantList plants = do
                   Html.a srclink $ Html.text "add a new species"
                   Html.text " would be accepted."
 
-              matches -> traverse_ (renderSearchResult appState plantList plants) matches
+              matches -> traverse_ (renderSearchResult appState plantList) matches
 
   local (const input) $ Html.onInput fillResults
 
-renderApp :: AppState -> Instant -> Plants -> Html Unit
-renderApp appState now plants =
-  let
-    matched = Care.match appState.catalog plants
-  in do
-    plantList <- renderPlants appState now matched
-    renderAddPlant appState plantList plants
+renderApp :: AppState -> Instant -> Html Unit
+renderApp appState now = do
+  plantList <- renderPlants appState now
+  renderAddPlant appState plantList

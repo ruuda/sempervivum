@@ -8,6 +8,8 @@
 module AppState
   ( AppState
   , open
+  , getMatchedPlants
+  , getPlants
   , postWatered
   , postWateredFertilized
   ) where
@@ -18,16 +20,19 @@ import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson) as Json
 import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Either (Either (..))
+import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 import Effect.Exception (Error, error)
 
+import Care (MatchedPlants)
 import Idb (Db)
 import Plant (Plants, Plant)
 import Species (Catalog)
 import Time (Instant)
 import Var (Var)
 
+import Care as Care
 import Idb as Idb
 import Plant as Plant
 import Var as Var
@@ -86,3 +91,11 @@ postWateredFertilized appState now plant =
   in do
     insertPlant appState newPlant
     pure newPlant
+
+getPlants :: AppState -> Effect Plants
+getPlants appState = Var.get appState.plants
+
+getMatchedPlants :: AppState -> Effect MatchedPlants
+getMatchedPlants appState = do
+  plants <- Var.get appState.plants
+  pure $ Care.match appState.catalog plants
