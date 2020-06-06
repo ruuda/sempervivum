@@ -11,6 +11,7 @@ module Time
   , fromGregorianUtc
   , getCurrentInstant
   , localJulianDay
+  , toIso8601
   ) where
 
 import Prelude

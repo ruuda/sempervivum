@@ -95,6 +95,12 @@ exports.setDisabledImpl = function(isDisabled, element) {
   }
 }
 
+exports.setDownloadImpl = function(fname, element) {
+  return function() {
+    element.download = fname;
+  }
+}
+
 exports.setIdImpl = function(id, element) {
   return function() {
     element.id = id;

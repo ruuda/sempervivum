@@ -30,8 +30,6 @@ import Data.Array as Array
 import Data.Foldable (any)
 import Data.Maybe (Maybe)
 import Effect (Effect)
-import Effect.Aff (Aff)
-import Effect.Class (liftEffect)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object

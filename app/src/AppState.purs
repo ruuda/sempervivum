@@ -28,7 +28,6 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
-import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 
 import Care (MatchedPlants)
@@ -44,6 +43,7 @@ import Dom as Dom
 import Html as Html
 import Idb as Idb
 import Plant as Plant
+import Time as Time
 import Var as Var
 
 type AppState =
@@ -114,7 +114,7 @@ downloadAsJson :: AppState -> Effect Unit
 downloadAsJson appState = do
   plants <- Var.get appState.plants
   url <- Blob.getObjectUrl $ Blob.toBlob $ Json.encodeJson plants
-  Console.log $ "Can download at " <> url
+  now <- Time.getCurrentInstant
 
   -- Kind of hack, but it seems like this is the proper way to do it:
   -- We create an <a> element with href set to the object url, and "download"
@@ -124,6 +124,10 @@ downloadAsJson appState = do
   outer <- Dom.createElement "div"
   a <- Html.withElement outer $ do
     Html.a url $ do
+      -- Tell the browser to download the file instead of navigate to it, with
+      -- the following file name hint.
+      Html.setDownload $ "plants-" <> Time.toIso8601 now <> ".json"
+
       -- After click, "revoke" the url we just generated, to release the
       -- resources. We can't do this immediately in onClick, because it runs
       -- before the download starts, so delay it with Aff.
@@ -131,7 +135,6 @@ downloadAsJson appState = do
         Aff.delay (Milliseconds 1.0)
         liftEffect $ Blob.revokeObjectUrl url
 
-      -- TODO: Set download attribute.
       ask
 
   Dom.clickElement a

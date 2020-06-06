@@ -24,6 +24,7 @@ module Html
   , p
   , removeClass
   , setDisabled
+  , setDownload
   , setId
   , setOpacity
   , setTitle
@@ -70,6 +71,9 @@ setTitle title = ReaderT $ \self -> Dom.setAttribute "title" title self
 
 setDisabled :: Boolean -> Html Unit
 setDisabled isDisabled = ReaderT $ \self -> Dom.setDisabled isDisabled self
+
+setDownload :: String -> Html Unit
+setDownload fname = ReaderT $ \self -> Dom.setDownload fname self
 
 addClass :: String -> Html Unit
 addClass className = ReaderT $ \container -> Dom.addClass className container
