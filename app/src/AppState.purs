@@ -7,6 +7,7 @@
 
 module AppState
   ( AppState
+  , downloadAsJson
   , getMatchedPlants
   , getPlants
   , insertPlant
@@ -18,12 +19,16 @@ module AppState
 import Prelude
 
 import Control.Monad.Error.Class (class MonadThrow, throwError)
+import Control.Monad.Reader.Class (ask)
 import Data.Argonaut.Decode (decodeJson) as Json
 import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Either (Either (..))
+import Data.Time.Duration (Milliseconds (..))
 import Effect (Effect)
 import Effect.Aff (Aff)
+import Effect.Aff as Aff
 import Effect.Class (liftEffect)
+import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 
 import Care (MatchedPlants)
@@ -33,7 +38,10 @@ import Species (Catalog)
 import Time (Instant)
 import Var (Var)
 
+import Blob as Blob
 import Care as Care
+import Dom as Dom
+import Html as Html
 import Idb as Idb
 import Plant as Plant
 import Var as Var
@@ -100,3 +108,30 @@ getMatchedPlants :: AppState -> Effect MatchedPlants
 getMatchedPlants appState = do
   plants <- Var.get appState.plants
   pure $ Care.match appState.catalog plants
+
+-- Trigger a download of the plant list as json.
+downloadAsJson :: AppState -> Effect Unit
+downloadAsJson appState = do
+  plants <- Var.get appState.plants
+  url <- Blob.getObjectUrl $ Blob.toBlob $ Json.encodeJson plants
+  Console.log $ "Can download at " <> url
+
+  -- Kind of hack, but it seems like this is the proper way to do it:
+  -- We create an <a> element with href set to the object url, and "download"
+  -- attribute set. We never attach it to the document, we only .click() it to
+  -- trigger the download. We put it in a div because it is easier with the Html
+  -- monad.
+  outer <- Dom.createElement "div"
+  a <- Html.withElement outer $ do
+    Html.a url $ do
+      -- After click, "revoke" the url we just generated, to release the
+      -- resources. We can't do this immediately in onClick, because it runs
+      -- before the download starts, so delay it with Aff.
+      Html.onClick $ Aff.launchAff_ $ do
+        Aff.delay (Milliseconds 1.0)
+        liftEffect $ Blob.revokeObjectUrl url
+
+      -- TODO: Set download attribute.
+      ask
+
+  Dom.clickElement a

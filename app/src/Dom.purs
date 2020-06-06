@@ -15,6 +15,7 @@ module Dom
   , assumeElementById
   , body
   , clearElement
+  , clickElement
   , createElement
   , getValue
   , getElementById
@@ -38,6 +39,7 @@ foreign import assumeElementById :: String -> Effect Element
 foreign import body :: Element
 foreign import clearElement :: Element -> Effect Unit
 foreign import createElement :: String -> Effect Element
+foreign import clickElement :: Element -> Effect Unit
 foreign import getLocationPathName :: Effect String
 foreign import getValue :: Element -> Effect String
 foreign import scrollIntoView :: Element -> Effect Unit

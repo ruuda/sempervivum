@@ -28,6 +28,12 @@ exports.clearElement = function(container) {
   }
 }
 
+exports.clickElement = function(element) {
+  return function() {
+    element.click();
+  }
+}
+
 exports.appendTextImpl = function(text, container) {
   return function() {
     container.insertAdjacentText('beforeend', text);

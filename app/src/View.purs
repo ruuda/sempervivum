@@ -332,7 +332,16 @@ renderAddPlant appState plantList = do
 
   local (const input) $ Html.onInput fillResults
 
+renderManage :: AppState -> Html Unit
+renderManage appState = do
+  Html.h1 $ Html.text "Manage data"
+  Html.p $ Html.text "Your data is only stored locally on your device."
+  Html.button $ do
+    Html.text "export"
+    Html.onClick $ AppState.downloadAsJson appState
+
 renderApp :: AppState -> Instant -> Html Unit
 renderApp appState now = do
   plantList <- renderPlants appState now
   renderAddPlant appState plantList
+  renderManage appState
