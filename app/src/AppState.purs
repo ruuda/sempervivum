@@ -24,6 +24,7 @@ import Effect.Exception (Error, error)
 
 import Idb (Db)
 import Plant (Plants, Plant)
+import Species (Catalog)
 import Time (Instant)
 import Var (Var)
 
@@ -33,14 +34,15 @@ import Var as Var
 
 type AppState =
   { db :: Db
+  , catalog :: Catalog
   , plants :: Var Plants
   }
 
 fatal :: forall m a. MonadThrow Error m => String -> m a
 fatal = error >>> throwError
 
-open :: Aff AppState
-open = do
+open :: Catalog -> Aff AppState
+open catalog = do
   db         <- Idb.open
   plantsJson <- Idb.getJson "plants" db
   plants     <- case Json.decodeJson plantsJson of
@@ -49,7 +51,7 @@ open = do
 
   var <- liftEffect $ Var.create plants
 
-  pure { db: db, plants: var }
+  pure { db: db, catalog: catalog, plants: var }
 
 -- Add (or replace if the plant with that id already exists) a plant to the app
 -- state.

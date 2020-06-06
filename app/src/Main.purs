@@ -25,7 +25,7 @@ main :: Effect Unit
 main = launchAff_ $ do
   now      <- liftEffect $ Time.getCurrentInstant
   catalog  <- Species.getCatalog
-  appState <- AppState.open
+  appState <- AppState.open catalog
   plants   <- liftEffect $ Var.get appState.plants
 
   -- Idb.putJson "plants" (Json.encodeJson plants) db
