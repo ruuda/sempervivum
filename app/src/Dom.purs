@@ -17,6 +17,7 @@ module Dom
   , clearElement
   , clickElement
   , createElement
+  , getFile
   , getValue
   , getElementById
   , getLocationPathName
@@ -34,6 +35,8 @@ import Effect (Effect)
 import Prelude
 import Data.Maybe (Maybe (..))
 
+import File (File)
+
 foreign import data Element :: Type
 
 foreign import assumeElementById :: String -> Effect Element
@@ -42,6 +45,7 @@ foreign import clearElement :: Element -> Effect Unit
 foreign import createElement :: String -> Effect Element
 foreign import clickElement :: Element -> Effect Unit
 foreign import getLocationPathName :: Effect String
+foreign import getFile :: Element -> Effect File
 foreign import getValue :: Element -> Effect String
 foreign import scrollIntoView :: Element -> Effect Unit
 

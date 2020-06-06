@@ -16,7 +16,8 @@ module Html
   , h1
   , h2
   , img
-  , input
+  , inputFile
+  , inputText
   , li
   , node
   , onClick
@@ -135,8 +136,15 @@ img src alt (ReaderT children) = ReaderT $ \container -> do
   Dom.appendChild self container
   pure result
 
-input :: forall a. String -> Html a -> Html a
-input placeholder (ReaderT children) =
+inputText :: forall a. String -> Html a -> Html a
+inputText placeholder (ReaderT children) =
   node "input" $ ReaderT $ \self -> do
     Dom.setAttribute "placeholder" placeholder self
+    children self
+
+inputFile :: forall a. String -> Html a -> Html a
+inputFile accept (ReaderT children) =
+  node "input" $ ReaderT $ \self -> do
+    Dom.setAttribute "type" "file" self
+    Dom.setAttribute "accept" accept self
     children self

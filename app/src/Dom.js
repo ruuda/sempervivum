@@ -65,6 +65,14 @@ exports.getLocationPathName = function() {
   return window.location.pathname;
 }
 
+exports.getFile = function(element) {
+  return function() {
+    // Note that `files` is a `FileList`, not an array. We index here for
+    // simplicity.
+    return element.files[0];
+  }
+}
+
 exports.getValue = function(element) {
   return function() {
     return element.value;

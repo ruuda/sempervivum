@@ -303,7 +303,7 @@ renderSearchResult appState plantList (Species s) = Html.li $ do
 renderAddPlant :: AppState -> Element -> Html Unit
 renderAddPlant appState plantList = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
-  input    <- Html.input "Search for species" ask
+  input    <- Html.inputText "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
 
   let
@@ -339,6 +339,10 @@ renderManage appState = do
   Html.button $ do
     Html.text "export"
     Html.onClick $ AppState.downloadAsJson appState
+
+  Html.button $ do
+    Html.text "import"
+    Html.onClick $ AppState.importJson appState
 
 renderApp :: AppState -> Instant -> Html Unit
 renderApp appState now = do

@@ -10,6 +10,7 @@ module AppState
   , downloadAsJson
   , getMatchedPlants
   , getPlants
+  , importJson
   , insertPlant
   , open
   , postWatered
@@ -28,6 +29,7 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
+import Effect.Class.Console as Console
 import Effect.Exception (Error, error)
 
 import Care (MatchedPlants)
@@ -40,6 +42,7 @@ import Var (Var)
 import Blob as Blob
 import Care as Care
 import Dom as Dom
+import File as File
 import Html as Html
 import Idb as Idb
 import Plant as Plant
@@ -138,3 +141,22 @@ downloadAsJson appState = do
       ask
 
   Dom.clickElement a
+
+importJson :: AppState -> Effect Unit
+importJson appState = do
+  -- A similar hack as with the download: we create an invisible <input> element
+  -- and immediately click it to trigger a file picker popup. This way we can
+  -- have a normal button, instead of the file picker form element.
+  outer <- Dom.createElement "div"
+  input <- Html.withElement outer $ do
+    Html.inputFile ".json" $ do
+      self <- ask
+      Html.onInput $ \_fakeFileName -> do
+        file <- Dom.getFile self
+        Aff.launchAff_ $ do
+          contents <- File.read file
+          Console.log $ "File contents: " <> contents
+
+      pure self
+
+  Dom.clickElement input
