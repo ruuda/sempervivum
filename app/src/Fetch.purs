@@ -6,11 +6,12 @@
 -- A copy of the License has been included in the root of the repository.
 
 module Fetch
-  ( HasBody (readJson)
+  ( class HasBody
   , Request
   , Response
   , fetch
   , method
+  , readJson
   , url
   ) where
 
