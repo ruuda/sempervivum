@@ -9,24 +9,32 @@ module Main where
 
 import Prelude
 
-import Data.Argonaut.Encode (encodeJson) as Json
+import Control.Monad.Error.Class (class MonadThrow, throwError)
+import Data.Argonaut.Decode (decodeJson) as Json
+import Data.Either (Either (..))
 import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
+import Effect.Exception (Error, error)
 
 import Dom as Dom
 import Html as Html
 import Idb as Idb
-import Plant as Plant
 import Species as Species
 import Time as Time
 import View as View
 
+fatal :: forall m a. MonadThrow Error m => String -> m a
+fatal = error >>> throwError
+
 main :: Effect Unit
 main = launchAff_ $ do
-  now      <- liftEffect $ Time.getCurrentInstant
-  catalog  <- Species.getCatalog
-  plants   <- Plant.getPlants
-  db       <- Idb.open
-  Idb.putJson "plants" (Json.encodeJson plants) db
+  now        <- liftEffect $ Time.getCurrentInstant
+  catalog    <- Species.getCatalog
+  db         <- Idb.open
+  plantsJson <- Idb.getJson "plants" db
+  plants     <- case Json.decodeJson plantsJson of
+    Right ps -> pure ps
+    Left err -> fatal $ "Failed to parse plants: " <> err
+  -- Idb.putJson "plants" (Json.encodeJson plants) db
   liftEffect $ Html.withElement Dom.body $ View.renderApp now catalog plants

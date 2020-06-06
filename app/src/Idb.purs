@@ -7,6 +7,8 @@
 
 module Idb
   ( Db
+  , getJson
+  , getString
   , open
   , putJson
   , putString
@@ -20,6 +22,7 @@ import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 
 foreign import data Db :: Type
 
+foreign import getImpl :: forall a. String -> Db -> EffectFnAff a
 foreign import openImpl :: EffectFnAff Db
 foreign import putImpl :: forall a. Unit -> String -> a -> Db -> EffectFnAff Unit
 
@@ -31,3 +34,9 @@ putString key value db = fromEffectFnAff $ putImpl unit key value db
 
 putJson :: String -> Json -> Db -> Aff Unit
 putJson key value db = fromEffectFnAff $ putImpl unit key value db
+
+getString :: String -> Db -> Aff String
+getString key db = fromEffectFnAff $ getImpl key db
+
+getJson :: String -> Db -> Aff Json
+getJson key db = fromEffectFnAff $ getImpl key db

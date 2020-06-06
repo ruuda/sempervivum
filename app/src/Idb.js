@@ -60,3 +60,26 @@ exports.putImpl = function(unit) {
     };
   };
 };
+
+exports.getImpl = function(key) {
+  return function(db) {
+    return function(onError, onSuccess) {
+      let tx = db.transaction(["kv"], "readonly");
+      // TODO: Do we need handlers for tx.onerror/tx.onabort?
+
+      let objectStore = tx.objectStore("kv");
+      let getRequest = objectStore.get(key);
+
+      getRequest.onerror = function(event) {
+        onError(getRequest.error);
+      };
+      getRequest.onsuccess = function(event) {
+        onSuccess(getRequest.result.value);
+      };
+
+      return function (cancelError, onCancelError, onCancelSuccess) {
+        onCancelSuccess();
+      };
+    };
+  };
+}

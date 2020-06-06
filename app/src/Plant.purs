@@ -8,7 +8,6 @@
 module Plant
   ( Plant (..)
   , Plants (..)
-  , getPlants
   , hasSpecies
   , lastFertilized
   , lastWatered
@@ -72,17 +71,13 @@ instance encodeJsonPlant :: EncodeJson Plant where
 instance encodeJsonPlants :: EncodeJson Plants where
   encodeJson (Plants obj) = Json.encodeJson (Object.values obj)
 
+instance decodeJsonPlants :: DecodeJson Plants where
+  decodeJson json = do
+    plants <- Json.decodeJson json
+    pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants
+
 fatal :: forall m a. MonadThrow Error m => String -> m a
 fatal = error >>> throwError
-
-getPlants :: Aff Plants
-getPlants = do
-  result <- Http.get Http.ResponseFormat.json "/plants.json"
-  case result of
-    Left err -> fatal $ "Failed to retrieve plants: " <> Http.printError err
-    Right response -> case Json.decodeJson response.body of
-      Left err -> fatal $ "Failed to parse plants: " <> err
-      Right plants -> pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants
 
 -- Create a plant of the given species, with a new random id.
 newPlant :: String -> Effect Plant
