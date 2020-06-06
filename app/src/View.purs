@@ -30,7 +30,7 @@ import Care (MatchedPlants, KnownPlant)
 import Dom (Element)
 import Html (Html)
 import Plant (Plant (..), Plants)
-import Species (Catalog, Species (..))
+import Species (Species (..))
 import Time (Instant)
 
 import AppState as AppState
@@ -299,8 +299,8 @@ renderSearchResult appState plantList plants (Species s) = Html.li $ do
       Html.withElement self $ Html.setDisabled true
       Dom.scrollIntoView item
 
-renderAddPlant :: AppState -> Element -> Plants -> Catalog -> Html Unit
-renderAddPlant appState plantList plants catalog = do
+renderAddPlant :: AppState -> Element -> Plants -> Html Unit
+renderAddPlant appState plantList plants = do
   header   <- Html.h1 $ Html.text "Add new plants" *> ask
   input    <- Html.input "Search for species" ask
   resultUl <- Html.ul $ Html.setId "search-results" *> ask
@@ -316,7 +316,7 @@ renderAddPlant appState plantList plants catalog = do
             Html.removeClass "active"
           _  -> do
             Html.addClass "active"
-            case Species.search needle catalog of
+            case Species.search needle appState.catalog of
               [] -> do
                 Html.p $ do
                   Html.addClass "multi"
@@ -331,10 +331,10 @@ renderAddPlant appState plantList plants catalog = do
 
   local (const input) $ Html.onInput fillResults
 
-renderApp :: AppState -> Instant -> Catalog -> Plants -> Html Unit
-renderApp appState now catalog plants =
+renderApp :: AppState -> Instant -> Plants -> Html Unit
+renderApp appState now plants =
   let
-    matched = Care.match catalog plants
+    matched = Care.match appState.catalog plants
   in do
     plantList <- renderPlants appState now matched
-    renderAddPlant appState plantList plants catalog
+    renderAddPlant appState plantList plants
