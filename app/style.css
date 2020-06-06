@@ -143,7 +143,7 @@ p.multi {
 button {
   background-color: var(--yellow-green);
   border-radius: 0.4em;
-  border: 2pt solid white;
+  border: 2pt solid var(--light-bg);
   color: white;
   font-family: inherit;
   font-size: inherit;
@@ -159,6 +159,11 @@ button {
     border 0.1s ease-out,
     box-shadow 0.1s ease-out,
     background-color 0.07s ease-out;
+}
+
+.plant-details button {
+  /* The border color must match the background. */
+  border-color: white;
 }
 
 button:active {
