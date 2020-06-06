@@ -9,11 +9,14 @@ module Plant
   ( Plant (..)
   , Plants (..)
   , hasSpecies
+  , insertPlant
   , lastFertilized
   , lastWatered
   , newPlant
   , postWatered
   , postWateredFertilized
+  , recordWatered
+  , recordFertilized
   ) where
 
 import Prelude
@@ -103,6 +106,10 @@ recordWatered at (Plant p) =
 recordFertilized :: Instant -> Plant -> Plant
 recordFertilized at (Plant p) =
   Plant $ p { fertilized = Array.sort $ Array.snoc p.fertilized at }
+
+-- Insert the plant, overwiting it if a plant with that id existed already.
+insertPlant :: Plant -> Plants -> Plants
+insertPlant (Plant p) (Plants ps) = Plants $ Object.insert p.id (Plant p) ps
 
 postWatered :: Instant -> Plant -> Aff Plant
 postWatered now (Plant p) =
