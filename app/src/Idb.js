@@ -53,6 +53,7 @@ exports.putImpl = function(unit) {
           };
 
           return function (cancelError, onCancelError, onCancelSuccess) {
+            tx.abort();
             onCancelSuccess();
           };
         };

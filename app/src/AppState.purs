@@ -29,7 +29,6 @@ import Var (Var)
 
 import Idb as Idb
 import Plant as Plant
-import Time as Time
 import Var as Var
 
 type AppState =
@@ -61,9 +60,10 @@ insertPlant appState plant = do
   -- you may lose data. I consider that acceptable, it is easier than
   -- integrating IndexedDB operations deeply with PureScript types.
   plants <- liftEffect $ Var.get appState.plants
-  liftEffect $ Var.set appState.plants $ Plant.insertPlant plant plants
+  let newPlants = Plant.insertPlant plant plants
+  liftEffect $ Var.set appState.plants newPlants
   -- Also persist the new plant list in IndexedDB.
-  Idb.putJson "plants" (Json.encodeJson plants) appState.db
+  Idb.putJson "plants" (Json.encodeJson newPlants) appState.db
 
 -- Record a watered event for the given plant at the given time, then replace
 -- the plant in the app state, return the new plant.
