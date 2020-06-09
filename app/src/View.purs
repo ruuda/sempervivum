@@ -90,7 +90,7 @@ speciesImageUrl (Species species) =
       $ String.toLower
       $ species.name
   in
-    "/" <> slug <> ".webp"
+    "/images/" <> slug <> ".webp"
 
 renderPlants :: AppState -> Instant -> Html Element
 renderPlants appState now = do

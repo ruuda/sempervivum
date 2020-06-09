@@ -17,8 +17,16 @@ exports.url = function(request) {
   return request.url;
 }
 
+exports.urlPath = function(url) {
+  return new URL(url).pathname;
+}
+
 exports.method = function(request) {
   return request.method;
+}
+
+exports.statusCode = function(response) {
+  return response.status;
 }
 
 exports.readJsonImpl = function(requestOrResponse) {

@@ -63,9 +63,7 @@ fatal = error >>> throwError
 
 open :: Catalog -> Aff AppState
 open catalog = do
-  Console.log "before open"
   db         <- Idb.open
-  Console.log "before getJson"
   plantsJsonOpt <- Idb.getJson "plants" db
   let
     -- If the database is still empty (because this is the first time we open
@@ -73,7 +71,6 @@ open catalog = do
     plantsJson = case plantsJsonOpt of
       Just value -> value
       Nothing -> Json.jsonEmptyArray
-  Console.log "before decode"
   plants     <- case Json.decodeJson plantsJson of
     Right ps -> pure ps
     Left err -> fatal $ "Failed to parse plants: " <> err

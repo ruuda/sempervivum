@@ -12,7 +12,9 @@ module Fetch
   , fetch
   , method
   , readJson
+  , statusCode
   , url
+  , urlPath
   ) where
 
 import Prelude
@@ -28,6 +30,8 @@ foreign import data Response :: Type
 
 foreign import url :: Request -> String
 foreign import method :: Request -> String
+foreign import statusCode :: Response -> Int
+foreign import urlPath :: String -> String
 
 foreign import fetchImpl :: Request -> Effect (Promise Response)
 foreign import readJsonImpl :: forall a. a -> Effect (Promise Json)

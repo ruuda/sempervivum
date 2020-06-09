@@ -54,7 +54,7 @@ server catalog conn = do
     Scotty.setHeader "content-type" "image/svg+xml"
     Scotty.file $ "assets/" <> slug <> ".svg"
 
-  Scotty.get (Scotty.regex "^/pictures/(.*)\\.webp$")  $ do
+  Scotty.get (Scotty.regex "^/images/(.*)\\.webp$")  $ do
     slug <- Scotty.param "1"
     lift $ logDebugN $ "Serving image " <> (Text.pack slug)
     let photoFname = "photos/" <> slug <> ".webp"
