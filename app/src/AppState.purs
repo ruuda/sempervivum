@@ -167,7 +167,15 @@ importJson appState = do
         file <- Dom.getFile self
         Aff.launchAff_ $ do
           contents <- File.read file
-          Console.log $ "File contents: " <> contents
+          case Json.jsonParser contents >>= Json.decodeJson of
+            Left err -> do
+              -- TODO: Report error to the user
+              Console.log $ "Failed to parse json: " <> err
+            Right (plants :: Plants) -> do
+              -- Persist the new plant list in IndexedDB.
+              -- TODO: Optionally merge rather than replace.
+              -- TODO: Refresh the plant list afterwards.
+              Idb.putJson "plants" (Json.encodeJson plants) appState.db
 
       pure self
 
