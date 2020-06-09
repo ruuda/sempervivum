@@ -115,7 +115,7 @@ runServer = do
   -- Load the species definitions in the toml files in the "species" directory.
   catalog <- Species.readCatalogOrExit "species"
 
-  Scotty.scottyT 8000 runStdoutLoggingT $ server catalog conn
+  Scotty.scottyT 8243 runStdoutLoggingT $ server catalog conn
 
 -- Export the species catalog as json to stdout.
 exportSpecies :: IO ()
