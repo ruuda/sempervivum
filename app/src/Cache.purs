@@ -12,13 +12,14 @@ module Cache
   , match
   , matchUrl
   , open
+  , put
   ) where
 
 import Prelude
 
 import Control.Promise (Promise)
 import Control.Promise as Promise
-import Data.Function.Uncurried (Fn3, Fn4, runFn3, runFn4)
+import Data.Function.Uncurried (Fn2, Fn3, Fn4, runFn2, runFn3, runFn4)
 import Data.Maybe (Maybe (Just, Nothing))
 import Effect (Effect)
 import Effect.Aff (Aff)
@@ -27,10 +28,11 @@ import Fetch (Request, Response)
 
 foreign import data Cache :: Type
 
-foreign import openImpl :: String -> Effect (Promise Cache)
+foreign import addAllImpl :: Fn2 Cache (Array String) (Effect (Promise Unit))
 foreign import deleteImpl :: String -> Effect (Promise Boolean)
-foreign import addAllImpl :: Fn3 Cache (Array String) Unit (Effect (Promise Unit))
 foreign import matchImpl :: forall a. Fn4 Cache a (Maybe Response) (Response -> Maybe Response) (Effect (Promise (Maybe Response)))
+foreign import openImpl :: String -> Effect (Promise Cache)
+foreign import putImpl :: Fn3 Cache Request Response (Effect (Promise Unit))
 
 open :: String -> Aff Cache
 open name = Promise.toAffE $ openImpl name
@@ -39,7 +41,10 @@ delete :: String -> Aff Boolean
 delete name = Promise.toAffE $ deleteImpl name
 
 addAll :: Cache -> Array String -> Aff Unit
-addAll cache urls = Promise.toAffE $ runFn3 addAllImpl cache urls unit
+addAll cache urls = Promise.toAffE $ runFn2 addAllImpl cache urls
+
+put :: Cache -> Request -> Response -> Aff Unit
+put cache request response = Promise.toAffE $ runFn3 putImpl cache request response
 
 -- JS match accepts both a Request and a url, we expose both as different functions.
 

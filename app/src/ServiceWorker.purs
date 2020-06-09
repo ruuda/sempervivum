@@ -60,18 +60,17 @@ servePicture cache request =
       cachedFallback <- Cache.matchUrl cache "/assets/plant.svg"
       case cachedFallback of
         Just response -> pure response
-        Nothing -> do
-          Console.log "SW: Cached plant asset is missing."
-          onMissing
+        Nothing -> onMissing
 
     fetchFromNetwork = do
-      result <- Fetch.fetch request
-      case Fetch.statusCode result of
+      response <- Fetch.fetch request
+      case Fetch.statusCode response of
         200 -> do
-          -- TODO: Cache the result now.
-          pure result
-        404 -> serveCachedIcon $ pure result
-        _   -> pure result
+          -- If we did not yet have the image but we do now, cache it.
+          Cache.put cache request response
+          pure response
+        404 -> serveCachedIcon $ pure response
+        _   -> pure response
 
     -- In case we could not fetch the picture from the network, for example
     -- because we are offline, or because the server is offline, serve the
@@ -90,7 +89,6 @@ onFetch request = do
   -- Try to serve from cache first, and if the request is not cached, serve from
   -- the network.
   cache <- Cache.open "v1.0"
-  Console.log $ "SW: Serving " <> Fetch.url request
   cachedResponse <- Cache.match cache request
   case cachedResponse of
     Nothing ->

@@ -19,9 +19,15 @@ exports.deleteImpl = function(name) {
   }
 }
 
-exports.addAllImpl = function(cache, urls, unit) {
+exports.addAllImpl = function(cache, urls) {
   return function() {
-    return cache.addAll(urls).then(() => unit);
+    return cache.addAll(urls);
+  }
+}
+
+exports.putImpl = function(cache, request, response) {
+  return function() {
+    return cache.put(request, response);
   }
 }
 
