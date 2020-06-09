@@ -22,7 +22,6 @@ import qualified Data.Text.Lazy as LazyText
 import qualified Data.Time.Clock as Clock
 import qualified Database.SQLite.Simple as Sqlite
 import qualified Network.HTTP.Types.Status as Http
-import qualified System.Directory as Directory
 import qualified System.Environment as Environment
 import qualified System.Exit as System
 import qualified Web.Scotty.Trans as Scotty
@@ -45,24 +44,23 @@ server catalog conn = do
     Scotty.setHeader "content-type" "application/manifest+json"
     Scotty.file "app/manifest.json"
 
+  Scotty.get (Scotty.regex "^/assets/(.*)\\.svg$") $ do
+    slug <- Scotty.param "1"
+    Scotty.setHeader "content-type" "image/svg+xml"
+    Scotty.file $ "assets/" <> slug <> ".svg"
+
   Scotty.get (Scotty.regex "^/(.*)\\.svg$") $ do
     slug <- Scotty.param "1"
     Scotty.setHeader "content-type" "image/svg+xml"
     Scotty.file $ "assets/" <> slug <> ".svg"
 
-  Scotty.get (Scotty.regex "^/(.*)\\.webp$")  $ do
+  Scotty.get (Scotty.regex "^/pictures/(.*)\\.webp$")  $ do
     slug <- Scotty.param "1"
     lift $ logDebugN $ "Serving image " <> (Text.pack slug)
     let photoFname = "photos/" <> slug <> ".webp"
-    hasPhoto <- liftIO $ Directory.doesFileExist photoFname
-    case hasPhoto of
-      True -> do
-        Scotty.setHeader "content-type" "image/webp"
-        Scotty.file photoFname
-      False -> do
-        -- Fall back to a generic icon if we don't have a photo.
-        Scotty.setHeader "content-type" "image/svg+xml"
-        Scotty.file "assets/plant.svg"
+    Scotty.setHeader "content-type" "image/webp"
+    -- If the file does not exist, Scotty serves a 404.
+    Scotty.file photoFname
 
   Scotty.get "/" $ do
     Scotty.setHeader "content-type" "text/html; charset=utf-8"

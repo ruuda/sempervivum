@@ -161,7 +161,7 @@ renderPlantItem appState now knownPlant =
         Html.h2 $ Html.text plant.species
         statusLine <- Html.p $ do
           Html.addClass "status"
-          Html.img "/droplet.svg" "droplet" $ do
+          Html.img "/assets/droplet.svg" "droplet" $ do
             Html.addClass "droplet"
             Html.setOpacity $ dropletOpacity now knownPlant
           Html.text $ nextWater now knownPlant
@@ -263,7 +263,7 @@ installClickHandlers appState knownPlant collapse elements =
       Aff.delay (Milliseconds 170.0)
       liftEffect $ Html.withElement elements.statusLine $ do
         Html.clear
-        Html.img "/check.svg" "check" $ Html.addClass "droplet"
+        Html.img "/assets/check.svg" "check" $ Html.addClass "droplet"
         Html.text "Watered today"
 
       -- We need to wait a bit before removing the class, otherwise the new

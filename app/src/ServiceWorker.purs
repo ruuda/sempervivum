@@ -31,7 +31,9 @@ onInstall = do
   Cache.addAll cache
     [ "/"
     , "/app.js"
-    , "/droplet.svg"
+    , "/assets/check.svg"
+    , "/assets/droplet.svg"
+    , "/assets/plant.svg"
     , "/species.json"
     , "/style.css"
     ]
