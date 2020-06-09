@@ -17,12 +17,14 @@ module Idb
 import Prelude
 
 import Data.Argonaut.Core (Json)
+import Data.Function.Uncurried (Fn4, runFn4)
+import Data.Maybe (Maybe (..))
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
 
 foreign import data Db :: Type
 
-foreign import getImpl :: forall a. String -> Db -> EffectFnAff a
+foreign import getImpl :: forall a. Fn4 (Maybe a) (a -> Maybe a) String Db (EffectFnAff a)
 foreign import openImpl :: EffectFnAff Db
 foreign import putImpl :: forall a. Unit -> String -> a -> Db -> EffectFnAff Unit
 
@@ -35,8 +37,8 @@ putString key value db = fromEffectFnAff $ putImpl unit key value db
 putJson :: String -> Json -> Db -> Aff Unit
 putJson key value db = fromEffectFnAff $ putImpl unit key value db
 
-getString :: String -> Db -> Aff String
-getString key db = fromEffectFnAff $ getImpl key db
+getString :: String -> Db -> Aff (Maybe String)
+getString key db = fromEffectFnAff $ runFn4 getImpl Nothing Just key db
 
-getJson :: String -> Db -> Aff Json
-getJson key db = fromEffectFnAff $ getImpl key db
+getJson :: String -> Db -> Aff (Maybe Json)
+getJson key db = fromEffectFnAff $ runFn4 getImpl Nothing Just key db

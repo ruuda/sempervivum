@@ -21,9 +21,12 @@ import Prelude
 
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Control.Monad.Reader.Class (ask)
+import Data.Argonaut.Core (jsonEmptyArray) as Json
 import Data.Argonaut.Decode (decodeJson) as Json
 import Data.Argonaut.Encode (encodeJson) as Json
+import Data.Argonaut.Parser (jsonParser) as Json
 import Data.Either (Either (..))
+import Data.Maybe (Maybe (..))
 import Data.Time.Duration (Milliseconds (..))
 import Effect (Effect)
 import Effect.Aff (Aff)
@@ -60,8 +63,17 @@ fatal = error >>> throwError
 
 open :: Catalog -> Aff AppState
 open catalog = do
+  Console.log "before open"
   db         <- Idb.open
-  plantsJson <- Idb.getJson "plants" db
+  Console.log "before getJson"
+  plantsJsonOpt <- Idb.getJson "plants" db
+  let
+    -- If the database is still empty (because this is the first time we open
+    -- the app), fall back to the default of an empty array.
+    plantsJson = case plantsJsonOpt of
+      Just value -> value
+      Nothing -> Json.jsonEmptyArray
+  Console.log "before decode"
   plants     <- case Json.decodeJson plantsJson of
     Right ps -> pure ps
     Left err -> fatal $ "Failed to parse plants: " <> err
