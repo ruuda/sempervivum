@@ -156,8 +156,12 @@ renderPlantItem appState now knownPlant =
       statusLine <- Html.div $ do
         Html.setId plant.id
         Html.addClass "plant"
-        Html.img (speciesImageUrl knownPlant.species) species.name $
-          Html.addClass "plant-icon"
+        Html.imgWithFallback
+          -- Try the picture first. If loading that fails, fall back to the
+          -- generic plant icon.
+          (speciesImageUrl knownPlant.species)
+          "/assets/plant.svg"
+          species.name $ Html.addClass "plant-icon"
         Html.h2 $ Html.text plant.species
         statusLine <- Html.p $ do
           Html.addClass "status"

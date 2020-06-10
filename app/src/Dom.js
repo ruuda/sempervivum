@@ -115,6 +115,20 @@ exports.setIdImpl = function(id, element) {
   }
 }
 
+exports.setOnErrorImpl = function(handler, element) {
+  return function() {
+    element.onerror = function(event) {
+      handler();
+    }
+  }
+}
+
+exports.unsetOnError = function(element) {
+  return function() {
+    element.onerror = null;
+  }
+}
+
 exports.setOpacityImpl = function(opacity, element) {
   return function() {
     element.style.opacity = opacity;

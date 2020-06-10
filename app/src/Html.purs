@@ -17,6 +17,7 @@ module Html
   , h1
   , h2
   , img
+  , imgWithFallback
   , inputFile
   , inputText
   , li
@@ -134,6 +135,20 @@ a href (ReaderT children) = ReaderT $ \container -> do
 img :: forall a. String -> String -> Html a -> Html a
 img src alt (ReaderT children) = ReaderT $ \container -> do
   self <- Dom.createElement "img"
+  Dom.setAttribute "src" src self
+  Dom.setAttribute "alt" alt self
+  result <- children self
+  Dom.appendChild self container
+  pure result
+
+imgWithFallback :: forall a. String -> String -> String -> Html a -> Html a
+imgWithFallback src fallbackSrc alt (ReaderT children) = ReaderT $ \container -> do
+  self <- Dom.createElement "img"
+  let
+    onError = do
+      Dom.unsetOnError self
+      Dom.setAttribute "src" fallbackSrc self
+  Dom.setOnError onError self
   Dom.setAttribute "src" src self
   Dom.setAttribute "alt" alt self
   result <- children self

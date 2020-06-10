@@ -26,8 +26,10 @@ module Dom
   , setDisabled
   , setDownload
   , setId
-  , setOpacity
   , scrollIntoView
+  , setOnError
+  , setOpacity
+  , unsetOnError
   ) where
 
 import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3)
@@ -42,12 +44,13 @@ foreign import data Element :: Type
 foreign import assumeElementById :: String -> Effect Element
 foreign import body :: Element
 foreign import clearElement :: Element -> Effect Unit
-foreign import createElement :: String -> Effect Element
 foreign import clickElement :: Element -> Effect Unit
-foreign import getLocationPathName :: Effect String
+foreign import createElement :: String -> Effect Element
 foreign import getFile :: Element -> Effect File
+foreign import getLocationPathName :: Effect String
 foreign import getValue :: Element -> Effect String
 foreign import scrollIntoView :: Element -> Effect Unit
+foreign import unsetOnError :: Element -> Effect Unit
 
 foreign import addClassImpl :: Fn2 String Element (Effect Unit)
 foreign import addEventListenerImpl :: Fn3 String (Effect Unit) Element (Effect Unit)
@@ -59,6 +62,7 @@ foreign import setAttributeImpl :: Fn3 String String Element (Effect Unit)
 foreign import setDisabledImpl :: Fn2 Boolean Element (Effect Unit)
 foreign import setDownloadImpl :: Fn2 String Element (Effect Unit)
 foreign import setIdImpl :: Fn2 String Element (Effect Unit)
+foreign import setOnErrorImpl :: Fn2 (Effect Unit) Element (Effect Unit)
 foreign import setOpacityImpl :: Fn2 Number Element (Effect Unit)
 
 appendChild :: Element -> Element -> Effect Unit
@@ -90,6 +94,9 @@ setDownload fname element = runFn2 setDownloadImpl fname element
 
 setOpacity :: Number -> Element -> Effect Unit
 setOpacity opacity element = runFn2 setOpacityImpl opacity element
+
+setOnError :: Effect Unit -> Element -> Effect Unit
+setOnError handler element = runFn2 setOnErrorImpl handler element
 
 addEventListener :: String -> Effect Unit -> Element -> Effect Unit
 addEventListener eventName callback element = runFn3 addEventListenerImpl eventName callback element
