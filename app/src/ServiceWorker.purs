@@ -15,13 +15,10 @@ import Prelude
 
 import Control.Promise (Promise)
 import Control.Promise as Promise
-import Control.Monad.Error.Class (catchError, throwError)
 import Data.Maybe (Maybe (Just, Nothing))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class.Console as Console
-
-import Cache (Cache)
 
 import Cache as Cache
 import Fetch (Request, Response)
