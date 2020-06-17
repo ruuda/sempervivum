@@ -1,0 +1,24 @@
+name = "Dracaena fragrans"
+# Source: https://www.123planten.nl/verzorging/tips-dracaena
+water_days_summer = 14
+water_days_winter = 28
+water_remark =
+  """\
+  Needs very litte water, \
+  water once every 2–3 weeks in summer, \
+  once every 4–6 weeks in winter. \
+  Only water when the soil feels dry. \
+  When in doubt, prefer watering too little over watring too much. \
+  Brown spots with yellow edges in the leaves are signs of too much water, \
+  curling leaves are signs of too little water. \
+  Misting is not necessary, but can help to remove dust.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Only fertilize in the growing season, from March through summer. \
+  Do not fertilize in fall and winter.\
+  """
+light = "Partial shade to shade, at most 3 hours of direct sunlight per day"
+light_remark = "Lighter leaves, sometimes yellow, are signs of too much light."
