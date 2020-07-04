@@ -346,9 +346,9 @@ renderManage appState = do
     Html.em $ Html.text "export"
     Html.text " to download your data for backup or sharing purposes. Use "
     Html.em $ Html.text "restore"
-    Html.text " to replace your current data with an earlier export. Use "
-    Html.em $ Html.text "merge"
-    Html.text " to add plants from a different export to your current data. "
+    Html.text " to replace your current data with an earlier export."
+    -- TODO: Build the refresh into the app.
+    Html.text " Refresh the page after restoring."
 
   Html.button $ do
     Html.text "export"
@@ -358,9 +358,10 @@ renderManage appState = do
     Html.text "restore"
     Html.onClick $ AppState.importJson appState
 
-  Html.button $ do
-    Html.text "merge"
-    Html.onClick $ AppState.importJson appState
+  -- TODO: Implement the merge functionality.
+  -- Html.button $ do
+  --   Html.text "merge"
+  --   Html.onClick $ AppState.importJson appState
 
 renderApp :: AppState -> Instant -> Html Unit
 renderApp appState now = do
