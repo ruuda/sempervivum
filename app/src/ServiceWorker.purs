@@ -23,11 +23,12 @@ import Effect.Class.Console as Console
 import Cache as Cache
 import Fetch (Request, Response)
 import Fetch as Fetch
+import Version as Version
 
 onInstall :: Aff Unit
 onInstall = do
   Console.log "SW: Begin install"
-  cache <- Cache.open "v1.0"
+  cache <- Cache.open $ "v" <> Version.version
   Cache.addAll cache
     [ "/"
     , "app.js"

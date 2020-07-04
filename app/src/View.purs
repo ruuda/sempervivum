@@ -41,6 +41,7 @@ import Plant as Plant
 import Species as Species
 import Time as Time
 import Var as Var
+import Version as Version
 
 -- Return (t2 - t1) in number of local days. This considers only the local date,
 -- and ignores the time of the day. So if t1 is 5 seconds before midnight in
@@ -381,8 +382,20 @@ renderManage appState = do
   --   Html.text "merge"
   --   Html.onClick $ AppState.importJson appState
 
+renderFooter :: Html Unit
+renderFooter = do
+  Html.h1 $ Html.text "About"
+  Html.p $ do
+    Html.text "This is Sempervivum "
+    Html.a "https://github.com/ruuda/sempervivum/blob/master/CHANGELOG.md" $ Html.text Version.version
+    Html.text ". Sempervivum is free software, licensed under the Apache 2.0 license. "
+    Html.text "The source code "
+    Html.a "https://github.com/ruuda/sempervivum" $ Html.text "is available on GitHub"
+    Html.text "."
+
 renderApp :: AppState -> Instant -> Html Unit
 renderApp appState now = do
   plantList <- renderPlants appState now
   renderAddPlant appState plantList
   renderManage appState
+  renderFooter
