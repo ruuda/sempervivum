@@ -25,13 +25,6 @@ before_install:
   - export LOCALE_ARCHIVE=${devenv_path}/lib/locale/locale-archive
 
 script:
-  # Build the Haskell server-side app.
-  - stack build --no-terminal
-
-  # Build the PureScript client-side app.
-  - make -C app
-
-  # Export the species catalog, and pipe it through jq. This verifies that we
-  # can parse all toml files, printing the erros if that fails. If it succeeds,
-  # we would get a big json blob in the CI logs, so instead pipe it to /dev/null.
-  - stack exec --no-terminal sempervivum -- export-species > /dev/null
+  # Build the static site, which includes building the Haskell app that
+  # generates the species catalog, and building the PureScript app.
+  - make
