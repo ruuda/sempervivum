@@ -15,7 +15,7 @@ out: app $(BIN_PATH) assets/*.svg app/*.html app/*.css app/*.json
 	cp assets/droplet.svg out/assets/droplet.svg
 	cp assets/plant.svg out/assets/plant.svg
 
-$(BIN_PATH): app/*.hs src/*.hs
+$(BIN_PATH): src/*.hs
 	stack build
 
 app:
