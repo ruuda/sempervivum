@@ -22,6 +22,13 @@ jobs:
           path: "/nix/store"
           key: "nix-${{ hashFiles('*.nix') }}"
 
+      - name: "Cache Stack"
+        uses: "actions/cache@v2.0.0"
+        with:
+          path: "~/.stack/snapshots"
+          key: "stack-${{ hashFiles('util/stack.yaml*') }}"
+          restore-keys: "stack-"
+
       - uses: "cachix/install-nix-action@v10"
         with:
           nix_path: "nixpkgs=channel:nixos-unstable"
