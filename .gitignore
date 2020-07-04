@@ -2,12 +2,17 @@
 *.swo
 *.swp
 
+# Static site output.
+out
+
 # Haskell build files.
 .stack-work
-
-# Default database.
-sempervivum.sqlite3
 
 # Purescript build files.
 app/output
 app/.psc-package
+
+# Photo editing source files.
+photos/*.kra
+photos/*.kra~
+photos/*.xcf
