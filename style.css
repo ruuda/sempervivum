@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=DM+Sans:400,400i,500,500i,700,700i&display=swap&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Literata:400,400i,500,500i,600,600i,700,700i&display=swap');
+
+:root {
+  /* Colors: */
+  /* https://coolors.co/84c318-f5fbef-92ad94-748b75-503d42 */
+  /* https://coolors.co/503d42-84c318-c9e3ac-f5fbef-eaefbd */
+  --yellow-green: #84c318;
+  --honeydew: #f5fbef;
+  --laurel-green: #92ad94;
+  --xanadu: #748b75;
+  --old-burgrundy: #503d42;
+  --tea-green: #c9e3ac;
+  --pale-spring-bud: #eaefbd;
+
+  --light-bg: #fafbf9;
+  --light-bg: #f7f8f6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  /* Chrome on mobile shows a blue highlight on tap. It makes sense to give some
+   * feedback, but we already have a manual style for this, so disable the
+   * highlight that does not fit the theme. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: 'DM Sans';
+  font-size: 16px;
+  line-height: 1.4em;
+  padding: 2em;
+  padding-top: 0;
+  background-color: var(--light-bg);
+  color: var(--old-burgrundy);
+}
+
+body {
+  max-width: 26em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  color: var(--yellow-green);
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  /* Split into padding and marging so scroll into view aligns nicely. */
+  padding-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1:first-of-type {
+  margin-top: 0;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.plant {
+  background-color: white;
+  border-radius: 0.25em;
+  padding: 1.2em;
+  margin-top: 1em;
+  cursor: pointer;
+
+  position: relative;
+  z-index: 1;
+  transition: transform 0.04s ease-out;
+}
+
+.plant:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 1em inset rgba(0, 0, 0, 0.02);
+}
+
+.plant img.plant-icon {
+  width: 2.6em;
+  height: 2.6em;
+  float: left;
+  margin-left: -0.4em;
+  margin-right: 0.8em;
+  object-fit: contain;
+}
+
+img.droplet {
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-right: 0.3rem;
+}
+
+.plant-details span {
+  font-weight: 700;
+  display: inline-block;
+  width: 5em;
+}
+
+p.multi {
+  margin-bottom: 1em;
+}
+
+.plant-details {
+  display: none;
+  background-color: white;
+  border-radius: 0 0 0.25em 0.25em;
+  padding: 1.2em;
+  margin-top: 1.5pt;
+  transform: translate(0, -6em);
+  opacity: 0;
+  transition:
+    transform 0.07s ease-out,
+    opacity 0.13s ease-out;
+
+  position: relative;
+  z-index: 0;
+}
+
+.expanded .plant {
+  border-radius: 0.25em 0.25em 0 0;
+}
+
+/* Expanding is split into two classes, .expanded and .unveiled, to work around
+ * the transition not taking effect if display changes from none to block. */
+
+.expanded .plant-details {
+  display: block;
+}
+
+.unveiled .plant-details {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+button {
+  background-color: var(--yellow-green);
+  border-radius: 0.4em;
+  border: 2pt solid var(--light-bg);
+  color: white;
+  font-family: inherit;
+  font-size: inherit;
+  margin-right: 1em;
+  margin-top: 1em;
+  margin-left: -1pt;
+  margin-bottom: -1pt;
+  outline: none;
+  padding: 0.8em;
+  padding-left: 1em;
+  padding-right: 1em;
+  transition:
+    border 0.1s ease-out,
+    box-shadow 0.1s ease-out,
+    background-color 0.07s ease-out;
+}
+
+.plant-details button {
+  /* The border color must match the background. */
+  border-color: white;
+}
+
+button:active {
+  box-shadow: 0 0 1em inset rgba(0, 0, 0, 0.05);
+  background-color: #659513;
+}
+
+button:focus {
+  border: 2pt solid var(--tea-green);
+}
+
+button img {
+  margin-right: 0.5em;
+  vertical-align: text-bottom;
+}
+
+.status {
+  transition: opacity 0.17s ease-in-out;
+}
+
+.status img {
+  transition: transform 0.17s ease-in-out;
+}
+
+/* Used to fade the status line in and out when we change it after watering. */
+.faded {
+  opacity: 0;
+}
+
+.faded img {
+  transform: scale(0, 0);
+}
+
+input {
+  width: 100%;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.3rem;
+  border-radius: 0.4em;
+  border: 2pt solid white;
+  outline: none;
+  transition: border 0.1s ease-out;
+  margin-bottom: 0.5em;
+}
+
+input:focus {
+  border: 2pt solid var(--tea-green);
+}
+
+ul#search-results {
+  list-style: none;
+  min-height: 0;
+  transition: min-height 0.2s ease-out;
+}
+
+ul#search-results.active {
+  /* When searching, add some space to avoid
+   * jumping the page so much when typing. */
+  min-height: 100vh;
+}
+
+ul#search-results li {
+  background-color: white;
+  overflow: hidden;
+  margin-top: 1.5pt;
+  padding: 0.2em;
+  border-radius: 0.4em;
+}
+
+ul#search-results span {
+  margin: 0.45em;
+  display: inline-block;
+}
+
+ul#search-results button {
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  margin: 0;
+  float: right;
+}
+
+button:disabled {
+  opacity: 0.3;
+}

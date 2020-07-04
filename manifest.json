@@ -1,0 +1,8 @@
+{
+  "name": "Sempervivum",
+  "short_name": "Sempervivum",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fafbf9",
+  "description": "A plant watering tracker."
+}
