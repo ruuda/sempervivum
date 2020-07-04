@@ -19,7 +19,7 @@ jobs:
       - name: "Cache Nix"
         uses: "actions/cache@v2.0.0"
         with:
-          path: "/nix"
+          path: "/nix/store"
           key: "nix-${{ hashFiles('*.nix') }}"
 
       - uses: "cachix/install-nix-action@v10"
