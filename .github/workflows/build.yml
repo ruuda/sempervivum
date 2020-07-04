@@ -29,6 +29,13 @@ jobs:
           key: "stack-${{ hashFiles('util/stack.yaml*') }}"
           restore-keys: "stack-"
 
+      - name: "Cache PureScript"
+        uses: "actions/cache@v2.0.0"
+        with:
+          path: "app/.psc-package"
+          key: "psc-package-${{ hashFiles('app/psc-package.json') }}"
+          restore-keys: "psc-package-"
+
       - uses: "cachix/install-nix-action@v10"
         with:
           nix_path: "nixpkgs=channel:nixos-unstable"
