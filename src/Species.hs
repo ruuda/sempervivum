@@ -25,9 +25,11 @@ import System.IO (stderr)
 import Toml (TomlCodec, (.=))
 
 import qualified Data.Aeson as Aeson
+import qualified Data.ByteString as ByteString
 import qualified Data.Char as Char
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.Text as Text
+import qualified Data.Text.Encoding as Text
 import qualified Data.Text.IO as TextIO
 import qualified System.Exit as System
 import qualified System.Directory as Directory
@@ -86,20 +88,30 @@ slug species =
     Text.unpack $ Text.map replaceInvalidChars $ Text.toLower $ name species
 
 readSingleEntry :: FilePath -> FilePath -> IO (Either Text Species)
-readSingleEntry dirname fname = do
-  tomlText <- TextIO.readFile (dirname </> fname)
-  case Toml.decode speciesCodec tomlText of
-    Right species ->
-      if (slug species <> ".toml") == fname
-        then pure $ Right species
-        else pure $ Left $ mempty
-          <> "Error in " <> (Text.pack fname) <> ":\n"
-          <> "  File name does not match species '" <> name species <> "'.\n"
-          <> "  Expected file to be named '" <> (Text.pack $ slug species) <> ".toml'."
-    Left msg ->
-      pure $ Left $ mempty
-        <> "Failed to parse " <> (Text.pack fname) <> ":\n"
-        <> "  " <> Toml.prettyException msg
+readSingleEntry dirname fname =
+  let
+    decodeBytes tomlBytes = do
+      tomlText <- case Text.decodeUtf8' tomlBytes of
+        Right txt -> Right txt
+        Left exc ->
+          Left $ mempty
+            <> "Failed to read " <> (Text.pack fname) <> " as UTF-8:\n"
+            <> "  " <> (Text.pack $ show exc)
+
+      case Toml.decode speciesCodec tomlText of
+        Right species ->
+          if (slug species <> ".toml") == fname
+            then Right species
+            else Left $ mempty
+              <> "Error in " <> (Text.pack fname) <> ":\n"
+              <> "  File name does not match species '" <> name species <> "'.\n"
+              <> "  Expected file to be named '" <> (Text.pack $ slug species) <> ".toml'."
+        Left msg ->
+          Left $ mempty
+            <> "Failed to parse " <> (Text.pack fname) <> ":\n"
+            <> "  " <> Toml.prettyException msg
+  in
+    fmap decodeBytes $ ByteString.readFile (dirname </> fname)
 
 readCatalog :: FilePath -> IO (Either [Text] Catalog)
 readCatalog dirname = do
