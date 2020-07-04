@@ -13,15 +13,6 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
 
-      # I hope that restoring from the GitHub cache is faster than pulling from
-      # cache.nixos.org every time, but in case the cache is not available, do
-      # not bother with a fallback, just let Nix download the dependencies.
-      - name: "Cache Nix"
-        uses: "actions/cache@v2.0.0"
-        with:
-          path: "/nix/store"
-          key: "nix-${{ hashFiles('*.nix') }}"
-
       - name: "Cache Stack"
         uses: "actions/cache@v2.0.0"
         with:
