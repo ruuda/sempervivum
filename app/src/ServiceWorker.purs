@@ -46,6 +46,7 @@ onActivate = do
   Console.log "SW: Begin activate"
   -- Delete caches of older versions.
   _wasDeleted <- Cache.delete "v1.0"
+  _wasDeleted <- Cache.delete "v2.0"
   Console.log "SW: Activation complete"
 
 onFetch :: Request -> Aff Response

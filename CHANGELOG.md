@@ -8,6 +8,13 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.1
+
+Released 2020-07-07.
+
+ * Make the app a bit friendlier for first use.
+ * Internal cleanup, release automation through GitHub actions.
+
 ## 2.0
 
 Released 2020-07-07.
