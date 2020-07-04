@@ -90,7 +90,7 @@ speciesImageUrl (Species species) =
       $ String.toLower
       $ species.name
   in
-    "/images/" <> slug <> ".webp"
+    "images/" <> slug <> ".webp"
 
 renderPlants :: AppState -> Instant -> Html Element
 renderPlants appState now = do
@@ -127,7 +127,6 @@ renderPlantItem appState now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
-    _href = "/app/plant/" <> plant.id
   in
     Html.div $ do
       Html.addClass "plant-item"
@@ -160,12 +159,12 @@ renderPlantItem appState now knownPlant =
           -- Try the picture first. If loading that fails, fall back to the
           -- generic plant icon.
           (speciesImageUrl knownPlant.species)
-          "/assets/plant.svg"
+          "assets/plant.svg"
           species.name $ Html.addClass "plant-icon"
         Html.h2 $ Html.text plant.species
         statusLine <- Html.p $ do
           Html.addClass "status"
-          Html.img "/assets/droplet.svg" "droplet" $ do
+          Html.img "assets/droplet.svg" "droplet" $ do
             Html.addClass "droplet"
             Html.setOpacity $ dropletOpacity now knownPlant
           Html.text $ nextWater now knownPlant
@@ -267,7 +266,7 @@ installClickHandlers appState knownPlant collapse elements =
       Aff.delay (Milliseconds 170.0)
       liftEffect $ Html.withElement elements.statusLine $ do
         Html.clear
-        Html.img "/assets/check.svg" "check" $ Html.addClass "droplet"
+        Html.img "assets/check.svg" "check" $ Html.addClass "droplet"
         Html.text "Watered today"
 
       -- We need to wait a bit before removing the class, otherwise the new

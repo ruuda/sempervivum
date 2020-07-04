@@ -30,12 +30,12 @@ onInstall = do
   cache <- Cache.open "v1.0"
   Cache.addAll cache
     [ "/"
-    , "/app.js"
-    , "/assets/check.svg"
-    , "/assets/droplet.svg"
-    , "/assets/plant.svg"
-    , "/species.json"
-    , "/style.css"
+    , "app.js"
+    , "assets/check.svg"
+    , "assets/droplet.svg"
+    , "assets/plant.svg"
+    , "species.json"
+    , "style.css"
     ]
   Console.log "SW: Installation complete"
 

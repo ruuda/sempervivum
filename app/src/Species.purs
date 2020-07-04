@@ -70,7 +70,7 @@ fatal = error >>> throwError
 
 getCatalog :: Aff Catalog
 getCatalog = do
-  result <- Http.get Http.ResponseFormat.json "/species.json"
+  result <- Http.get Http.ResponseFormat.json "species.json"
   case result of
     Left err -> fatal $ "Failed to retrieve species catalog: " <> Http.printError err
     Right response -> case Json.decodeJson response.body of
