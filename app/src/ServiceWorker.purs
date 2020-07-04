@@ -34,6 +34,7 @@ onInstall = do
     , "assets/check.svg"
     , "assets/droplet.svg"
     , "assets/plant.svg"
+    , "manifest.json"
     , "species.json"
     , "style.css"
     ]
