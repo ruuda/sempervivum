@@ -349,6 +349,7 @@ renderManage appState = do
     Html.text " to replace your current data with an earlier export."
     -- TODO: Build the refresh into the app.
     Html.text " Refresh the page after restoring."
+    Html.text " To remove local data, clear data under site settings in your browser."
 
   Html.button $ do
     Html.text "export"
