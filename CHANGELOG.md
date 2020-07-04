@@ -3,13 +3,10 @@
 ## Versioning policy
 
  * Versions are numbered `major.minor`.
- * Upgrading the server to a new minor version should not involve manual
+ * New versions should be able to read the local data stored by the prior version.
+ * Deploying a new minor version should not involve manual intervention apart
+   from copying the new files. Deploying a new major version may require manual
    intervention.
- * Upgrading the server to a new major version might require manual
-   intervention.
- * Once client-side data storage is stable, a new release should be able to load
-   client-saved data of the version before it, and possibly of earlier versions.
- * Until then, manual migration will be necessary.
 
 ## 2.0
 
