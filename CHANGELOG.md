@@ -11,6 +11,14 @@
    client-saved data of the version before it, and possibly of earlier versions.
  * Until then, manual migration will be necessary.
 
+## 2.0
+
+Released 2020-07-07.
+
+ * This is the first version that can be deployed as a static site.
+ * To upgrade, download `/plants.json` from the old server, and use the new
+   “restore” button in the application to import it to local storage.
+
 ## 1.0
 
 Released 2020-05-31.
