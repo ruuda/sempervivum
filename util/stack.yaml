@@ -5,4 +5,4 @@ nix:
   packages:
     - zlib
   path:
-    - "nixpkgs=./nixpkgs-pinned.nix"
+    - "nixpkgs=../nixpkgs-pinned.nix"

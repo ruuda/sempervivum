@@ -7,7 +7,7 @@ notifications:
 cache:
   directories:
     - $HOME/.stack
-    - .stack-work
+    - util/.stack-work
     - app/.psc-package
 
 before_cache:

@@ -5,13 +5,12 @@ synopsis:            A plant watering tracker
 
 copyright:           Copyright 2020 Ruud van Asseldonk
 license:             Apache-2.0
-license-file:        LICENSE
+license-file:        ../LICENSE
 
 author:              Ruud van Asseldonk
 maintainer:          dev@veniogames.com
 
 build-type:          Simple
-extra-source-files:  README.md
 cabal-version:       >=1.10
 
 executable sempervivum
