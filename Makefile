@@ -3,7 +3,7 @@ BIN_PATH = .stack-work/dist/x86_64-linux-nix/Cabal-2.4.0.1/build/sempervivum/sem
 out: app $(BIN_PATH) assets/*.svg app/*.html app/*.css app/*.json
 	mkdir -p out
 	mkdir -p out/assets
-	$(BIN_PATH) export-species > out/species.json
+	$(BIN_PATH) > out/species.json
 	# In the source we use the non-minified versions for faster development, but
 	# in release we want to use the minified versions.
 	sed -e 's/app\.js/app.min.js/' -e 's/sw\.js/sw.min.js/' app/index.html > out/index.html

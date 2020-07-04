@@ -19,7 +19,6 @@ executable sempervivum
   ghc-options:     -Wall -Werror -Wincomplete-uni-patterns -Wincomplete-record-updates -fno-ignore-asserts
   hs-source-dirs:  src
   main-is:         Main.hs
-  other-modules:   Species
 
   build-depends: aeson
                , base
