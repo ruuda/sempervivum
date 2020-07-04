@@ -99,6 +99,11 @@ renderPlants appState now = do
   Html.div $ do
     Html.setId "plants"
     traverse_ (renderPlantItem appState now) (Care.sortByNextWater now ps.knowns)
+    case ps.knowns of
+      Nil -> Html.p $ do
+        Html.setId "no-plants-yet"
+        Html.text $ "You do not have any plants yet, add one below."
+      _   -> pure unit
     case ps.unknowns of
       Nil -> pure unit
       xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
@@ -296,11 +301,23 @@ renderSearchResult appState plantList (Species s) = Html.li $ do
     Html.setDisabled $ Plant.hasSpecies s.name plants
     self <- ask
     Html.onClick $ do
+      -- If this is the first plant we add, remove the "no plants yet" message.
+      noPlantsMessage <- Dom.getElementById "no-plants-yet"
+      case noPlantsMessage of
+        Nothing -> pure unit
+        Just _ -> Dom.clearElement plantList
+
+      -- Render the new plant at the end of the plant list.
       plant <- Plant.newPlant s.name
       now <- Time.getCurrentInstant
       item <- Html.withElement plantList $ renderPlantItem appState now { plant: plant, species: Species s }
-      Html.withElement self $ Html.setDisabled true
       Dom.scrollIntoView item
+
+      -- Disable the add button, because there can only be one instance of each
+      -- plant for now.
+      Html.withElement self $ Html.setDisabled true
+
+      -- Persist in the state that we now have this plant.
       Aff.launchAff_ $ AppState.insertPlant appState plant
 
 renderAddPlant :: AppState -> Element -> Html Unit
