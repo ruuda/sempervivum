@@ -1,6 +1,11 @@
 name: "Build"
 
-on: "push"
+on:
+  push:
+    # Build for all branches, but not for tags, there is a separate deploy
+    # workflow for tags.
+    branches:
+      - "*"
 
 jobs:
   build:
