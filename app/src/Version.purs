@@ -10,4 +10,4 @@ module Version
   ) where
 
 version :: String
-version = "2.1"
+version = "2.2"

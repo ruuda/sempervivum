@@ -8,6 +8,15 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.2
+
+Released 2020-07-11.
+
+ * Watering intervals are now adaptive, the app will “learn” how much water your
+   plants really need based on when you water them, rather than basing reminders
+   only on the built-in care dataset, which has only rough suggestions.
+ * Fix a bug in how the service worker handled non-cached responses.
+
 ## 2.1
 
 Released 2020-07-07.
