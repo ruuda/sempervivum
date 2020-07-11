@@ -2,7 +2,6 @@ UTIL_BIN_PATH = util/.stack-work/dist/x86_64-linux-nix/Cabal-2.4.0.1/build/sempe
 
 out: app/output/app.min.js app/output/sw.min.js assets app/*.html
 	mkdir -p out
-	mkdir -p out/assets
 	# In the source we use the non-minified versions for faster development, but
 	# in release we want to use the minified versions.
 	sed -e 's/app\.js/app.min.js/' -e 's/sw\.js/sw.min.js/' app/index.html > out/index.html
@@ -11,12 +10,12 @@ out: app/output/app.min.js app/output/sw.min.js assets app/*.html
 
 debug: app/output/app.js app/output/sw.js assets app/*.html
 	mkdir -p out
-	mkdir -p out/assets
 	cp app/index.html out/index.html
 	cp app/output/app.js out/app.js
 	cp app/output/sw.js out/sw.js
 
 assets: assets/*.svg app/*.css app/*.json out/species.json
+	mkdir -p out/assets
 	cp app/manifest.json out/manifest.json
 	cp app/style.css out/style.css
 	cp assets/check.svg out/assets/check.svg
@@ -25,6 +24,7 @@ assets: assets/*.svg app/*.css app/*.json out/species.json
 
 out/species.json: $(UTIL_BIN_PATH)
 	# Convert species toml files into a single json file using the utility.
+	mkdir -p out
 	$(UTIL_BIN_PATH) > out/species.json
 
 $(UTIL_BIN_PATH): util/src/*.hs
