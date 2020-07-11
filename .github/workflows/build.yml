@@ -17,14 +17,14 @@ jobs:
         uses: "actions/cache@v2.0.0"
         with:
           path: "~/.stack/snapshots"
-          key: "stack-${{ hashFiles('util/stack.yaml* nixpkgs-pinned.nix') }}"
+          key: "stack-${{ hashFiles('util/stack.yaml*', 'nixpkgs-pinned.nix') }}"
           restore-keys: "stack-"
 
       - name: "Cache PureScript"
         uses: "actions/cache@v2.0.0"
         with:
           path: "app/.psc-package"
-          key: "psc-package-${{ hashFiles('app/psc-package.json nixpkgs-pinned.nix') }}"
+          key: "psc-package-${{ hashFiles('app/psc-package.json', 'nixpkgs-pinned.nix') }}"
           restore-keys: "psc-package-"
 
       - uses: "cachix/install-nix-action@v10"
