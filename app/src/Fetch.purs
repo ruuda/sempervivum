@@ -9,6 +9,7 @@ module Fetch
   ( class HasBody
   , Request
   , Response
+  , clone
   , fetch
   , method
   , readJson
@@ -28,6 +29,7 @@ import Effect.Aff (Aff)
 foreign import data Request :: Type
 foreign import data Response :: Type
 
+foreign import clone :: Response -> Response
 foreign import url :: Request -> String
 foreign import method :: Request -> String
 foreign import statusCode :: Response -> Int

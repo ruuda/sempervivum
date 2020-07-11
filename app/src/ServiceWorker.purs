@@ -60,7 +60,7 @@ onFetch request = do
       response <- Fetch.fetch request
       case Fetch.statusCode response of
         200 -> do
-          Cache.put cache request response
+          Cache.put cache request $ Fetch.clone response
           pure response
         -- TODO: To cache or not to cache 404s ...
         404 -> pure response

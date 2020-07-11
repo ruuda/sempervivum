@@ -29,6 +29,10 @@ exports.statusCode = function(response) {
   return response.status;
 }
 
+exports.clone = function(response) {
+  return response.clone();
+}
+
 exports.readJsonImpl = function(requestOrResponse) {
   return requestOrResponse.json();
 }
