@@ -41,6 +41,10 @@ exports.localDay = function(instant) { return instant.getDate(); }
 exports.localMonth = function(instant) { return 1 + instant.getMonth(); }
 exports.localYear = function(instant) { return instant.getFullYear(); }
 
-exports.addMillisecondsImpl = function(msecs, instant) {
-  return new Date(msecs + instant.getTime());
+exports.addSecondsImpl = function(secs, instant) {
+  return new Date(secs * 1000.0 + instant.getTime());
+}
+
+exports.diffSecondsImpl = function(t0, t1) {
+  return (t0.getTime() - t1.getTime()) / 1000.0;
 }

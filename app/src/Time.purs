@@ -30,7 +30,8 @@ import Effect (Effect)
 
 foreign import data Instant :: Type
 
-foreign import addMillisecondsImpl :: Fn2 Number Instant Instant
+foreign import addSecondsImpl :: Fn2 Number Instant Instant
+foreign import diffSecondsImpl :: Fn2 Instant Instant Number
 foreign import eqInstantImpl :: Fn2 Instant Instant Boolean
 foreign import fromGregorianUtcImpl :: Fn6 Int Int Int Int Int Int Instant
 foreign import fromIso8601Impl :: Fn3 (Maybe Instant) (Instant -> Maybe Instant) String (Maybe Instant)
@@ -74,11 +75,17 @@ fromIso8601 = runFn3 fromIso8601Impl Nothing Just
 -- Note that the argument is Number, not Int. The range of a signed 32-bit
 -- number of milliseconds is -24.8 to +24.8 days, so an Int is unable to
 -- represent long time spans.
-addMilliseconds :: Number -> Instant -> Instant
-addMilliseconds = runFn2 addMillisecondsImpl
+addSeconds :: Number -> Instant -> Instant
+addSeconds = runFn2 addSecondsImpl
+
+diffSeconds :: Instant -> Instant -> Number
+diffSeconds = runFn2 diffSecondsImpl
 
 add :: Duration -> Instant -> Instant
-add (Duration secs) = addMilliseconds (secs * 1000.0)
+add (Duration secs) = addSeconds secs
+
+subtract :: Instant -> Instant -> Duration
+subtract t0 t1 = seconds $ diffSeconds t0 t1
 
 seconds :: Number -> Duration
 seconds = Duration
