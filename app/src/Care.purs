@@ -8,7 +8,7 @@
 module Care
   ( KnownPlant
   , MatchedPlants
-  , adaptiveWateringInterval
+  , adaptiveWaterDaysRange
   , match
   , nextWater
   , sortByNextWater
@@ -18,6 +18,7 @@ import Prelude
 
 import Data.Array as Array
 import Data.Foldable (foldl)
+import Data.Int as Int
 import Data.List (List (..), (:))
 import Data.Maybe (Maybe (..))
 import Foreign.Object as Object
@@ -64,6 +65,17 @@ adaptiveWateringInterval kp =
   in
     Plant.adaptiveWateringInterval kp.plant baseInterval
 
+adaptiveWaterDaysRange :: KnownPlant -> { lower :: Int, upper :: Int }
+adaptiveWaterDaysRange kp =
+  let
+    seconds = Time.toSeconds $ adaptiveWateringInterval kp
+    days = seconds / (3600.0 * 24.0)
+    lower = Int.floor days
+    preUpper = Int.ceil days
+    upper = if lower == preUpper then lower + 1 else preUpper
+  in
+    { lower, upper }
+
 nextWater :: Instant -> KnownPlant -> Instant
 nextWater now kp =
   let
@@ -71,7 +83,7 @@ nextWater now kp =
   in
     case Plant.lastWatered kp.plant of
       Nothing -> now
-      Just t  -> Time.add (Time.fromDays species.waterDaysSummer) t
+      Just t  -> Time.add (adaptiveWateringInterval kp) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable

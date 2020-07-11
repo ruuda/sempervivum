@@ -31,15 +31,9 @@ $(UTIL_BIN_PATH): util/src/*.hs
 	cd util && stack build
 
 app/output/app.js: app/src/*.purs app/src/*.js
-	$(MAKE) -C app output/app.js
+	$(MAKE) -C app output/app.js output/sw.js
 
 app/output/app.min.js: app/src/*.purs app/src/*.js
-	$(MAKE) -C app output/app.min.js
-
-app/output/sw.js: app/src/*.purs app/src/*.js
-	$(MAKE) -C app output/sw.js
-
-app/output/sw.min.js: app/src/*.purs app/src/*.js
-	$(MAKE) -C app output/sw.min.js
+	$(MAKE) -C app output/app.min.js output/sw.min.js
 
 .PHONY: assets debug out
