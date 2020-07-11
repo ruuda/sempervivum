@@ -28,6 +28,7 @@ import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
+import Data.Array.NonEmpty as NonEmpty
 import Data.Foldable (any)
 import Data.Maybe (Maybe (Just, Nothing))
 import Effect (Effect)
@@ -107,10 +108,11 @@ recordFertilized at (Plant p) =
 -- starting point when there are no past waterings yet.
 adaptiveWateringInterval :: Plant -> Duration -> Duration
 adaptiveWateringInterval (Plant p) baseInterval =
-  case Array.unsnoc p.watered of
+  case NonEmpty.fromArray p.watered of
     Nothing -> baseInterval
-    Just { init: tailWatered, last: t } ->
+    Just watered ->
       let
+        t = NonEmpty.last watered
         -- Weigh watering events with exponential decay with a half-life of 30
         -- days. So the last interval gets weight 1, an interval that ended 15
         -- days before the last one gets weight 0.707, an interval that ended 30
@@ -119,7 +121,7 @@ adaptiveWateringInterval (Plant p) baseInterval =
         lambda = (Math.log 0.5) / (30.0 * 24.0 * 3600.0)
         weightedDiff t0 t1 =
           let
-            weight = Math.exp $ lambda * (Time.toSeconds $ t1 `Time.subtract` t)
+            weight = Math.exp $ lambda * (Time.toSeconds $ t `Time.subtract` t1)
             seconds = weight * (Time.toSeconds $ t1 `Time.subtract` t0)
           in
             { weight, seconds }
@@ -128,8 +130,10 @@ adaptiveWateringInterval (Plant p) baseInterval =
         -- relative weight when there is less data, and it will also have more
         -- relative weight when past watering events are longer ago.
         initial = { seconds: Time.toSeconds baseInterval, weight: 1.0 }
-        diffs = Array.zipWith weightedDiff p.watered tailWatered
-        total = Array.foldl sumDiff zero diffs
+        diffs = Array.zipWith weightedDiff p.watered $ NonEmpty.tail watered
+        -- We do a left fold so we sum small values first before adding them to
+        -- bigger numbers.
+        total = Array.foldl sumDiff initial diffs
       in
         Time.fromSeconds $ total.seconds / total.weight
 

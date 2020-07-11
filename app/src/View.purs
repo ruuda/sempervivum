@@ -199,6 +199,8 @@ renderDetails now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
+    seconds = Time.toSeconds $ Care.adaptiveWateringInterval knownPlant
+    days = seconds / (3600.0 * 24.0)
   in do
     Html.p $ do
       Html.addClass "multi"
@@ -211,6 +213,8 @@ renderDetails now knownPlant =
       " every " <> (show species.waterDaysSummer) <> " days"
     renderSpanP "fertilize" $
       " every " <> (show species.fertilizeDaysSummer) <> " days"
+    renderSpanP "water adaptive" $
+      " every " <> (show days) <> " days"
 
     infoBlock <- Html.div $ do
       renderInfoBlock now knownPlant
