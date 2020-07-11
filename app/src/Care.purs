@@ -61,7 +61,7 @@ nextWater now kp =
   in
     case Plant.lastWatered kp.plant of
       Nothing -> now
-      Just t  -> Time.addDays species.waterDaysSummer t
+      Just t  -> Time.add (Time.days species.waterDaysSummer) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable

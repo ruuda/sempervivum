@@ -6,11 +6,14 @@
 -- A copy of the License has been included in the root of the repository.
 
 module Time
-  ( Instant
-  , addDays
+  ( Duration
+  , Instant
+  , add
+  , days
   , fromGregorianUtc
   , getCurrentInstant
   , localJulianDay
+  , seconds
   , toIso8601
   ) where
 
@@ -56,6 +59,12 @@ instance decodeJsonInstant :: DecodeJson Instant where
 instance encodeJsonInstant :: EncodeJson Instant where
   encodeJson = Json.fromString <<< toIso8601
 
+-- Duration represents a number of seconds, but the inner value should not be
+-- exposed outside of this module. Durations are signed.
+newtype Duration = Duration Number
+derive instance eqDuration :: Eq Duration
+derive instance ordDuration :: Ord Duration
+
 fromGregorianUtc :: Int -> Int -> Int -> Int -> Int -> Int -> Instant
 fromGregorianUtc = runFn6 fromGregorianUtcImpl
 
@@ -68,25 +77,14 @@ fromIso8601 = runFn3 fromIso8601Impl Nothing Just
 addMilliseconds :: Number -> Instant -> Instant
 addMilliseconds = runFn2 addMillisecondsImpl
 
-addDays :: Int -> Instant -> Instant
-addDays n = addMilliseconds $ (Int.toNumber n) * 24.0 * 3600.0 * 1000.0
+add :: Duration -> Instant -> Instant
+add (Duration secs) = addMilliseconds (secs * 1000.0)
 
--- Return the Julian day number of the given instant in the user's local time
--- zone. Algorithm from
--- https://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
-xlocalJulianDay :: Instant -> Int
-xlocalJulianDay t =
-  let
-    y = localYear t
-    m = localMonth t
-    d = localDay t
-  in
-    0
-    + (1461 * (y + 4800 + (m - 14) / 12)) / 4
-    + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12
-    - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4
-    + d
-    - 32075
+seconds :: Number -> Duration
+seconds = Duration
+
+days :: Int -> Duration
+days n = seconds $ 24.0 * 3600.0 * Int.toNumber n
 
 -- Return the Julian day number of the given instant in the user's local time
 -- zone. Algorithm from
