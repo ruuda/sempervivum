@@ -8,6 +8,7 @@
 module Care
   ( KnownPlant
   , MatchedPlants
+  , adaptiveWateringInterval
   , match
   , nextWater
   , sortByNextWater
@@ -24,7 +25,7 @@ import Foreign.Object as Object
 import Plant (Plant (..), Plants (..))
 import Plant as Plant
 import Species (Catalog, Species (..))
-import Time (Instant)
+import Time (Duration, Instant)
 import Time as Time
 
 type KnownPlant =
@@ -53,6 +54,15 @@ match catalog (Plants plantMap) =
   in
     foldl prepend { knowns: Nil, unknowns: Nil } plants
 
+-- See also Plant.adaptiveWateringInterval.
+adaptiveWateringInterval :: KnownPlant -> Duration
+adaptiveWateringInterval kp =
+  let
+    Species species = kp.species
+    -- TODO: Adjust to the season.
+    baseInterval = Time.fromDays species.waterDaysSummer
+  in
+    Plant.adaptiveWateringInterval kp.plant baseInterval
 
 nextWater :: Instant -> KnownPlant -> Instant
 nextWater now kp =
@@ -61,7 +71,7 @@ nextWater now kp =
   in
     case Plant.lastWatered kp.plant of
       Nothing -> now
-      Just t  -> Time.add (Time.days species.waterDaysSummer) t
+      Just t  -> Time.add (Time.fromDays species.waterDaysSummer) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable

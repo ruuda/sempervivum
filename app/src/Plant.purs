@@ -8,6 +8,7 @@
 module Plant
   ( Plant (..)
   , Plants (..)
+  , adaptiveWateringInterval
   , hasSpecies
   , insertPlant
   , lastFertilized
@@ -28,13 +29,15 @@ import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
 import Data.Foldable (any)
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe (Just, Nothing))
 import Effect (Effect)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object
+import Math as Math
 
-import Time (Instant)
+import Time as Time
+import Time (Duration, Instant)
 import Util (arrayToMap, getUniqueId)
 
 newtype Plant = Plant
@@ -98,6 +101,37 @@ recordWatered at (Plant p) =
 recordFertilized :: Instant -> Plant -> Plant
 recordFertilized at (Plant p) =
   Plant $ p { fertilized = Array.sort $ Array.snoc p.fertilized at }
+
+-- Compute an adaptive watering interval, which is a weighted average of
+-- intervals between past waterings, and a base interval that acts as the
+-- starting point when there are no past waterings yet.
+adaptiveWateringInterval :: Plant -> Duration -> Duration
+adaptiveWateringInterval (Plant p) baseInterval =
+  case Array.unsnoc p.watered of
+    Nothing -> baseInterval
+    Just { init: tailWatered, last: t } ->
+      let
+        -- Weigh watering events with exponential decay with a half-life of 30
+        -- days. So the last interval gets weight 1, an interval that ended 15
+        -- days before the last one gets weight 0.707, an interval that ended 30
+        -- days ago gets weight 0.5. An interval that ended 180 days ago gets
+        -- weight 0.015.
+        lambda = (Math.log 0.5) / (30.0 * 24.0 * 3600.0)
+        weightedDiff t0 t1 =
+          let
+            weight = Math.exp $ lambda * (Time.toSeconds $ t1 `Time.subtract` t)
+            seconds = weight * (Time.toSeconds $ t1 `Time.subtract` t0)
+          in
+            { weight, seconds }
+        sumDiff x y = { seconds: x.seconds + y.seconds, weight: x.weight + y.weight }
+        -- The base interval weighs in with weight 1.0, so it will have more
+        -- relative weight when there is less data, and it will also have more
+        -- relative weight when past watering events are longer ago.
+        initial = { seconds: Time.toSeconds baseInterval, weight: 1.0 }
+        diffs = Array.zipWith weightedDiff p.watered tailWatered
+        total = Array.foldl sumDiff zero diffs
+      in
+        Time.fromSeconds $ total.seconds / total.weight
 
 -- Insert the plant, overwiting it if a plant with that id existed already.
 insertPlant :: Plant -> Plants -> Plants

@@ -9,12 +9,14 @@ module Time
   ( Duration
   , Instant
   , add
-  , days
+  , fromDays
   , fromGregorianUtc
+  , fromSeconds
   , getCurrentInstant
   , localJulianDay
-  , seconds
+  , subtract
   , toIso8601
+  , toSeconds
   ) where
 
 import Prelude
@@ -85,13 +87,16 @@ add :: Duration -> Instant -> Instant
 add (Duration secs) = addSeconds secs
 
 subtract :: Instant -> Instant -> Duration
-subtract t0 t1 = seconds $ diffSeconds t0 t1
+subtract t0 t1 = fromSeconds $ diffSeconds t0 t1
 
-seconds :: Number -> Duration
-seconds = Duration
+fromSeconds :: Number -> Duration
+fromSeconds = Duration
 
-days :: Int -> Duration
-days n = seconds $ 24.0 * 3600.0 * Int.toNumber n
+fromDays :: Int -> Duration
+fromDays n = fromSeconds $ 24.0 * 3600.0 * Int.toNumber n
+
+toSeconds :: Duration -> Number
+toSeconds (Duration secs) = secs
 
 -- Return the Julian day number of the given instant in the user's local time
 -- zone. Algorithm from
