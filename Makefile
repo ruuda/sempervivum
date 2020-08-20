@@ -22,7 +22,7 @@ assets: assets/*.svg app/*.css app/*.json out/species.json
 	cp assets/droplet.svg out/assets/droplet.svg
 	cp assets/plant.svg out/assets/plant.svg
 
-out/species.json: $(UTIL_BIN_PATH)
+out/species.json: $(UTIL_BIN_PATH) species/*.toml
 	# Convert species toml files into a single json file using the utility.
 	mkdir -p out
 	$(UTIL_BIN_PATH) > out/species.json
