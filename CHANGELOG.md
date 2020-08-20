@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.3
+
+Released 2020-08-20.
+
+ * Add Philodendron White Measure.
+
 ## 2.2
 
 Released 2020-07-11.

@@ -48,6 +48,7 @@ onActivate = do
   _wasDeleted <- Cache.delete "v1.0"
   _wasDeleted <- Cache.delete "v2.0"
   _wasDeleted <- Cache.delete "v2.1"
+  _wasDeleted <- Cache.delete "v2.2"
   Console.log "SW: Activation complete"
 
 onFetch :: Request -> Aff Response
