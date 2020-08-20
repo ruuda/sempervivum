@@ -1,0 +1,25 @@
+name = "Philodendron White Measure"
+aliases = ["Philodendron Birkin"]
+# Source: https://www.intratuin.nl/philodendron-philodendron-white-measure-d-11-h-30.html
+# Source: https://plantophiles.com/plant-care/philodendron-birkin
+# Source: https://www.123planten.nl/verzorging/tips-philodendron
+# Missing information copied from philodendron_scandens.toml.
+water_days_summer = 7
+water_days_winter = 8
+water_remark =
+  """\
+  Keep soil lightly moist, not soggy. \
+  Allow the top centimeter of soil to dry out before watering again. \
+  Do not allow water to accumulate in the pot. \
+  In winter, allow the soil to dry out fully before watering again. \
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize when the plant is growing."
+light = "Partial shade, bright indirect light"
+light_remark =
+  """\
+  Too much direct sunlight can cause the leaves to fall off, \
+  too little light causes the leaves to grow further apart, \
+  and the stem to sag.\
+  """
