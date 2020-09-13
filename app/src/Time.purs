@@ -14,6 +14,7 @@ module Time
   , fromSeconds
   , getCurrentInstant
   , localJulianDay
+  , localMonth
   , subtract
   , toIso8601
   , toSeconds

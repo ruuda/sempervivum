@@ -48,10 +48,10 @@ instance decodeJsonSpecies :: DecodeJson Species where
     obj                 <- Json.decodeJson json
     name                <- Json.getField obj "name"
     waterDaysSummer     <- Json.getField obj "water_days_summer"
-    waterDaysWinter     <- Json.getField obj "water_days_summer"
+    waterDaysWinter     <- Json.getField obj "water_days_winter"
     waterRemark         <- Json.getField obj "water_remark"
     fertilizeDaysSummer <- Json.getField obj "fertilize_days_summer"
-    fertilizeDaysWinter <- Json.getField obj "fertilize_days_summer"
+    fertilizeDaysWinter <- Json.getField obj "fertilize_days_winter"
     fertilizeRemark     <- Json.getField obj "fertilize_remark"
     light               <- Json.getField obj "light"
     pure $ Species

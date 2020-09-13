@@ -11,6 +11,7 @@ module Care
   , adaptiveWaterDaysRange
   , match
   , nextWater
+  , seasonalFertilizeDays
   , sortByNextWater
   ) where
 
@@ -55,20 +56,81 @@ match catalog (Plants plantMap) =
   in
     foldl prepend { knowns: Nil, unknowns: Nil } plants
 
--- See also Plant.adaptiveWateringInterval.
-adaptiveWateringInterval :: KnownPlant -> Duration
-adaptiveWateringInterval kp =
+-- Interpolate between a winter and summer value, depending on the time of the
+-- year. These are just some made-up numbers, but that is the case for the
+-- values entering into the equation as well. This is no substitute for written
+-- instructions, or actually looking at the plant.
+interpolateSeason :: Instant -> Duration -> Duration -> Duration
+interpolateSeason at winter summer =
+  let
+    -- The local month depends on the user's time zone, but we only care very
+    -- roughly about the time of the year, so an additional 24 hours more or
+    -- less is not important.
+    amountSummer = case Time.localMonth at of
+      1 -> 0.0
+      2 -> 0.0
+      3 -> 0.5
+      4 -> 0.8
+      5 -> 1.0
+      6 -> 1.0
+      7 -> 1.0
+      8 -> 1.0
+      9 -> 0.8
+      10 -> 0.5
+      11 -> 0.0
+      12 -> 0.0
+      _  -> 0.0 -- Impossible
+    wsecs = Time.toSeconds winter
+    ssecs = Time.toSeconds summer
+  in
+    Time.fromSeconds $ (1.0 - amountSummer) * wsecs + amountSummer * ssecs
+
+-- Interpolate between the winter and summer watering interval.
+seasonalWateringInterval :: Instant -> KnownPlant -> Duration
+seasonalWateringInterval at kp =
   let
     Species species = kp.species
-    -- TODO: Adjust to the season.
-    baseInterval = Time.fromDays species.waterDaysSummer
+  in
+    interpolateSeason at
+      (Time.fromDays species.waterDaysWinter)
+      (Time.fromDays species.waterDaysSummer)
+
+-- Interpolate between the winter and summer fertilization interval.
+seasonalFertilizeInterval :: Instant -> KnownPlant -> Duration
+seasonalFertilizeInterval at kp =
+  let
+    Species species = kp.species
+  in
+    interpolateSeason at
+      (Time.fromDays species.fertilizeDaysWinter)
+      (Time.fromDays species.fertilizeDaysSummer)
+
+seasonalFertilizeDays :: Instant -> KnownPlant -> Int
+seasonalFertilizeDays at kp =
+  let
+    seconds = Time.toSeconds $ seasonalFertilizeInterval at kp
+  in
+    Int.ceil $ seconds / (3600.0 * 24.0)
+
+-- See also Plant.adaptiveWateringInterval.
+adaptiveWateringInterval :: Instant -> KnownPlant -> Duration
+adaptiveWateringInterval now kp =
+  let
+    -- Prefer to measure at the last watered time, to ensure that the ordering
+    -- of when plants need to be watered is stable across different dates.
+    at = case Plant.lastWatered kp.plant of
+      Nothing -> now
+      Just t  -> t
+    baseInterval = seasonalWateringInterval at kp
   in
     Plant.adaptiveWateringInterval kp.plant baseInterval
 
-adaptiveWaterDaysRange :: KnownPlant -> { lower :: Int, upper :: Int }
-adaptiveWaterDaysRange kp =
+-- Return the watering interval, adapting to previous watering. Returns the
+-- result as a range.
+adaptiveWaterDaysRange :: Instant -> KnownPlant -> { lower :: Int, upper :: Int }
+adaptiveWaterDaysRange at kp =
   let
-    seconds = Time.toSeconds $ adaptiveWateringInterval kp
+    seconds = Time.toSeconds $ adaptiveWateringInterval at kp
     days = seconds / (3600.0 * 24.0)
     lower = Int.floor days
     preUpper = Int.ceil days
@@ -83,7 +145,7 @@ nextWater now kp =
   in
     case Plant.lastWatered kp.plant of
       Nothing -> now
-      Just t  -> Time.add (adaptiveWateringInterval kp) t
+      Just t  -> Time.add (adaptiveWateringInterval now kp) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable

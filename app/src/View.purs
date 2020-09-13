@@ -199,7 +199,8 @@ renderDetails now knownPlant =
   let
     Plant plant = knownPlant.plant
     Species species = knownPlant.species
-    waterDays = Care.adaptiveWaterDaysRange knownPlant
+    waterDays = Care.adaptiveWaterDaysRange now knownPlant
+    fertilizeDays = Care.seasonalFertilizeDays now knownPlant
   in do
     Html.p $ do
       Html.addClass "multi"
@@ -211,7 +212,7 @@ renderDetails now knownPlant =
     renderSpanP "water" $
       " every " <> (show waterDays.lower) <> "–" <> (show waterDays.upper) <> " days"
     renderSpanP "fertilize" $
-      " every " <> (show species.fertilizeDaysSummer) <> " days"
+      " every " <> (show fertilizeDays) <> " days"
 
     infoBlock <- Html.div $ do
       renderInfoBlock now knownPlant
