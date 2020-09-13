@@ -49,6 +49,7 @@ onActivate = do
   void $ Cache.delete "v2.0"
   void $ Cache.delete "v2.1"
   void $ Cache.delete "v2.2"
+  void $ Cache.delete "v2.3"
   Console.log "SW: Activation complete"
 
 onFetch :: Request -> Aff Response

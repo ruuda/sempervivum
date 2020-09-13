@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.4
+
+Released 2020-09-13.
+
+ * Adjust watering and fertilization interval to the season.
+
 ## 2.3
 
 Released 2020-08-20.
