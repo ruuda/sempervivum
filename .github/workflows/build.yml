@@ -27,7 +27,7 @@ jobs:
           key: "psc-package-${{ hashFiles('app/psc-package.json', 'nixpkgs-pinned.nix') }}"
           restore-keys: "psc-package-"
 
-      - uses: "cachix/install-nix-action@v10"
+      - uses: "cachix/install-nix-action@v11"
         with:
           nix_path: "nixpkgs=channel:nixos-unstable"
 
