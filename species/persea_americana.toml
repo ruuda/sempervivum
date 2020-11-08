@@ -1,0 +1,15 @@
+name = "Persea americana"
+aliases = ["Avocado"]
+# Source: https://www.thespruce.com/grow-avocados-indoors-1902590
+
+water_days_summer = 3
+water_days_winter = 4
+water_remark =
+  """\
+  Keep the soil moist. \
+  Leaves turning yellow are a sign of too much water.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize abundantly during the growing season." 
+light = "Full sun"
