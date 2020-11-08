@@ -8,6 +8,13 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.5
+
+Release 2020-11-08.
+
+ * Tune adaptive watering interval parameters.
+ * Add avocado.
+
 ## 2.4
 
 Released 2020-09-13.
