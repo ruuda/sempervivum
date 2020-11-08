@@ -113,12 +113,12 @@ adaptiveWateringInterval (Plant p) baseInterval =
     Just watered ->
       let
         t = NonEmpty.last watered
-        -- Weigh watering events with exponential decay with a half-life of 30
-        -- days. So the last interval gets weight 1, an interval that ended 15
-        -- days before the last one gets weight 0.707, an interval that ended 30
-        -- days ago gets weight 0.5. An interval that ended 180 days ago gets
-        -- weight 0.015.
-        lambda = (Math.log 0.5) / (30.0 * 24.0 * 3600.0)
+        -- Weigh watering events with exponential decay with a half-life of 15
+        -- days. So the last interval gets weight 1, an interval that ended 7
+        -- days before the last one gets weight 0.72, an interval that ended 30
+        -- days ago gets weight 0.25. An interval that ended 100 days ago gets
+        -- weight 0.01.
+        lambda = (Math.log 0.5) / (15.0 * 24.0 * 3600.0)
         weightedDiff t0 t1 =
           let
             weight = Math.exp $ lambda * (Time.toSeconds $ t `Time.subtract` t1)
