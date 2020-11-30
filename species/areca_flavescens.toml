@@ -13,8 +13,11 @@ water_remark =
   Mist often, daily during winter if the air is dry.\
   """
 # Once source says add fertilizer in summer every time you water, the other
-# source says add fertilizer every 14 days. I'll go with the lazy option.
-fertilize_days_summer = 14
+# source says add fertilizer every 14 days. I'll go with the lazy option of once
+# every 14 days. Then I got a large Areca, and the care instructions card said
+# to fertilize every 60 days. Since many sources warn against over-
+# fertilization, I’ll update to once every 3 weeks.
+fertilize_days_summer = 21
 fertilize_days_winter = 180
 fertilize_remark = "Don’t fertilize in winter."
 light = "Bright, no direct sunlight"
