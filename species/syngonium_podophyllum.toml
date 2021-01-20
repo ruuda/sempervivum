@@ -5,8 +5,7 @@ name = "Syngonium podophyllum"
 # Source: https://dier-en-natuur.infonu.nl/bloemen-en-planten/181550-syngonium-kamerplant-met-pijlvormige-bladeren.html
 water_days_summer = 2
 water_days_winter = 5
-water_remark =
-  """\
+water_remark = """\
   Keep the soil slightly moist, but not wet. \
   Avoid cold water. Demineralized water can be beneficial.\
   """
