@@ -1,0 +1,22 @@
+name = "Syngonium podophyllum"
+# Source: https://www.plantsome.nl/products/syngonium-pixie-xs
+# Source: https://www.intratuin.nl/syngonium-syngonium-pixie-d-12-cm.html
+# Source: https://www.tuinadvies.nl/plantengids/18745/syngonium-podophyllum-white-butterfly
+# Source: https://dier-en-natuur.infonu.nl/bloemen-en-planten/181550-syngonium-kamerplant-met-pijlvormige-bladeren.html
+water_days_summer = 2
+water_days_winter = 5
+water_remark =
+  """\
+  Keep the soil slightly moist, but not wet. \
+  Avoid cold water. Demineralized water can be beneficial.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Fertilize once every two weeks in summer. \
+  Pale leaves are a sign of too little fertilizer.\
+  """
+light = """\
+  Light, but avoid direct sunlight. \
+  The whiter the leaves, the more light it needs.\
+  """
