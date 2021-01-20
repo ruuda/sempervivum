@@ -8,6 +8,13 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.6
+
+Released 2021-01-20.
+
+ * Update Areca fertilization interval.
+ * Add Syngonium podophyllum.
+
 ## 2.5
 
 Release 2020-11-08.
