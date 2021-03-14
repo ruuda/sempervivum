@@ -144,6 +144,15 @@ exports.addEventListenerImpl = function(eventName, callback, element) {
   }
 }
 
+exports.addTouchEventListenerImpl = function(eventName, callback, element) {
+  return function() {
+    element.addEventListener(eventName, function(evt) {
+      callback(evt.changedTouches)();
+      return false;
+    });
+  }
+}
+
 exports.scrollIntoView = function(element) {
   return function() {
     return element.scrollIntoView();

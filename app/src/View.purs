@@ -179,6 +179,8 @@ renderPlantItem appState now knownPlant =
           true  -> Aff.launchAff_ collapse
           false -> Aff.launchAff_ expand
 
+        installSwipeHandlers outer
+
         pure statusLine
 
       deleteButton <- Html.button $ do
@@ -296,6 +298,28 @@ installClickHandlers appState knownPlant collapse elements =
   in do
     local (const elements.buttonWatered) $ Html.onClick watered
     local (const elements.buttonWateredFertilized) $ Html.onClick wateredFertilized
+
+-- Install the swipe handlers on the plant header, to add or remove .swiped to
+-- the outer container, to reveal or hide the delete button.
+installSwipeHandlers :: Element -> Html Unit
+installSwipeHandlers outer = do
+  lastTouch <- liftEffect $ Var.create { pageX: 0.0, pageY: 0.0 }
+
+  Html.onTouchStart $ case _ of
+    [touch] -> Var.set lastTouch touch
+    _       -> pure unit
+
+  Html.onTouchMove $ case _ of
+    [touch] -> do
+      prev <- Var.get lastTouch
+      let dx = touch.pageX - prev.pageX
+      when (dx < -20.0) $ do
+        Var.set lastTouch touch
+        Html.withElement outer $ Html.addClass "swiped"
+      when (dx > 20.0) $ do
+        Var.set lastTouch touch
+        Html.withElement outer $ Html.removeClass "swiped"
+    _ -> pure unit
 
 renderSearchResult :: AppState -> Element -> Species -> Html Unit
 renderSearchResult appState plantList (Species s) = Html.li $ do
