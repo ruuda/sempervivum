@@ -25,8 +25,8 @@ out/species.json: util/mkspecies species/*.toml
 	mkdir -p out
 	util/mkspecies > out/species.json
 
-util/mkspecies: util/src/*.hs
-	ghc util/src/Main.hs -o util/mkspecies
+util/mkspecies: util/mkspecies.hs
+	ghc util/mkspecies.hs
 
 app/output/app.js: app/src/*.purs app/src/*.js
 	$(MAKE) -C app output/app.js output/sw.js
