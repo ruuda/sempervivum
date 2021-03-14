@@ -163,6 +163,10 @@ adaptiveWateringInterval (Plant p) baseInterval =
 insertPlant :: Plant -> Plants -> Plants
 insertPlant (Plant p) (Plants ps) = Plants $ Object.insert p.id (Plant p) ps
 
--- Return wether a plant of the given species is part of the collection.
+-- Return wether a non-deleted plant of the given species is part of the collection.
 hasSpecies :: String -> Plants -> Boolean
-hasSpecies speciesName (Plants ps) = any (case _ of Plant p -> p.species == speciesName) ps
+hasSpecies speciesName (Plants ps) =
+  let
+    isMatch (Plant p) = p.species == speciesName && not isDeleted (Plant p)
+  in
+    any isMatch ps
