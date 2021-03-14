@@ -13,13 +13,6 @@ jobs:
     steps:
       - uses: "actions/checkout@v2"
 
-      - name: "Cache Stack"
-        uses: "actions/cache@v2.0.0"
-        with:
-          path: "~/.stack/snapshots"
-          key: "stack-${{ hashFiles('util/stack.yaml*', 'nixpkgs-pinned.nix') }}"
-          restore-keys: "stack-"
-
       - name: "Cache PureScript"
         uses: "actions/cache@v2.0.0"
         with:
