@@ -22,7 +22,7 @@ import Prelude
 
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Core (jsonEmptyObject)
-import Data.Argonaut.Decode (decodeJson, getField) as Json
+import Data.Argonaut.Decode (decodeJson, getField, getFieldOptional) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Argonaut.Encode.Class (class EncodeJson)
@@ -46,6 +46,9 @@ newtype Plant = Plant
   , species    :: String
   , watered    :: Array Instant
   , fertilized :: Array Instant
+    -- The time at which the plant was deleted. This is a list, so we could
+    -- support restore in the future.
+  , deleted    :: Array Instant
   }
 
 newtype Plants = Plants (Object Plant)
@@ -57,7 +60,12 @@ instance decodeJsonPlant :: DecodeJson Plant where
     species    <- Json.getField obj "species"
     watered    <- Array.sort <$> Json.getField obj "watered"
     fertilized <- Array.sort <$> Json.getField obj "fertilized"
-    pure $ Plant { id, species, watered, fertilized }
+    -- Deletes were added later; in case they are not present in the data,
+    -- assume an empty list
+    deleted <- Json.getFieldOptional obj "deleted" >>= case _ of
+      Just deletes -> pure $ Array.sort deletes
+      Nothing      -> pure []
+    pure $ Plant { id, species, watered, fertilized, deleted }
 
 instance encodeJsonPlant :: EncodeJson Plant where
   encodeJson (Plant plant) =
@@ -65,6 +73,7 @@ instance encodeJsonPlant :: EncodeJson Plant where
     ~> "species" := plant.species
     ~> "watered" := plant.watered
     ~> "fertilized" := plant.fertilized
+    ~> "deleted" := plant.deleted
     ~> jsonEmptyObject
 
 instance encodeJsonPlants :: EncodeJson Plants where
@@ -87,6 +96,7 @@ newPlant speciesName = do
     , species: speciesName
     , watered: []
     , fertilized: []
+    , deleted: []
     }
 
 lastWatered :: Plant -> Maybe Instant
