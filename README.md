@@ -11,9 +11,9 @@ version is hosted at https://ruuda.github.io/sempervivum/.
 
 The client is written in PureScript and builds with [psc-package][psc-package].
 [Closure Compiler][closure] takes care of bundling and minification. There is
-also a Haskell program that bundles the species catalog into a json file. That
-program builds with [Stack][stack]. You can set up a local development
-environment with all dependencies with [Nix][nix].
+also a Haskell program that bundles the species catalog into a json file. It
+builds with GHC, and requires a few Hakell packages to be available. You can set
+up a local development environment with all dependencies with [Nix][nix].
 
     # Enter a shell with development dependencies available.
     nix run --command $SHELL
@@ -42,7 +42,6 @@ environment with all dependencies with [Nix][nix].
    neighboring rights to this work.
 
 [closure]:     https://github.com/google/closure-compiler
-[stack]:       https://docs.haskellstack.org/en/stable/README/
 [psc-package]: https://github.com/purescript/psc-package
 [nix]:         https://nixos.org/nix/
 [apache2]:     https://www.apache.org/licenses/LICENSE-2.0
