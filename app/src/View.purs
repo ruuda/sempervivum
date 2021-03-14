@@ -303,23 +303,36 @@ installClickHandlers appState knownPlant collapse elements =
 -- the outer container, to reveal or hide the delete button.
 installSwipeHandlers :: Element -> Html Unit
 installSwipeHandlers outer = do
-  lastTouch <- liftEffect $ Var.create { pageX: 0.0, pageY: 0.0 }
+  lastPos <- liftEffect $ Var.create { pageX: 0.0, pageY: 0.0 }
+  isOpen <- liftEffect $ Var.create false
 
   Html.onTouchStart $ case _ of
-    [touch] -> Var.set lastTouch touch
+    [touch] -> Var.set lastPos touch
     _       -> pure unit
 
   Html.onTouchMove $ case _ of
     [touch] -> do
-      prev <- Var.get lastTouch
+      prev <- Var.get lastPos
       let dx = touch.pageX - prev.pageX
       when (dx < -20.0) $ do
-        Var.set lastTouch touch
+        Var.set lastPos touch
         Html.withElement outer $ Html.addClass "swiped"
       when (dx > 20.0) $ do
-        Var.set lastTouch touch
+        Var.set lastPos touch
         Html.withElement outer $ Html.removeClass "swiped"
     _ -> pure unit
+
+  -- On desktop, instead of the swipe, which creates problems with selecting
+  -- text, and where swiping isn't natural anyway, use right click to toggle
+  -- instead.
+  Html.onRightClick $ do
+    open <- Var.get isOpen
+    if open then do
+      Var.set isOpen false
+      Html.withElement outer $ Html.removeClass "swiped"
+    else do
+      Var.set isOpen true
+      Html.withElement outer $ Html.addClass "swiped"
 
 renderSearchResult :: AppState -> Element -> Species -> Html Unit
 renderSearchResult appState plantList (Species s) = Html.li $ do

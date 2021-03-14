@@ -153,6 +153,22 @@ exports.addTouchEventListenerImpl = function(eventName, callback, element) {
   }
 }
 
+exports.addRightClickListenerImpl = function(callback, element) {
+  return function() {
+    element.addEventListener('mousedown', function(evt) {
+      if (evt.button == 2) {
+        callback();
+      }
+      return false;
+    });
+    // Also prevent the context menu, now that we added a custom behavior for
+    // right click.
+    element.addEventListener('contextmenu', function(evt) {
+      evt.preventDefault();
+    });
+  }
+}
+
 exports.scrollIntoView = function(element) {
   return function() {
     return element.scrollIntoView();

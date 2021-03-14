@@ -8,10 +8,11 @@
 
 module Dom
   ( Element
-  , Touch
+  , Position
   , addClass
   , addEventListener
   , addTouchEventListener
+  , addRightClickListener
   , appendChild
   , appendText
   , assumeElementById
@@ -41,7 +42,7 @@ import Data.Maybe (Maybe (..))
 
 import File (File)
 
-type Touch = { pageX :: Number, pageY :: Number }
+type Position = { pageX :: Number, pageY :: Number }
 
 foreign import data Element :: Type
 
@@ -58,7 +59,8 @@ foreign import unsetOnError :: Element -> Effect Unit
 
 foreign import addClassImpl :: Fn2 String Element (Effect Unit)
 foreign import addEventListenerImpl :: Fn3 String (Effect Unit) Element (Effect Unit)
-foreign import addTouchEventListenerImpl :: Fn3 String (Array Touch -> Effect Unit) Element (Effect Unit)
+foreign import addTouchEventListenerImpl :: Fn3 String (Array Position -> Effect Unit) Element (Effect Unit)
+foreign import addRightClickListenerImpl :: Fn2 (Effect Unit) Element (Effect Unit)
 foreign import appendChildImpl :: Fn2 Element Element (Effect Unit)
 foreign import appendTextImpl :: Fn2 String Element (Effect Unit)
 foreign import getElementByIdImpl :: Fn3 String (Element -> Maybe Element) (Maybe Element) (Effect (Maybe Element))
@@ -106,5 +108,8 @@ setOnError handler element = runFn2 setOnErrorImpl handler element
 addEventListener :: String -> Effect Unit -> Element -> Effect Unit
 addEventListener eventName callback element = runFn3 addEventListenerImpl eventName callback element
 
-addTouchEventListener :: String -> (Array Touch -> Effect Unit) -> Element -> Effect Unit
+addTouchEventListener :: String -> (Array Position -> Effect Unit) -> Element -> Effect Unit
 addTouchEventListener eventName callback element = runFn3 addTouchEventListenerImpl eventName callback element
+
+addRightClickListener :: Effect Unit -> Element -> Effect Unit
+addRightClickListener callback element = runFn2 addRightClickListenerImpl callback element

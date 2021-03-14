@@ -26,6 +26,7 @@ module Html
   , onInput
   , onTouchMove
   , onTouchStart
+  , onRightClick
   , p
   , removeClass
   , setDisabled
@@ -40,7 +41,7 @@ module Html
   ) where
 
 import Control.Monad.Reader.Trans (ReaderT (..))
-import Dom (Element, Touch)
+import Dom (Element, Position)
 import Dom as Dom
 import Effect (Effect)
 import Prelude
@@ -90,6 +91,10 @@ onClick :: Effect Unit -> Html Unit
 onClick callback = ReaderT $ \container ->
   Dom.addEventListener "click" callback container
 
+onRightClick :: Effect Unit -> Html Unit
+onRightClick callback = ReaderT $ \container ->
+  Dom.addRightClickListener callback container
+
 onInput :: (String -> Effect Unit) -> Html Unit
 onInput callback = ReaderT $ \container ->
   let
@@ -99,11 +104,11 @@ onInput callback = ReaderT $ \container ->
   in
     Dom.addEventListener "input" getValueAndCall container
 
-onTouchStart :: (Array Touch -> Effect Unit) -> Html Unit
+onTouchStart :: (Array Position -> Effect Unit) -> Html Unit
 onTouchStart callback = ReaderT $ \container ->
   Dom.addTouchEventListener "touchstart" callback container
 
-onTouchMove :: (Array Touch -> Effect Unit) -> Html Unit
+onTouchMove :: (Array Position -> Effect Unit) -> Html Unit
 onTouchMove callback = ReaderT $ \container ->
   Dom.addTouchEventListener "touchmove" callback container
 
