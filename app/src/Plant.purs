@@ -62,8 +62,10 @@ instance decodeJsonPlant :: DecodeJson Plant where
     species    <- Json.getField obj "species"
     watered    <- Array.sort <$> Json.getField obj "watered"
     fertilized <- Array.sort <$> Json.getField obj "fertilized"
-    -- Deletes were added later; in case they are not present in the data,
-    -- assume an empty list
+    -- Deletes were added in version 2.7; in case they are not present in the
+    -- data, assume an empty list. We could remove this fallback at some point
+    -- in the future, when pre-2.7 versions should no longer be in use, but for
+    -- now, it's not harmful either.
     deleted <- Json.getFieldOptional obj "deleted" >>= case _ of
       Just deletes -> pure $ Array.sort deletes
       Nothing      -> pure []

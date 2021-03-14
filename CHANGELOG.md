@@ -8,6 +8,15 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.7
+
+Released 2021-03-14.
+
+ * Add support for deleting plants. Swipe left to reveal the delete button on
+   mobile, or right-click on desktop.
+ * Simplify how the species utility is built. This removes the need for Stack,
+   but it makes using Nix practically a requirement.
+
 ## 2.6
 
 Released 2021-01-20.
