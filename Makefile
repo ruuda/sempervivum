@@ -1,5 +1,3 @@
-UTIL_BIN_PATH = util/.stack-work/dist/x86_64-linux-nix/Cabal-2.4.0.1/build/sempervivum/sempervivum
-
 out: app/output/app.min.js app/output/sw.min.js assets app/*.html
 	mkdir -p out
 	# In the source we use the non-minified versions for faster development, but
@@ -22,13 +20,13 @@ assets: assets/*.svg app/*.css app/*.json out/species.json
 	cp assets/droplet.svg out/assets/droplet.svg
 	cp assets/plant.svg out/assets/plant.svg
 
-out/species.json: $(UTIL_BIN_PATH) species/*.toml
+out/species.json: util/mkspecies species/*.toml
 	# Convert species toml files into a single json file using the utility.
 	mkdir -p out
-	$(UTIL_BIN_PATH) > out/species.json
+	util/mkspecies > out/species.json
 
-$(UTIL_BIN_PATH): util/src/*.hs
-	cd util && stack build
+util/mkspecies: util/src/*.hs
+	ghc util/src/Main.hs -o util/mkspecies
 
 app/output/app.js: app/src/*.purs app/src/*.js
 	$(MAKE) -C app output/app.js output/sw.js

@@ -102,10 +102,10 @@ readSingleEntry dirname fname =
               <> "Error in " <> (Text.pack fname) <> ":\n"
               <> "  File name does not match species '" <> name species <> "'.\n"
               <> "  Expected file to be named '" <> (Text.pack $ slug species) <> ".toml'."
-        Left msg ->
+        Left msgs ->
           Left $ mempty
             <> "Failed to parse " <> (Text.pack fname) <> ":\n"
-            <> "  " <> Toml.prettyException msg
+            <> "  " <> Toml.prettyTomlDecodeErrors msgs
   in
     fmap decodeBytes $ ByteString.readFile (dirname </> fname)
 

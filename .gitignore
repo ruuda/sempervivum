@@ -6,7 +6,9 @@
 out
 
 # Haskell build files.
-util/.stack-work
+util/mkspecies
+*.hi
+*.o
 
 # Purescript build files.
 app/output
