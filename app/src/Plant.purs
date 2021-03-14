@@ -9,6 +9,7 @@ module Plant
   ( Plant (..)
   , Plants (..)
   , adaptiveWateringInterval
+  , delete
   , hasSpecies
   , insertPlant
   , isDeleted
@@ -119,6 +120,10 @@ recordWatered at (Plant p) =
 recordFertilized :: Instant -> Plant -> Plant
 recordFertilized at (Plant p) =
   Plant $ p { fertilized = Array.sort $ Array.snoc p.fertilized at }
+
+delete :: Instant -> Plant -> Plant
+delete at (Plant p) =
+  Plant $ p { deleted = Array.sort $ Array.snoc p.deleted at }
 
 -- Compute an adaptive watering interval, which is a weighted average of
 -- intervals between past waterings, and a base interval that acts as the

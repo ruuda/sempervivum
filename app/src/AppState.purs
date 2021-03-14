@@ -13,6 +13,7 @@ module AppState
   , importJson
   , insertPlant
   , open
+  , postDeleted
   , postWatered
   , postWateredFertilized
   ) where
@@ -112,6 +113,16 @@ postWateredFertilized appState now plant =
   in do
     insertPlant appState newPlant
     pure newPlant
+
+-- Record a delete event for the given plant at the given time, then replace
+-- the plant in the app state, return the new deleted plant.
+postDeleted :: AppState -> Instant -> Plant -> Aff Plant
+postDeleted appState now plant =
+  let
+    deletedPlant = Plant.delete now plant
+  in do
+    insertPlant appState deletedPlant
+    pure deletedPlant
 
 getPlants :: AppState -> Effect Plants
 getPlants appState = Var.get appState.plants

@@ -163,7 +163,8 @@ renderPlantItem appState now knownPlant =
           liftEffect $ Html.withElement outer $ Html.addClass "deleted"
           Aff.delay (Milliseconds 60.0)
           liftEffect $ Html.withElement outer $ Html.remove
-          -- TODO: Delete save in state.
+          deleteTime <- liftEffect $ Time.getCurrentInstant
+          void $ AppState.postDeleted appState deleteTime (Plant plant)
 
       statusLine <- Html.div $ do
         Html.setId plant.id
