@@ -181,6 +181,11 @@ renderPlantItem appState now knownPlant =
 
         pure statusLine
 
+      deleteButton <- Html.button $ do
+        Html.addClass "delete"
+        Html.text "delete"
+        ask
+
       detailElements <- Html.div $ do
         Html.addClass "plant-details"
         renderDetails now knownPlant

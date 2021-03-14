@@ -66,6 +66,10 @@ h2 {
   font-size: 1rem;
 }
 
+.plant-item {
+  position: relative;
+}
+
 .plant {
   background-color: white;
   border-radius: 0.25em;
@@ -195,6 +199,23 @@ button img {
 
 .faded img {
   transform: scale(0, 0);
+}
+
+.swiped .plant {
+  transform: translate(-6em, 0em);
+}
+
+button.delete {
+  color: var(--old-burgrundy);
+  position: absolute;
+  top: 0;
+  right: -1em;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+.swiped button.delete {
+  opacity: 1;
 }
 
 input {
