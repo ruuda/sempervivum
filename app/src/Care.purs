@@ -44,15 +44,18 @@ match :: Catalog -> Plants -> MatchedPlants
 match catalog (Plants plantMap) =
   let
     plants = Object.values plantMap
-    prepend acc (Plant p) = case Object.lookup p.species catalog of
-      Just species ->
-        let
-          known = { plant: Plant p, species: species }
-        in
-          acc { knowns = known : acc.knowns }
+    prepend acc (Plant p) = if Plant.isDeleted (Plant p)
+      -- Drop deleted plants entirely.
+      then acc
+      else case Object.lookup p.species catalog of
+        Just species ->
+          let
+            known = { plant: Plant p, species: species }
+          in
+            acc { knowns = known : acc.knowns }
 
-      Nothing ->
-        acc { unknowns = (Plant p) : acc.unknowns }
+        Nothing ->
+          acc { unknowns = (Plant p) : acc.unknowns }
   in
     foldl prepend { knowns: Nil, unknowns: Nil } plants
 

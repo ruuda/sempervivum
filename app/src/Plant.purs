@@ -11,11 +11,12 @@ module Plant
   , adaptiveWateringInterval
   , hasSpecies
   , insertPlant
+  , isDeleted
   , lastFertilized
   , lastWatered
   , newPlant
-  , recordWatered
   , recordFertilized
+  , recordWatered
   ) where
 
 import Prelude
@@ -98,6 +99,12 @@ newPlant speciesName = do
     , fertilized: []
     , deleted: []
     }
+
+-- For now, a plant is deleted when it contains a deleted timestamp. In the
+-- future, we could support restores, and for that we would interleave deletes
+-- and restores, and see whether the most recent event is a restore or delete.
+isDeleted :: Plant -> Boolean
+isDeleted (Plant p) = not $ Array.null p.deleted
 
 lastWatered :: Plant -> Maybe Instant
 lastWatered (Plant p) = Array.last p.watered
