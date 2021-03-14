@@ -158,6 +158,13 @@ renderPlantItem appState now knownPlant =
           Aff.delay (Milliseconds 60.0)
           liftEffect $ Html.withElement outer $ Html.removeClass "expanded"
 
+        delete :: Aff Unit
+        delete = do
+          liftEffect $ Html.withElement outer $ Html.addClass "deleted"
+          Aff.delay (Milliseconds 60.0)
+          liftEffect $ Html.withElement outer $ Html.remove
+          -- TODO: Delete save in state.
+
       statusLine <- Html.div $ do
         Html.setId plant.id
         Html.addClass "plant"
@@ -183,10 +190,10 @@ renderPlantItem appState now knownPlant =
 
         pure statusLine
 
-      deleteButton <- Html.button $ do
+      Html.button $ do
         Html.addClass "delete"
         Html.text "delete"
-        ask
+        Html.onClick $ Aff.launchAff_ delete
 
       detailElements <- Html.div $ do
         Html.addClass "plant-details"

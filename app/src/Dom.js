@@ -28,6 +28,12 @@ exports.clearElement = function(container) {
   }
 }
 
+exports.removeElement = function(element) {
+  return function() {
+    element.remove();
+  }
+}
+
 exports.clickElement = function(element) {
   return function() {
     element.click();

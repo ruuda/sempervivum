@@ -28,6 +28,7 @@ module Html
   , onTouchStart
   , onRightClick
   , p
+  , remove
   , removeClass
   , setDisabled
   , setDownload
@@ -54,6 +55,9 @@ withElement container (ReaderT f) = f container
 
 clear :: Html Unit
 clear = ReaderT $ \container -> Dom.clearElement container
+
+remove :: Html Unit
+remove = ReaderT $ \container -> Dom.removeElement container
 
 node :: forall a. String -> Html a -> Html a
 node tagName (ReaderT children) =

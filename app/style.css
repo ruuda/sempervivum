@@ -68,6 +68,12 @@ h2 {
 
 .plant-item {
   position: relative;
+  transition: opacity 0.04s ease-in, transform 0.04s ease-in;
+}
+
+.plant-item.deleted {
+  transform: scale(0.68);
+  opacity: 0;
 }
 
 .plant {
@@ -206,7 +212,6 @@ button img {
 }
 
 button.delete {
-  color: var(--old-burgrundy);
   position: absolute;
   top: 0;
   right: -1em;

@@ -25,6 +25,7 @@ module Dom
   , getElementById
   , getLocationPathName
   , removeClass
+  , removeElement
   , setAttribute
   , setDisabled
   , setDownload
@@ -54,6 +55,7 @@ foreign import createElement :: String -> Effect Element
 foreign import getFile :: Element -> Effect File
 foreign import getLocationPathName :: Effect String
 foreign import getValue :: Element -> Effect String
+foreign import removeElement :: Element -> Effect Unit
 foreign import scrollIntoView :: Element -> Effect Unit
 foreign import unsetOnError :: Element -> Effect Unit
 
