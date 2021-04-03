@@ -17,6 +17,7 @@ import Data.Int as Int
 import Data.List (List (..))
 import Data.List as List
 import Data.Maybe (Maybe (..))
+import Data.Ord (abs)
 import Data.String.Common as String
 import Data.String.Pattern (Pattern (..), Replacement (..))
 import Data.Time.Duration (Milliseconds (..))
@@ -322,10 +323,11 @@ installSwipeHandlers outer = do
     [touch] -> do
       prev <- Var.get lastPos
       let dx = touch.pageX - prev.pageX
-      when (dx < -20.0) $ do
+      let dy = abs $ touch.pageY - prev.pageY
+      when ((dx < -20.0) && (dy < 10.0)) do
         Var.set lastPos touch
         Html.withElement outer $ Html.addClass "swiped"
-      when (dx > 20.0) $ do
+      when ((dx > 20.0) && (dy < 10.0)) do
         Var.set lastPos touch
         Html.withElement outer $ Html.removeClass "swiped"
     _ -> pure unit
