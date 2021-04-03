@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.8
+
+Released 2021-04-03.
+
+ * Make "swipe to reveal the delete button" harder to trigger unintentionally.
+
 ## 2.7
 
 Released 2021-03-14.
