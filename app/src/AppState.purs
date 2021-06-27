@@ -22,8 +22,9 @@ import Prelude
 
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Control.Monad.Reader.Class (ask)
-import Data.Argonaut.Core (jsonEmptyArray) as Json
+import Data.Argonaut.Core (Json, jsonEmptyArray) as Json
 import Data.Argonaut.Decode (decodeJson) as Json
+import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Argonaut.Encode (encodeJson) as Json
 import Data.Argonaut.Parser (jsonParser) as Json
 import Data.Either (Either (..))
@@ -72,9 +73,9 @@ open catalog = do
     plantsJson = case plantsJsonOpt of
       Just value -> value
       Nothing -> Json.jsonEmptyArray
-  plants     <- case Json.decodeJson plantsJson of
+  plants <- case Json.decodeJson plantsJson of
     Right ps -> pure ps
-    Left err -> fatal $ "Failed to parse plants: " <> err
+    Left err -> fatal $ "Failed to parse plants: " <> printJsonDecodeError err
 
   var <- liftEffect $ Var.create plants
 
@@ -175,15 +176,18 @@ importJson appState = do
         file <- Dom.getFile self
         Aff.launchAff_ $ do
           contents <- File.read file
-          case Json.jsonParser contents >>= Json.decodeJson of
+          case Json.jsonParser contents of
             Left err -> do
               -- TODO: Report error to the user
               Console.log $ "Failed to parse json: " <> err
-            Right (plants :: Plants) -> do
-              -- Persist the new plant list in IndexedDB.
-              -- TODO: Optionally merge rather than replace.
-              -- TODO: Refresh the plant list afterwards.
-              Idb.putJson "plants" (Json.encodeJson plants) appState.db
+            Right jsonValue -> case Json.decodeJson jsonValue of
+              Left err -> do
+                Console.log $ "Failed to parse json: " <> printJsonDecodeError err
+              Right (plants :: Plants) -> do
+                -- Persist the new plant list in IndexedDB.
+                -- TODO: Optionally merge rather than replace.
+                -- TODO: Refresh the plant list afterwards.
+                Idb.putJson "plants" (Json.encodeJson plants) appState.db
 
       pure self
 

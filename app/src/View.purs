@@ -108,7 +108,7 @@ renderPlants appState now = do
       _   -> pure unit
     case ps.unknowns of
       Nil -> pure unit
-      xs  -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
+      _   -> Html.p $ Html.text $ "And " <> (show $ List.length ps.unknowns) <> " unknown plants"
     ask
 
 renderSpanP :: String -> String -> Html Unit
@@ -213,7 +213,6 @@ renderPlantItem appState now knownPlant =
 renderDetails :: Instant -> KnownPlant -> Html PlantDetailElements
 renderDetails now knownPlant =
   let
-    Plant plant = knownPlant.plant
     Species species = knownPlant.species
     waterDays = Care.adaptiveWaterDaysRange now knownPlant
     fertilizeDays = Care.seasonalFertilizeDays now knownPlant
@@ -248,7 +247,6 @@ renderInfoBlock :: Instant -> KnownPlant -> Html Unit
 renderInfoBlock now knownPlant =
   let
     Plant plant = knownPlant.plant
-    Species species = knownPlant.species
   in do
     renderSpanP "watered" $
       " " <> (lastWatered now $ Plant plant)

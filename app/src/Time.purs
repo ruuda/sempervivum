@@ -25,6 +25,7 @@ import Prelude
 import Data.Argonaut.Core (caseJsonString, fromString) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
 import Data.Argonaut.Encode.Class (class EncodeJson)
+import Data.Argonaut.Decode.Error (JsonDecodeError (TypeMismatch))
 import Data.Either (Either (..))
 import Data.Function.Uncurried (Fn2, Fn3, Fn5, Fn6, runFn2, runFn3, runFn5, runFn6)
 import Data.Int as Int
@@ -55,9 +56,9 @@ instance ordInstant :: Ord Instant where
 
 instance decodeJsonInstant :: DecodeJson Instant where
   decodeJson = Json.caseJsonString
-    (Left "Expected Instant to be a string.")
+    (Left $ TypeMismatch "Expected Instant to be a string.")
     $ fromIso8601 >>> case _ of
-        Nothing -> Left "Failed to parse ISO-8601 string."
+        Nothing -> Left $ TypeMismatch "That was not a valid ISO-8601 string."
         Just t  -> Right t
 
 instance encodeJsonInstant :: EncodeJson Instant where

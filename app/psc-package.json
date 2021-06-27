@@ -1,6 +1,6 @@
 {
   "name": "sempervivum",
-  "set": "psc-0.13.5",
+  "set": "psc-0.14.0",
   "source": "https://github.com/purescript/package-sets.git",
   "depends": [
     "aff-promise",
@@ -10,7 +10,6 @@
     "console",
     "foldable-traversable",
     "foreign-object",
-    "globals",
     "integers",
     "lists",
     "prelude",

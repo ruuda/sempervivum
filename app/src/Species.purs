@@ -19,6 +19,7 @@ import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson, getField) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
+import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Array as Array
 import Data.Either (Either (..))
 import Data.String as String
@@ -74,7 +75,7 @@ getCatalog = do
   case result of
     Left err -> fatal $ "Failed to retrieve species catalog: " <> Http.printError err
     Right response -> case Json.decodeJson response.body of
-      Left err -> fatal $ "Failed to parse species catalog: " <> err
+      Left err -> fatal $ "Failed to parse species catalog: " <> printJsonDecodeError err
       Right species -> pure $ arrayToMap (case _ of Species s -> s.name) species
 
 -- Search for a species by name.
