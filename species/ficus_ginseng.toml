@@ -1,0 +1,15 @@
+name = "Ficus ginseng"
+# Source: https://www.bonsaiboy.com/catalog/ginsengcare.html
+# Source: Label that came with the plant.
+water_days_summer = 5
+water_days_winter = 5
+water_remark = """\
+  Apply water before the soil appears dry. \
+  Apply water until it starts leaking out from under the pot.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Don’t fertilize during the winter.\
+  """
+light = "Four to six hours of sunlight per day."
