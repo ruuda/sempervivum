@@ -2,7 +2,7 @@ name = "Ficus ginseng"
 # Source: https://www.bonsaiboy.com/catalog/ginsengcare.html
 # Source: Label that came with the plant.
 water_days_summer = 5
-water_days_winter = 5
+water_days_winter = 7
 water_remark = """\
   Apply water before the soil appears dry. \
   Apply water until it starts leaking out from under the pot.\
