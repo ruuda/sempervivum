@@ -8,6 +8,14 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.9
+
+Released 2021-11-02.
+
+ * Add Ficus ginseng.
+
+Thanks chloekek for contributing to this release.
+
 ## 2.8
 
 Released 2021-04-03.
