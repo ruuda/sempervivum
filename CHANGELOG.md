@@ -8,6 +8,10 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.10
+
+ * Add Strelitzia nicolai.
+
 ## 2.9
 
 Released 2021-11-02.
