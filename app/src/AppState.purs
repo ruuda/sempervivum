@@ -22,7 +22,7 @@ import Prelude
 
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Control.Monad.Reader.Class (ask)
-import Data.Argonaut.Core (Json, jsonEmptyArray) as Json
+import Data.Argonaut.Core (jsonEmptyArray) as Json
 import Data.Argonaut.Decode (decodeJson) as Json
 import Data.Argonaut.Decode.Error (printJsonDecodeError)
 import Data.Argonaut.Encode (encodeJson) as Json
