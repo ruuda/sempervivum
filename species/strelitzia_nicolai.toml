@@ -1,0 +1,28 @@
+name = "Strelitzia nicolai"
+# Source: https://www.123planten.nl/verzorging/tips-strelitzia
+# Source: label on the plant I bought.
+
+# Label says water twice a week. But 123planten says once per week, both in
+# summer and winter, but with more water in summer.
+water_days_summer = 4
+water_days_winter = 5
+water_remark =
+  """\
+  In summer, water when the top soil has just dried out. \
+  In winter, let the soil dry further before watering again. \
+  The Strelitzia stores water in its thick roots, so a dry soil is fine. \
+  Brown spots are a sign of too much water. \
+  Mist occasionally to remove dust and increase humidity. \
+  Misting can help new leaves unroll.\
+  """
+
+# 123planten says to fertilize every 6-8 weeks.
+fertilize_days_summer = 35
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize only in spring and summer."
+
+light = """\
+  Requires a lot of light, place close to a window. \
+  Can withstand direct sunlight. \
+  Curling and closing leaves can be a sign of too little light.\
+  """
