@@ -10,6 +10,8 @@
 
 ## 2.10
 
+Released 2022-01-23.
+
  * Add Strelitzia nicolai.
 
 ## 2.9
