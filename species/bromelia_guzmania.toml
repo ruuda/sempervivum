@@ -1,0 +1,16 @@
+name = "Bromelia guzmania"
+# Source: https://www.br-easy.com/en-gb/meet-the-family/rockyflower/
+# Source: https://plantophiles.com/plant-care/guzmania-bromeliad/
+# Source: The florist.
+water_days_summer = 7
+water_days_winter = 7
+water_remark =
+  """\
+  Pour water directly into the chalice. \
+  Do not water if water is still visible. \
+  Do not water the soil.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Use a balanced fertilizer."
+light = "Do not expose to direct sunlight."
