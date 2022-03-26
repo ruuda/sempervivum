@@ -8,6 +8,14 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.11
+
+Released 2022-03-26.
+
+ * Add Bromelia guzmania.
+
+Thanks chloekek for contributing to this release.
+
 ## 2.10
 
 Released 2022-01-23.
