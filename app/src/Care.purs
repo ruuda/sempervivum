@@ -143,12 +143,9 @@ adaptiveWaterDaysRange at kp =
 
 nextWater :: Instant -> KnownPlant -> Instant
 nextWater now kp =
-  let
-    Species species = kp.species
-  in
-    case Plant.lastWatered kp.plant of
-      Nothing -> now
-      Just t  -> Time.add (adaptiveWateringInterval now kp) t
+  case Plant.lastWatered kp.plant of
+    Nothing -> now
+    Just t  -> Time.add (adaptiveWateringInterval now kp) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable

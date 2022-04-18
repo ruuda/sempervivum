@@ -31,8 +31,9 @@ import Data.Argonaut.Encode.Class (class EncodeJson)
 import Data.Argonaut.Encode.Combinators ((:=), (~>))
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
-import Data.Foldable (any)
+import Data.Foldable (any, sum)
 import Data.Maybe (Maybe (Just, Nothing))
+import Data.Ord (class Ord)
 import Effect (Effect)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
@@ -127,12 +128,20 @@ delete :: Instant -> Plant -> Plant
 delete at (Plant p) =
   Plant $ p { deleted = Array.sort $ Array.snoc p.deleted at }
 
--- Compute an adaptive watering interval, which is a weighted average of
+newtype Delta = Delta
+  { seconds :: Number
+  , weight :: Number
+  }
+
+derive instance eqDelta :: Eq Delta
+derive instance ordDelta :: Ord Delta
+
+-- Compute an adaptive watering interval, which is a weighted median of
 -- intervals between past waterings, and a base interval that acts as the
 -- starting point when there are no past waterings yet.
 adaptiveWateringInterval :: Plant -> Duration -> Duration
 adaptiveWateringInterval (Plant p) baseInterval =
-  case NonEmpty.fromArray p.watered of
+  case NonEmpty.fromArray $ Array.takeEnd 50 p.watered of
     Nothing -> baseInterval
     Just watered ->
       let
@@ -146,20 +155,50 @@ adaptiveWateringInterval (Plant p) baseInterval =
         weightedDiff t0 t1 =
           let
             weight = Math.exp $ lambda * (Time.toSeconds $ t `Time.subtract` t1)
-            seconds = weight * (Time.toSeconds $ t1 `Time.subtract` t0)
+            seconds = Time.toSeconds $ t1 `Time.subtract` t0
           in
-            { weight, seconds }
-        sumDiff x y = { seconds: x.seconds + y.seconds, weight: x.weight + y.weight }
-        -- The base interval weighs in with weight 1.0, so it will have more
+            Delta { seconds, weight }
+        -- The base interval weighs in with weight 1.2, so it will have more
         -- relative weight when there is less data, and it will also have more
-        -- relative weight when past watering events are longer ago.
-        initial = { seconds: Time.toSeconds baseInterval, weight: 1.0 }
-        diffs = Array.zipWith weightedDiff p.watered $ NonEmpty.tail watered
+        -- relative weight when past watering events are longer ago. We pick
+        -- 1.2, because for plants that are watered infrequently, once the base
+        -- interval goes down (because it’s starting to be summer), if the past
+        -- few intervals overshoot the target by a lot, the target will not
+        -- affect the median at all, so give it a bit of an edge to improve the
+        -- odds for that.
+        diffs = Array.snoc
+          (Array.zipWith weightedDiff
+            (NonEmpty.toArray watered)
+            (NonEmpty.tail watered)
+          )
+          (Delta { seconds: Time.toSeconds baseInterval, weight: 1.2 })
         -- We do a left fold so we sum small values first before adding them to
         -- bigger numbers.
-        total = Array.foldl sumDiff initial diffs
+        totalWeight = sum $ map (\(Delta d) -> d.weight) diffs
+        -- For the watering interval, we take the weighted median. In the past
+        -- we took a weighted average, but I tend to overshoot my target more
+        -- often than I undershoot it. (E.g. I'm away for a weekend, and I water
+        -- the plants one or two days later.) In a sense, the algorithm can't
+        -- distinguish between intentionally watering late because the plant
+        -- needs less water, vs. accidentally watering late. The median is more
+        -- robust against outliers, so being a few days late once will not
+        -- affect the scheduled interval as much.
+        sortedDiffs = Array.sort diffs
+        step acc xs = case Array.uncons xs of
+          Nothing -> baseInterval
+          Just { head: Delta head, tail } | acc.weight + head.weight > 0.5 * totalWeight ->
+            let
+              z = (0.5 * totalWeight - acc.weight) / head.weight
+            in
+              Time.fromSeconds $ (1.0 - z) * acc.seconds + z * head.seconds
+          Just { head: Delta head, tail } ->
+            step
+              { weight: acc.weight + head.weight, seconds: head.seconds }
+              tail
       in
-        Time.fromSeconds $ total.seconds / total.weight
+        step
+          { weight: 0.0, seconds: Time.toSeconds baseInterval }
+          sortedDiffs
 
 -- Insert the plant, overwiting it if a plant with that id existed already.
 insertPlant :: Plant -> Plants -> Plants
