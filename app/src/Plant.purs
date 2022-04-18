@@ -33,7 +33,6 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Foldable (any, sum)
 import Data.Maybe (Maybe (Just, Nothing))
-import Data.Ord (class Ord)
 import Effect (Effect)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
@@ -136,11 +135,14 @@ newtype Delta = Delta
 derive instance eqDelta :: Eq Delta
 derive instance ordDelta :: Ord Delta
 
--- Compute an adaptive watering interval, which is a weighted median of
+-- Compute an adaptive watering interval, which is a weighted quantile of
 -- intervals between past waterings, and a base interval that acts as the
 -- starting point when there are no past waterings yet.
-adaptiveWateringInterval :: Plant -> Duration -> Duration
-adaptiveWateringInterval (Plant p) baseInterval =
+adaptiveWateringInterval :: Number -> Plant -> Duration -> Duration
+adaptiveWateringInterval quantile (Plant p) baseInterval =
+  -- We consider only the past 50 watering events, mostly because it makes debug
+  -- prints easier to read. Waterings longer ago will have a negligible weight
+  -- anyway.
   case NonEmpty.fromArray $ Array.takeEnd 50 p.watered of
     Nothing -> baseInterval
     Just watered ->
@@ -186,9 +188,9 @@ adaptiveWateringInterval (Plant p) baseInterval =
         sortedDiffs = Array.sort diffs
         step acc xs = case Array.uncons xs of
           Nothing -> baseInterval
-          Just { head: Delta head, tail } | acc.weight + head.weight > 0.5 * totalWeight ->
+          Just { head: Delta head, tail: _ } | acc.weight + head.weight > quantile * totalWeight ->
             let
-              z = (0.5 * totalWeight - acc.weight) / head.weight
+              z = (quantile * totalWeight - acc.weight) / head.weight
             in
               Time.fromSeconds $ (1.0 - z) * acc.seconds + z * head.seconds
           Just { head: Delta head, tail } ->

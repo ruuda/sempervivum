@@ -116,8 +116,8 @@ seasonalFertilizeDays at kp =
     Int.ceil $ seconds / (3600.0 * 24.0)
 
 -- See also Plant.adaptiveWateringInterval.
-adaptiveWateringInterval :: Instant -> KnownPlant -> Duration
-adaptiveWateringInterval now kp =
+adaptiveWateringInterval :: Number -> Instant -> KnownPlant -> Duration
+adaptiveWateringInterval quantile now kp =
   let
     -- Prefer to measure at the last watered time, to ensure that the ordering
     -- of when plants need to be watered is stable across different dates.
@@ -126,18 +126,20 @@ adaptiveWateringInterval now kp =
       Just t  -> t
     baseInterval = seasonalWateringInterval at kp
   in
-    Plant.adaptiveWateringInterval kp.plant baseInterval
+    Plant.adaptiveWateringInterval quantile kp.plant baseInterval
 
 -- Return the watering interval, adapting to previous watering. Returns the
 -- result as a range.
 adaptiveWaterDaysRange :: Instant -> KnownPlant -> { lower :: Int, upper :: Int }
 adaptiveWaterDaysRange at kp =
   let
-    seconds = Time.toSeconds $ adaptiveWateringInterval at kp
-    days = seconds / (3600.0 * 24.0)
-    lower = Int.floor days
-    preUpper = Int.ceil days
-    upper = if lower == preUpper then lower + 1 else preUpper
+    -- Take the 0.33 and 0.66 quantile as the range, and ensure at least one day
+    -- of headroom.
+    secondsLow  = Time.toSeconds $ adaptiveWateringInterval 0.33 at kp
+    secondsHigh = Time.toSeconds $ adaptiveWateringInterval 0.66 at kp
+    lower       = Int.floor $ secondsLow / (3600.0 * 24.0)
+    preUpper    = Int.ceil $ secondsHigh / (3600.0 * 24.0)
+    upper       = if lower == preUpper then lower + 1 else preUpper
   in
     { lower, upper }
 
@@ -145,7 +147,7 @@ nextWater :: Instant -> KnownPlant -> Instant
 nextWater now kp =
   case Plant.lastWatered kp.plant of
     Nothing -> now
-    Just t  -> Time.add (adaptiveWateringInterval now kp) t
+    Just t  -> Time.add (adaptiveWateringInterval 0.5 now kp) t
 
 sortByNextWater :: Instant -> List KnownPlant -> Array KnownPlant
 sortByNextWater now = Array.sortWith (nextWater now) <<< Array.fromFoldable
