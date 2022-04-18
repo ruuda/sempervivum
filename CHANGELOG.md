@@ -8,6 +8,17 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.12
+
+Released 2022-04-18.
+
+ * The adaptive watering interval is now based on a weighted median instead of a
+   weighted average, to ensure that one-off forgetting to water a plant for a
+   few days does not affect the interval as much. Also, the range shown in
+   the details now shows the weighted 0.33 and 0.66 quantile of past watering
+   intervals (plus the target interval) to better indicate how strict the
+   range is.
+
 ## 2.11
 
 Released 2022-03-26.
