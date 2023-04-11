@@ -1,0 +1,29 @@
+name = "Begonia rex"
+# Source: https://www.123planten.nl/verzorging/tips-begonia
+# Source: https://www.thespruce.com/grow-rex-begonia-1902492
+# Source: label on the plant I got.
+
+# Not so sure about this, can't find any concrete advice.
+# Label says "medium".
+water_days_summer = 4
+water_days_winter = 5
+water_remark =
+  """\
+  Keep the soil evenly moist, \
+  water again when it is dry to the touch. \
+  Brown or yellow spots or edges are a sign of too much water.\
+  """
+
+# The Spruce says every week at quarter strength, or every two weeks at half
+# strength.
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = "Fertilize every two weeks at half strength in the growing season."
+
+# Conflicting advice between websites here ..
+light =
+  """\
+  Avoid direct sunlight and bright afternoon sun. \
+  The plant can thrive in bright indirect light, but also partial shade. \
+  A blossoming plant requires more light.\
+  """
