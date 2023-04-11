@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.13
+
+Released 2023-04-11.
+
+ * Add Begonia rex.
+
 ## 2.12
 
 Released 2022-04-18.
