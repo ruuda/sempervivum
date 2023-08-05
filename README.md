@@ -9,7 +9,7 @@ version is hosted at https://ruuda.github.io/sempervivum/.
 
 ## Building
 
-The client is written in PureScript and builds with [psc-package][psc-package].
+The client is written in PureScript and builds with [Spago][spago].
 [Closure Compiler][closure] takes care of bundling and minification. There is
 also a Haskell program that bundles the species catalog into a json file. It
 builds with GHC, and requires a few Hakell packages to be available. You can set
@@ -42,7 +42,7 @@ up a local development environment with all dependencies with [Nix][nix].
    neighboring rights to this work.
 
 [closure]:     https://github.com/google/closure-compiler
-[psc-package]: https://github.com/purescript/psc-package
+[spago]:       https://github.com/purescript/spago
 [nix]:         https://nixos.org/nix/
 [apache2]:     https://www.apache.org/licenses/LICENSE-2.0
 [cc0]:         https://creativecommons.org/publicdomain/zero/1.0/
