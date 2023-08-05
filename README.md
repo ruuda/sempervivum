@@ -16,7 +16,7 @@ builds with GHC, and requires a few Hakell packages to be available. You can set
 up a local development environment with all dependencies with [Nix][nix].
 
     # Enter a shell with development dependencies available.
-    nix run --command $SHELL
+    nix develop --command $SHELL
 
     # Build the app.
     make -j4

@@ -7,9 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-22.04"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3.5.3"
 
       - name: "Cache PureScript"
         uses: "actions/cache@v2.0.0"
@@ -21,10 +21,10 @@ jobs:
       - uses: "cachix/install-nix-action@v20"
         with:
           nix_path: "nixpkgs=channel:nixos-unstable"
-          install_url: "https://releases.nixos.org/nix/nix-2.3.7/install"
+          install_url: "https://releases.nixos.org/nix/nix-2.17.0/install"
 
       - name: "Build"
-        run: "nix run -c make"
+        run: "nix develop --command make"
 
       - name: "Deploy"
         uses: "peaceiris/actions-gh-pages@v3.6.1"
