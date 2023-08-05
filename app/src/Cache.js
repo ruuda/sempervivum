@@ -7,31 +7,31 @@
 
 "use strict";
 
-exports.openImpl = function(name) {
+export const openImpl = function(name) {
   return function() {
     return caches.open(name);
   }
 }
 
-exports.deleteImpl = function(name) {
+export const deleteImpl = function(name) {
   return function() {
     return caches.delete(name);
   }
 }
 
-exports.addAllImpl = function(cache, urls) {
+export const addAllImpl = function(cache, urls) {
   return function() {
     return cache.addAll(urls);
   }
 }
 
-exports.putImpl = function(cache, request, response) {
+export const putImpl = function(cache, request, response) {
   return function() {
     return cache.put(request, response);
   }
 }
 
-exports.matchImpl = function(cache, request, nothing, just) {
+export const matchImpl = function(cache, request, nothing, just) {
   return function() {
     return cache.match(request).then(function(response) {
       if (response === undefined) {

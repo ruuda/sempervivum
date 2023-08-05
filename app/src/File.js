@@ -7,7 +7,7 @@
 
 "use strict";
 
-exports.readImpl = function(file, onLoad) {
+export const readImpl = function(file, onLoad) {
   return function(onError, onSuccess) {
     var reader = new FileReader();
     reader.onload = function(evt) {

@@ -7,32 +7,32 @@
 
 "use strict";
 
-exports.fetchImpl = function(request) {
+export const fetchImpl = function(request) {
   return function() {
     return fetch(request);
   }
 }
 
-exports.url = function(request) {
+export const url = function(request) {
   return request.url;
 }
 
-exports.urlPath = function(url) {
+export const urlPath = function(url) {
   return new URL(url).pathname;
 }
 
-exports.method = function(request) {
+export const method = function(request) {
   return request.method;
 }
 
-exports.statusCode = function(response) {
+export const statusCode = function(response) {
   return response.status;
 }
 
-exports.clone = function(response) {
+export const clone = function(response) {
   return response.clone();
 }
 
-exports.readJsonImpl = function(requestOrResponse) {
+export const readJsonImpl = function(requestOrResponse) {
   return requestOrResponse.json();
 }

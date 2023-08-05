@@ -7,7 +7,7 @@
 
 "use strict";
 
-exports.getRandomBytes = function(n) {
+export const getRandomBytes = function(n) {
   return function() {
     return crypto.getRandomValues(new Uint8Array(n));
   }

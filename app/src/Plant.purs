@@ -33,11 +33,11 @@ import Data.Array as Array
 import Data.Array.NonEmpty as NonEmpty
 import Data.Foldable (any, sum)
 import Data.Maybe (Maybe (Just, Nothing))
+import Data.Number as Number
 import Effect (Effect)
 import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object
-import Math as Math
 
 import Time as Time
 import Time (Duration, Instant)
@@ -153,10 +153,10 @@ adaptiveWateringInterval quantile (Plant p) baseInterval =
         -- days before the last one gets weight 0.78, an interval that ended 30
         -- days ago gets weight 0.35. An interval that ended 100 days ago gets
         -- weight 0.03.
-        lambda = (Math.log 0.5) / (20.0 * 24.0 * 3600.0)
+        lambda = (Number.log 0.5) / (20.0 * 24.0 * 3600.0)
         weightedDiff t0 t1 =
           let
-            weight = Math.exp $ lambda * (Time.toSeconds $ t `Time.subtract` t1)
+            weight = Number.exp $ lambda * (Time.toSeconds $ t `Time.subtract` t1)
             seconds = Time.toSeconds $ t1 `Time.subtract` t0
           in
             Delta { seconds, weight }

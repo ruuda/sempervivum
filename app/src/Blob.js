@@ -7,18 +7,18 @@
 
 "use strict";
 
-exports.toBlob = function(value) {
+export const toBlob = function(value) {
   return new Blob([JSON.stringify(value)], {type: 'application/json'});
 };
 
 // CreateObjectURL is impure, so we wrap it in an Effect.
-exports.getObjectUrl = function(blob) {
+export const getObjectUrl = function(blob) {
   return function() {
     return URL.createObjectURL(blob);
   };
 };
 
-exports.revokeObjectUrl = function(url) {
+export const revokeObjectUrl = function(url) {
   return function() {
     URL.revokeObjectURL(url);
   };

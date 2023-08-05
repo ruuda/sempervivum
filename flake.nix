@@ -20,8 +20,9 @@
         # but they are probably already available on the host and the version
         # is not that important, so we'd rather keep the closure size small.
 
-        pkgs.purescript   # Provides the Purescript compiler.
-        pkgs.psc-package  # Provides the Purescript package manager.
+        pkgs.purescript  # Provides the Purescript compiler.
+        pkgs.spago       # Provides the Purescript package manager.
+        pkgs.esbuild     # Bundler required by Spago.
 
         # Haskell toolchain for the utility that compiles the catalog.
         ghc

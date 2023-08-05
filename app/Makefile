@@ -16,10 +16,12 @@ output/sw.min.js: output/sw.js
 # eliminate everything as dead code.
 
 output/app.js: output/Main/index.js src/Main.entry.js
-	purs bundle output/*/*.js --module Main | cat - src/Main.entry.js > $@
+	spago bundle-module --minify --main Main --to output/app.bundle.js
+	esbuild --bundle --minify src/Main.entry.js > $@
 
 output/sw.js: output/ServiceWorker/index.js src/ServiceWorker.entry.js
-	purs bundle output/*/*.js --module ServiceWorker | cat - src/ServiceWorker.entry.js > $@
+	spago bundle-module --minify --main ServiceWorker --to output/sw.bundle.js
+	esbuild --bundle --minify src/ServiceWorker.entry.js > $@
 
-output/Main/index.js output/ServiceWorker/index.js &: src/*.purs src/*.js psc-package.json
-	psc-package build
+output/Main/index.js output/ServiceWorker/index.js &: src/*.purs src/*.js spago.dhall packages.dhall
+	spago build

@@ -5,10 +5,12 @@
 // you may not use this file except in compliance with the License.
 // A copy of the License has been included in the root of the repository.
 
+import { main } from '../output/app.bundle.js';
+
 window.onload = function() {
   let loader = document.getElementById('loader');
-   document.body.removeChild(loader);
-   PS.Main.main();
+  document.body.removeChild(loader);
+  main();
 };
 
 if('serviceWorker' in navigator) {

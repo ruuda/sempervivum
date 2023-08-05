@@ -7,7 +7,7 @@
 
 "use strict";
 
-exports.openImpl = function(onError, onSuccess) {
+export const openImpl = function(onError, onSuccess) {
   let openRequest = window.indexedDB.open("sempervivum", 1);
   openRequest.onerror = function(event) {
     onError(openRequest.error);
@@ -34,7 +34,7 @@ exports.openImpl = function(onError, onSuccess) {
   };
 }
 
-exports.putImpl = function(unit) {
+export const putImpl = function(unit) {
   return function(key) {
     return function(value) {
       return function(db) {
@@ -62,7 +62,7 @@ exports.putImpl = function(unit) {
   };
 };
 
-exports.getImpl = function(nothing, just, key, db) {
+export const getImpl = function(nothing, just, key, db) {
   return function(onError, onSuccess) {
     let tx = db.transaction(["kv"], "readonly");
     // TODO: Do we need handlers for tx.onerror/tx.onabort?

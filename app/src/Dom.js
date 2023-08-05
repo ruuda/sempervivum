@@ -8,19 +8,19 @@
 
 "use strict";
 
-exports.createElement = function(tagName) {
+export const createElement = function(tagName) {
   return function() {
     return document.createElement(tagName);
   }
 }
 
-exports.appendChildImpl = function(child, container) {
+export const appendChildImpl = function(child, container) {
   return function() {
     container.appendChild(child);
   }
 }
 
-exports.clearElement = function(container) {
+export const clearElement = function(container) {
   return function() {
     while (container.hasChildNodes()) {
       container.removeChild(container.lastChild);
@@ -28,25 +28,25 @@ exports.clearElement = function(container) {
   }
 }
 
-exports.removeElement = function(element) {
+export const removeElement = function(element) {
   return function() {
     element.remove();
   }
 }
 
-exports.clickElement = function(element) {
+export const clickElement = function(element) {
   return function() {
     element.click();
   }
 }
 
-exports.appendTextImpl = function(text, container) {
+export const appendTextImpl = function(text, container) {
   return function() {
     container.insertAdjacentText('beforeend', text);
   }
 }
 
-exports.getElementByIdImpl = function(id, just, nothing) {
+export const getElementByIdImpl = function(id, just, nothing) {
   return function() {
     var element = document.getElementById(id);
     if (element === null) {
@@ -57,7 +57,7 @@ exports.getElementByIdImpl = function(id, just, nothing) {
   }
 }
 
-exports.assumeElementById = function(id) {
+export const assumeElementById = function(id) {
   return function() {
     var element = document.getElementById(id);
     window.console.assert(element !== null, 'No element with id: ' + id);
@@ -65,13 +65,13 @@ exports.assumeElementById = function(id) {
   }
 }
 
-exports.body = document.body;
+export const body = document.body;
 
-exports.getLocationPathName = function() {
+export const getLocationPathName = function() {
   return window.location.pathname;
 }
 
-exports.getFile = function(element) {
+export const getFile = function(element) {
   return function() {
     // Note that `files` is a `FileList`, not an array. We index here for
     // simplicity.
@@ -79,49 +79,49 @@ exports.getFile = function(element) {
   }
 }
 
-exports.getValue = function(element) {
+export const getValue = function(element) {
   return function() {
     return element.value;
   }
 }
 
-exports.setAttributeImpl = function(attribute, value, element) {
+export const setAttributeImpl = function(attribute, value, element) {
   return function() {
     element.setAttribute(attribute, value);
   }
 }
 
-exports.addClassImpl = function(className, element) {
+export const addClassImpl = function(className, element) {
   return function() {
     element.classList.add(className);
   }
 }
 
-exports.removeClassImpl = function(className, element) {
+export const removeClassImpl = function(className, element) {
   return function() {
     element.classList.remove(className);
   }
 }
 
-exports.setDisabledImpl = function(isDisabled, element) {
+export const setDisabledImpl = function(isDisabled, element) {
   return function() {
     element.disabled = isDisabled;
   }
 }
 
-exports.setDownloadImpl = function(fname, element) {
+export const setDownloadImpl = function(fname, element) {
   return function() {
     element.download = fname;
   }
 }
 
-exports.setIdImpl = function(id, element) {
+export const setIdImpl = function(id, element) {
   return function() {
     element.id = id;
   }
 }
 
-exports.setOnErrorImpl = function(handler, element) {
+export const setOnErrorImpl = function(handler, element) {
   return function() {
     element.onerror = function(event) {
       handler();
@@ -129,19 +129,19 @@ exports.setOnErrorImpl = function(handler, element) {
   }
 }
 
-exports.unsetOnError = function(element) {
+export const unsetOnError = function(element) {
   return function() {
     element.onerror = null;
   }
 }
 
-exports.setOpacityImpl = function(opacity, element) {
+export const setOpacityImpl = function(opacity, element) {
   return function() {
     element.style.opacity = opacity;
   }
 }
 
-exports.addEventListenerImpl = function(eventName, callback, element) {
+export const addEventListenerImpl = function(eventName, callback, element) {
   return function() {
     element.addEventListener(eventName, function(evt) {
       callback();
@@ -150,7 +150,7 @@ exports.addEventListenerImpl = function(eventName, callback, element) {
   }
 }
 
-exports.addTouchEventListenerImpl = function(eventName, callback, element) {
+export const addTouchEventListenerImpl = function(eventName, callback, element) {
   return function() {
     element.addEventListener(eventName, function(evt) {
       callback(evt.changedTouches)();
@@ -159,7 +159,7 @@ exports.addTouchEventListenerImpl = function(eventName, callback, element) {
   }
 }
 
-exports.addRightClickListenerImpl = function(callback, element) {
+export const addRightClickListenerImpl = function(callback, element) {
   return function() {
     element.addEventListener('mousedown', function(evt) {
       if (evt.button == 2) {
@@ -175,7 +175,7 @@ exports.addRightClickListenerImpl = function(callback, element) {
   }
 }
 
-exports.scrollIntoView = function(element) {
+export const scrollIntoView = function(element) {
   return function() {
     return element.scrollIntoView();
   }

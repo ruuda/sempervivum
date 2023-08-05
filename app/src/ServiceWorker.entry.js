@@ -5,14 +5,16 @@
 // you may not use this file except in compliance with the License.
 // A copy of the License has been included in the root of the repository.
 
+import { onInstallPromise, onActivatePromise, onFetchPromise } from '../output/sw.bundle.js';
+
 self.addEventListener('install', function(evt) {
-  evt.waitUntil(PS.ServiceWorker.onInstallPromise())
+  evt.waitUntil(onInstallPromise())
 });
 
 self.addEventListener('activate', function(evt) {
-  evt.waitUntil(PS.ServiceWorker.onActivatePromise())
+  evt.waitUntil(onActivatePromise())
 });
 
 self.addEventListener('fetch', function(evt) {
-  evt.respondWith(PS.ServiceWorker.onFetchPromise(evt.request)());
+  evt.respondWith(onFetchPromise(evt.request)());
 });

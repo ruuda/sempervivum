@@ -14,7 +14,7 @@ module Species
 
 import Prelude
 
-import Affjax as Http
+import Affjax.Web as Http
 import Affjax.ResponseFormat as Http.ResponseFormat
 import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Decode (decodeJson, getField) as Json

@@ -7,28 +7,28 @@
 
 "use strict";
 
-exports.eqInstantImpl = function(lhs, rhs) {
+export const eqInstantImpl = function(lhs, rhs) {
   return lhs === rhs;
 }
 
-exports.ordInstantImpl = function(lt, eq, gt, lhs, rhs) {
+export const ordInstantImpl = function(lt, eq, gt, lhs, rhs) {
   return lhs < rhs ? lt : lhs === rhs ? eq : gt;
 }
 
-exports.getCurrentInstant = function() {
+export const getCurrentInstant = function() {
   return new Date(Date.now());
 }
 
-exports.fromIso8601Impl = function(nothing, just, str) {
+export const fromIso8601Impl = function(nothing, just, str) {
   let result = Date.parse(str);
   return result == undefined ? nothing : just(new Date(result));
 }
 
-exports.toIso8601 = function(t) {
+export const toIso8601 = function(t) {
   return t.toISOString();
 }
 
-exports.fromGregorianUtcImpl = function(year, month, day, hour, minute, second) {
+export const fromGregorianUtcImpl = function(year, month, day, hour, minute, second) {
   // Beware, js months start counting at 0, but dates start at 1.
   return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
 }
@@ -37,14 +37,14 @@ exports.fromGregorianUtcImpl = function(year, month, day, hour, minute, second) 
 // 1. getDay returns the day of the week, getDate the day of the month.
 // 2. getMonth is 0-based, December is month 11.
 // 3. getYear returns a 2 or 3-digit number, getFullYear is the one we need.
-exports.localDay = function(instant) { return instant.getDate(); }
-exports.localMonth = function(instant) { return 1 + instant.getMonth(); }
-exports.localYear = function(instant) { return instant.getFullYear(); }
+export const localDay = function(instant) { return instant.getDate(); }
+export const localMonth = function(instant) { return 1 + instant.getMonth(); }
+export const localYear = function(instant) { return instant.getFullYear(); }
 
-exports.addSecondsImpl = function(secs, instant) {
+export const addSecondsImpl = function(secs, instant) {
   return new Date(secs * 1000.0 + instant.getTime());
 }
 
-exports.diffSecondsImpl = function(t0, t1) {
+export const diffSecondsImpl = function(t0, t1) {
   return (t0.getTime() - t1.getTime()) / 1000.0;
 }
