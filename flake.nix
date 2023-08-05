@@ -16,8 +16,10 @@
       ]);
 
       buildInputs = [
-        pkgs.git
-        pkgs.gnumake
+        # For a self-contained flake we would also need Git and GNU Make,
+        # but they are probably already available on the host and the version
+        # is not that important, so we'd rather keep the closure size small.
+
         pkgs.purescript   # Provides the Purescript compiler.
         pkgs.psc-package  # Provides the Purescript package manager.
 
