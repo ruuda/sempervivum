@@ -22,7 +22,6 @@ module Plant
 
 import Prelude
 
-import Control.Monad.Error.Class (class MonadThrow, throwError)
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (decodeJson, getField, getFieldOptional) as Json
 import Data.Argonaut.Decode.Class (class DecodeJson)
@@ -35,7 +34,6 @@ import Data.Foldable (any, sum)
 import Data.Maybe (Maybe (Just, Nothing))
 import Data.Number as Number
 import Effect (Effect)
-import Effect.Exception (Error, error)
 import Foreign.Object (Object)
 import Foreign.Object as Object
 
@@ -87,9 +85,6 @@ instance decodeJsonPlants :: DecodeJson Plants where
   decodeJson json = do
     plants <- Json.decodeJson json
     pure $ Plants $ arrayToMap (case _ of Plant p -> p.id) plants
-
-fatal :: forall m a. MonadThrow Error m => String -> m a
-fatal = error >>> throwError
 
 -- Create a plant of the given species, with a new random id.
 newPlant :: String -> Effect Plant
