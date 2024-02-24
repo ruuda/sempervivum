@@ -1,0 +1,9 @@
+let make_workflow = import "base.rcl";
+let config = {
+  name = "Build",
+  // Build for all branches but not for tags, there is a separate deploy
+  // workflow for tags.
+  on_push = { branches = ["*"] },
+};
+
+make_workflow(config)
