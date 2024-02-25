@@ -1,4 +1,4 @@
-# Generated from *.rcl by generate.sh, do not edit manually.
+# This file is generated from build.rcl using RCL 9e8f729c19e.
 {
   "jobs": {
     "build": {

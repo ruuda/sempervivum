@@ -1,9 +1,81 @@
-let make_workflow = import "base.rcl";
-let config = {
-  name = "Build",
-  // Build for all branches but not for tags, there is a separate deploy
-  // workflow for tags.
-  on_push = { branches = ["*"] },
+// The steps that are the same for all CI jobs.
+let basic_steps = [
+  {
+    name = "Checkout",
+    uses = "actions/checkout@v3.5.3"
+  },
+  {
+    name = "Cache PureScript",
+    uses = "actions/cache@v3.3.1",
+    with = {
+      path = "app/.spago",
+      key = "spago-${{ hashFiles('app/spago.dhall', 'app/packages.dhall', 'flake.lock') }}",
+      restore-keys = "spago-",
+    },
+  },
+  {
+    name = "Install Nix",
+    uses = "cachix/install-nix-action@v25",
+    with = {
+      nix_path = "nixpkgs=channel:nixos-unstable",
+      install_url = "https://releases.nixos.org/nix/nix-2.17.0/install",
+    },
+  },
+  {
+    name = "Build",
+    run = "nix develop --command make",
+  },
+];
+
+let workflow_configs = {
+  // Main workflow that runs on every push.
+  build = {
+    name = "Build",
+    // Build for all branches but not for tags, there is a separate deploy
+    // workflow for tags.
+    on_push = { branches = ["*"] },
+    steps = basic_steps,
+  },
+
+  // Same as build, but also pushes to GitHub Pages, runs on tags.
+  deploy = {
+    name = "Deploy",
+    on_push = { tags = ["v*"] },
+    steps = [
+      for step in basic_steps: step,
+      {
+        name = "Deploy",
+        uses = "peaceiris/actions-gh-pages@v3.6.1",
+        with = {
+          github_token = "${{ secrets.GITHUB_TOKEN }}",
+          commit_message = "${{ github.ref }}",
+          publish_dir = "out",
+        },
+      },
+    ],
+  },
 };
 
-make_workflow(config)
+// Render the full GitHub Actions workflow for each config.
+let workflows = {
+  for name, config in workflow_configs:
+  name: {
+    name = config.name,
+    on = { push = config.on_push },
+    jobs = {
+      build = {
+        runs-on = "ubuntu-22.04",
+        steps = config.steps,
+      },
+    },
+  },
+};
+
+{
+  for name, workflow in workflows:
+  f"{name}.yml": {
+    format = "json",
+    banner = "# This file is generated from build.rcl using RCL 9e8f729c19e.\n",
+    contents = workflow,
+  }
+}
