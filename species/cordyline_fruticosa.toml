@@ -1,0 +1,22 @@
+name = "Cordyline fruticosa"
+# Source: https://www.thespruce.com/grow-cordyline-indoors-1902747
+# Source: https://www.123planten.nl/cordyline-rumba-355317.html
+
+water_days_summer = 5
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil lightly moist in summer, \
+  water when the soil feels dry. \
+  In winter, let the soil dry out before watering. \
+  Mist once in a while to remove dust.\
+  """
+# One source says weekly with half-strength fertilizer,
+# another says monthly ... let's go in between.
+fertilize_days_summer = 21
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Only fertilize when the plant is growing, not in winter.\
+  """
+light = "Bright but indirect light"
