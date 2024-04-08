@@ -1,0 +1,25 @@
+name = "Spathiphyllum"
+aliases = ["Spathiphyllum Bingo", "Spathiphyllum Bingo Cupido", "Peace lily"]
+# Source: https://www.123planten.nl/spathiphyllum-bingo-sp19binb.html
+# Source: https://www.tuinadvies.be/plantengids/19772/spathiphyllum-bingo-cupido
+# Source: https://www.groenrijkmaasbree.nl/nieuws/703/op-slag-verliefd-op-de-spathiphyllum-bingo-cupido
+# Source: https://leafyplace.com/spathiphyllum-care/
+water_days_summer = 5
+water_days_winter = 15
+water_remark = """\
+  When the top soil is dry, water thoroughly and let it drain. \
+  Water 1–2 times per week when the plant grows, \
+  every two weeks in winter. \
+  Can benefit from descaled water. \
+  Mist regularly, the plant likes humidity.\
+  """
+fertilize_days_summer = 30
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Fertilize once a month in summer.\
+  """
+light = "Half-shade, avoid direct sunlight."
+light_remark = """\
+  When the flowers remain green, the plant receives too little light. \
+  When the leaves turn brown, the plant may receive too much light.\
+  """
