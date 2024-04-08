@@ -1,0 +1,24 @@
+name = "Clusia rosea"
+# Source: https://www.123planten.nl/verzorging/tips-clusia
+# Source: https://www.plantje.nl/verzorging/clusia/
+water_days_summer = 5
+water_days_winter = 6
+water_remark = """\
+  In summer, keep the soil slightly moist. \
+  In winter, allow it to dry out slightly. \
+  Prefer regularly watering a little \
+  over letting the soil dry out and then soaking it.
+  Brown spots and edges can be a sign of too much water. \
+  Misting is not necessary but can help to remove dust.\
+  """
+fertilize_days_summer = 35
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Fertilization is beneficial but not necessary. \
+  Fertilize once a month in summer.\
+  """
+light = "Bright, but avoid direct sunlight."
+light_remark = """\
+  Brown and yellow spots or yellow glow can indicate too much light. \
+  Few new leaves can indicate too little light.\
+  """

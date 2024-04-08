@@ -10,6 +10,9 @@
 
 ## 2.14
 
+Released 2023-04-08.
+
+ * Add Clusia rosea.
  * Add Cordyline fruticosa.
  * Add Pelargonium graveolens.
  * Add Spathiphyllum.
