@@ -8,13 +8,18 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.15
+
+Released 2023-04-09.
+
+ * Add Pelargonium graveolens.
+
 ## 2.14
 
 Released 2023-04-08.
 
  * Add Clusia rosea.
  * Add Cordyline fruticosa.
- * Add Pelargonium graveolens.
  * Add Spathiphyllum.
 
 ## 2.13
