@@ -1,0 +1,17 @@
+name = "Pelargonium graveolens"
+aliases = ["Rose pelargonium", "Rose geranium"]
+# Source: https://www.maxvandaag.nl/sessies/themas/huis-tuin-hobby/citroengeranium-pelargonium-graveolens/
+# Source: https://www.mamabotanica.nl/blog/pelargonium-graveolens-stekken
+water_days_summer = 3
+water_days_winter = 7
+water_remark = """\
+  Let the soil dry out lightly before watering again. \
+  In summer, water 2–3 times per week, in winter once per week.\
+  """
+fertilize_days_summer = 14
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Fertilize once every two weeks in summer. \
+  Pale leaves are a sign of too little fertilizer.\
+  """
+light = "Indirect, avoid windows on the south."
