@@ -11,6 +11,7 @@
 ## 2.14
 
  * Add Cordyline fruticosa.
+ * Add Pelargonium graveolens
 
 ## 2.13
 
