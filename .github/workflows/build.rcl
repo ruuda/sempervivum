@@ -75,7 +75,7 @@ let workflows = {
   for name, workflow in workflows:
   f"{name}.yml": {
     format = "json",
-    banner = "# This file is generated from build.rcl using RCL 9e8f729c19e.\n",
+    banner = "# This file is generated from build.rcl using RCL 0.5.0.",
     contents = workflow,
   }
 }
