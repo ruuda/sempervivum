@@ -9,7 +9,7 @@
           "name": "Cache PureScript",
           "uses": "actions/cache@v4.0.2",
           "with": {
-            "key": "spago-${{ hashFiles('app/spago.dhall', 'app/packages.dhall', 'flake.lock') }}",
+            "key": "spago-${{ hashFiles('app/spago.yaml', 'app/spago.lock', 'flake.lock') }}",
             "path": "app/.spago",
             "restore-keys": "spago-"
           }

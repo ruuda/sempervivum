@@ -1,0 +1,30 @@
+package:
+  dependencies:
+    - aff
+    - aff-promise
+    - affjax
+    - affjax-web
+    - argonaut-codecs
+    - argonaut-core
+    - arrays
+    - console
+    - datetime
+    - effect
+    - either
+    - exceptions
+    - foldable-traversable
+    - foreign-object
+    - functions
+    - integers
+    - lists
+    - maybe
+    - numbers
+    - prelude
+    - strings
+    - transformers
+    - tuples
+  name: sempervivum
+workspace:
+  extraPackages: {}
+  packageSet:
+    url: https://raw.githubusercontent.com/purescript/package-sets/psc-0.15.9-20230718/packages.json

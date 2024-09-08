@@ -2,11 +2,16 @@
   description = "Sempervivum, a plant watering tracker";
 
   inputs.nixpkgs.url = "nixpkgs/nixos-24.05";
+  inputs.purescript-overlay.url = "github:thomashoneyman/purescript-overlay";
+  inputs.purescript-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, purescript-overlay }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ purescript-overlay.overlays.default ];
+      };
 
       ghc = pkgs.ghc.withPackages (ps: [
         ps.aeson
@@ -20,9 +25,9 @@
         # but they are probably already available on the host and the version
         # is not that important, so we'd rather keep the closure size small.
 
-        pkgs.purescript  # Provides the Purescript compiler.
-        pkgs.spago       # Provides the Purescript package manager.
-        pkgs.esbuild     # Bundler required by Spago.
+        pkgs.purescript      # Provides the Purescript compiler.
+        pkgs.spago-unstable  # Provides the Purescript package manager.
+        pkgs.esbuild         # Bundler required by Spago.
 
         # Haskell toolchain for the utility that compiles the catalog.
         ghc

@@ -9,7 +9,7 @@ let basic_steps = [
     uses = "actions/cache@v4.0.2",
     with = {
       path = "app/.spago",
-      key = "spago-${{ hashFiles('app/spago.dhall', 'app/packages.dhall', 'flake.lock') }}",
+      key = "spago-${{ hashFiles('app/spago.yaml', 'app/spago.lock', 'flake.lock') }}",
       restore-keys = "spago-",
     },
   },
