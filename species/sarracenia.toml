@@ -1,0 +1,20 @@
+name = "Sarracenia"
+aliases = ["Pitcher plant", "Trumpet pitcher"]
+# Source: https://tomscarnivores.com/resources/how-to-grow-pitcher-plants/
+# Source: https://plantinterrarium.com/complete-sarracenia-growing-care-guide/
+water_days_summer = 4
+water_days_winter = 7
+water_remark = """\
+  Use demineralized water, avoid tap water. \
+  In summer, put the plant in a pot in about 2cm of water, \
+  don’t water from the top. \
+  In winter, keep the soil damp only, not moist.
+  """
+fertilize_days_summer = 60
+fertilize_days_winter = 180
+fertilize_remark = """\
+  Do not fertilize — the plant gets its nutrients from prey. \
+  When there aren’t enough prey, \
+  use orchid fertilizer on the leaves, not on the soil!
+  """
+light = "Full, direct sunlight."
