@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.16
+
+Released 2025-05-04.
+
+ * Add Sarracenia.
+
 ## 2.15
 
 Released 2023-04-09.
