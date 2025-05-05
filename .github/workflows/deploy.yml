@@ -4,10 +4,10 @@
     "build": {
       "runs-on": "ubuntu-22.04",
       "steps": [
-        {"name": "Checkout", "uses": "actions/checkout@v4.2.2"},
+        {"name": "Checkout", "uses": "actions/checkout@main"},
         {
           "name": "Cache PureScript",
-          "uses": "actions/cache@v4.2.3",
+          "uses": "actions/cache@main",
           "with": {
             "key": "spago-${{ hashFiles('app/spago.yaml', 'app/spago.lock', 'flake.lock') }}",
             "path": "app/.spago",
