@@ -10,7 +10,7 @@
       "src": "assets/icon.svg",
       "sizes": "any",
       "type": "image/svg",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }
