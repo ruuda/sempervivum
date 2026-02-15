@@ -4,5 +4,13 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fafbf9",
-  "description": "A plant watering tracker."
+  "description": "A plant watering tracker.",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg",
+      "purpose": "maskable"
+    }
+  ]
 }
