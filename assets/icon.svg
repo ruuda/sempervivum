@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 32 32"
+   width="32"
+   height="32"
+   version="1.1"
+   id="svg18"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview18"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="19.600116"
+     inkscape:cx="15.382562"
+     inkscape:cy="20.816203"
+     inkscape:window-width="1920"
+     inkscape:window-height="1046"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg18" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#2ea3e0;stop-opacity:1;"
+         offset="0.12296875"
+         id="stop3" />
+      <stop
+         style="stop-color:#bfe1f5;stop-opacity:1;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <radialGradient
+       id="bg"
+       cx="50%"
+       cy="50%"
+       r="50%">
+      <stop
+         offset="0%"
+         stop-color="#2d4a1e"
+         id="stop1" />
+      <stop
+         offset="100%"
+         stop-color="#1a2e10"
+         id="stop2" />
+    </radialGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient4"
+       x1="22.373932"
+       y1="27.56358"
+       x2="17.363733"
+       y2="17.461597"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.78724188,0,0,0.78724188,5.8164449,5.5202906)" />
+  </defs>
+  <!-- Background -->
+  <rect
+     width="32"
+     height="32"
+     fill="url(#bg)"
+     id="rect2" />
+  <!-- Outer ring: 8 leaves radiating from (16,16).
+       Each ellipse centered at cy=-4 so its base sits at the rosette center. -->
+  <g
+     transform="matrix(1.0867341,0,0,1.0867341,16,16)"
+     id="g9">
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       id="ellipse2" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(45)"
+       id="ellipse3" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(90)"
+       id="ellipse4" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(135)"
+       id="ellipse5" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="scale(-1)"
+       id="ellipse6" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(-135)"
+       id="ellipse7" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(-90)"
+       id="ellipse8" />
+    <ellipse
+       cx="0"
+       cy="-4"
+       rx="3"
+       ry="6"
+       fill="#3d7a22"
+       transform="rotate(-45)"
+       id="ellipse9" />
+  </g>
+  <!-- Inner ring: 8 leaves, offset 22.5°, shorter -->
+  <g
+     transform="matrix(1.0867341,0,0,1.0867341,16,16)"
+     id="g17">
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(22.5)"
+       id="ellipse10" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(67.5)"
+       id="ellipse11" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(112.5)"
+       id="ellipse12" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(157.5)"
+       id="ellipse13" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(-157.5)"
+       id="ellipse14" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(-112.5)"
+       id="ellipse15" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(-67.5)"
+       id="ellipse16" />
+    <ellipse
+       cx="0"
+       cy="-2.5"
+       rx="2.2"
+       ry="4.5"
+       fill="#5aaa32"
+       transform="rotate(-22.5)"
+       id="ellipse17" />
+  </g>
+  <!-- Center bud -->
+  <circle
+     cx="16"
+     cy="16"
+     r="3.2602026"
+     fill="#8abe3a"
+     id="circle17"
+     style="stroke-width:1.08673" />
+  <circle
+     cx="16"
+     cy="16"
+     r="1.4127544"
+     fill="#c8e86a"
+     id="circle18"
+     style="stroke-width:1.08673" />
+  <!-- Water drop: flat fill, no gradients -->
+  <path
+     d="m 22.140832,20.849174 c 0,0 -2.36572,2.448103 -2.36572,4.558424 0,1.243207 1.040917,2.237772 2.36572,2.237772 1.324803,0 2.365719,-0.994565 2.365719,-2.237772 0,-1.960819 -2.365719,-4.558424 -2.365719,-4.558424 z"
+     fill="#5bb8e8"
+     id="path18"
+     sodipodi:nodetypes="csssc"
+     style="opacity:0.88861;fill:url(#linearGradient4);fill-opacity:1;stroke-width:0.8856" />
+</svg>
