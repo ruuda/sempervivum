@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.17
+
+Released 2026-02-15.
+
+ * Add icon to restore PWA compatibility.
+
 ## 2.16
 
 Released 2025-05-04.

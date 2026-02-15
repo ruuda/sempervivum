@@ -18,6 +18,7 @@ assets: assets/*.svg app/*.css app/*.json out/species.json
 	cp app/style.css out/style.css
 	cp assets/check.svg out/assets/check.svg
 	cp assets/droplet.svg out/assets/droplet.svg
+	cp assets/icon.svg out/assets/icon.svg
 	cp assets/plant.svg out/assets/plant.svg
 
 out/species.json: util/mkspecies species/*.toml
