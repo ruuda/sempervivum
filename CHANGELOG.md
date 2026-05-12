@@ -8,6 +8,12 @@
    from copying the new files. Deploying a new major version may require manual
    intervention.
 
+## 2.18
+
+Released 2026-05-12.
+
+ * Add Fatsia japonica.
+
 ## 2.17
 
 Released 2026-02-15.

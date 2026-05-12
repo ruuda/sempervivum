@@ -46,10 +46,10 @@ onActivate :: Aff Unit
 onActivate = do
   Console.log "SW: Begin activate"
   -- Delete caches of older versions.
-  void $ Cache.delete "v2.13"
   void $ Cache.delete "v2.14"
   void $ Cache.delete "v2.15"
   void $ Cache.delete "v2.16"
+  void $ Cache.delete "v2.17"
   Console.log "SW: Activation complete"
 
 onFetch :: Request -> Aff Response
