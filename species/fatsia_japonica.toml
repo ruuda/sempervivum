@@ -1,0 +1,19 @@
+name = "Fatsia japonica"
+# Source: https://www.123planten.nl/verzorging/tips-fatsia
+# Source: https://www.intratuin.nl/plantengids/vingerplant-fatsia-japonica-verzorging
+water_days_summer = 5
+water_days_winter = 7
+water_remark =
+  """\
+  Keep the soil slightly moist at all times. \
+  Brown leaves are a sign of too much water. \
+  Mist occasionally.\
+  """
+fertilize_days_summer = 28
+fertilize_days_winter = 180
+fertilize_remark =
+  """\
+  Needs little fertilizer. \
+  Fertilize in spring and summer only.\
+  """
+light = "Lots of indirect sunlight."
